@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBFluxDIN</title>
+  <meta name="keywords" content="EOBFluxDIN">
+  <meta name="description" content="EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBFluxDIN.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBFluxDIN
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [hatF Flm FNewtlm flm] =EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.
+
+   [hatF Flm FNewtlm flm] = ...
+   EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt) 
+
+   Reference(s)
+    Damour, Iyer &amp; Nagar, PRD 79, 064004 (2008)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBModTailm.html" class="code" title="">EOBModTailm</a>	EOBModTailm compute the modulus of the complex tail factor |T_lm|.</li><li><a href="EOBNQCn.html" class="code" title="function varargout = EOBNQCn(r,prstar, Omega,ddotr)">EOBNQCn</a>	EOBNQCn Compute n's quantities for NQC.</li><li><a href="EOBf22Pade.html" class="code" title="function f22 = EOBf22Pade(x,nu)">EOBf22Pade</a>	EOBf22Pade Computes the f22(x,nu) correction factor.</li><li><a href="EOBflm.html" class="code" title="function [flm, rholm] = EOBflm(x,nu, EOBopt)">EOBflm</a>	EOBflm Compute the resummed amplitudes in the general nu-dependent case.</li><li><a href="EOBflm0.html" class="code" title="function [flm, rholm] = EOBflm0(x, EOBopt)">EOBflm0</a>	EOBflm Compute the resummed amplitudes in the nu=0 case.</li><li><a href="EOBflmNewt.html" class="code" title="function Nlm = EOBflmNewt(x,nu, EOBopt)">EOBflmNewt</a>	EOBFlmNewt Computes the GW multipolar flux for a binary in circular motion</li><li><a href="EOBrho22Pade23.html" class="code" title="function rho22 = EOBrho22Pade23(x,nu)">EOBrho22Pade23</a>	EOBrho22Pade23 Computes the (2,3) Padé approximant to the rho_22.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBIdPostAdiab.html" class="code" title="function y0 = EOBIdPostAdiab( nu, r0, EOBopt )">EOBIdPostAdiab</a>	EOBIdPostAdiab Provides initial data in post-post-circular approximation for</li><li><a href="EOBIdPostAdiab0.html" class="code" title="function y0 = EOBIdPostAdiab0( nu, r0, EOBopt )">EOBIdPostAdiab0</a>	EOBIdPostAdiab0 Provides initial data in post-circular (or post-adiabatic)</li><li><a href="EOBRRDIN0.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN0(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN0</a>	EOBRRDIN0 Compute radiation reaction with resummed flux for nu->0.</li><li><a href="EOBRRDINddotr.html" class="code" title="function [Fphi, Frstar] = EOBRRDINddotr(nu, Omega, y, EOBopt, EOBmet, EOBHam, ddotr)">EOBRRDINddotr</a>	EOBRRDINddotr Compute radiation reaction with resummed flux for a given ddotr.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [hatF Flm FNewtlm flm] = </a><span class="keyword">...</span>
+0002     EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)
+0003 
+0004 <span class="comment">%EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   [hatF Flm FNewtlm flm] = ...</span>
+0007 <span class="comment">%   EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Reference(s)</span>
+0010 <span class="comment">%    Damour, Iyer &amp; Nagar, PRD 79, 064004 (2008)</span>
+0011 <span class="comment">%</span>
+0012 
+0013 
+0014 L                 = EOBopt.L;
+0015 M                 = EOBopt.M;
+0016 LM2K              = EOBopt.LM2K;
+0017 
+0018 rholmarg          = EOBopt.rholmarg;
+0019 f22_resum         = EOBopt.resumf22;
+0020 NQC               = EOBopt.NQC;
+0021 
+0022 particle_dynamics = strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>);
+0023 
+0024 
+0025 <span class="comment">% Compute amplitude of resummed waveform</span>
+0026 
+0027 <span class="comment">% Argument for the modulus of hhatlm</span>
+0028 <span class="comment">% Note this has to be used only in the hhatlm modulus calculations,</span>
+0029 <span class="comment">% everywhere else use x !</span>
+0030 <span class="keyword">switch</span> rholmarg    
+0031     <span class="keyword">case</span> <span class="string">'v_omg'</span>
+0032         xarg = Omega.^(2/3);
+0033     <span class="keyword">case</span> <span class="string">'v_phi'</span>
+0034         xarg = x;
+0035     <span class="keyword">case</span> <span class="string">'1_r'</span>
+0036         xarg = 1./r;
+0037     <span class="keyword">otherwise</span>
+0038         error(<span class="string">'unknown option %s for rholmarg'</span>,rholmarg)
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="keyword">if</span> ~particle_dynamics
+0042         
+0043     <span class="comment">% Compute f_lm = (rho_lm)^ell</span>
+0044     flm = <a href="EOBflm.html" class="code" title="function [flm, rholm] = EOBflm(x,nu, EOBopt)">EOBflm</a>(xarg,nu,EOBopt);
+0045         
+0046     <span class="comment">% Further resummation of rho_22 or f_22 (if needed)</span>
+0047     <span class="keyword">if</span> strcmp(f22_resum,<span class="string">'pade23'</span>)        
+0048         flm(LM2K(2,2),:) = <a href="EOBrho22Pade23.html" class="code" title="function rho22 = EOBrho22Pade23(x,nu)">EOBrho22Pade23</a>(xarg,nu).^2;   
+0049     <span class="keyword">elseif</span> strcmp(f22_resum,<span class="string">'oldpade'</span>)   
+0050         flm(LM2K(2,2),:) = <a href="EOBf22Pade.html" class="code" title="function f22 = EOBf22Pade(x,nu)">EOBf22Pade</a>(xarg,nu);    
+0051     <span class="keyword">end</span>    
+0052     
+0053     <span class="comment">% Compute NQC correction to the modulus of the (l,m) waveform</span>
+0054     [n1,n2,n3]= <a href="EOBNQCn.html" class="code" title="function varargout = EOBNQCn(r,prstar, Omega,ddotr)">EOBNQCn</a>(r,prstar, Omega,ddotr);
+0055     <span class="comment">%warning(' check routine EOBNQCn and use it here ');</span>
+0056     <span class="comment">%{</span>
+0057     n1 = (prstar./(r.*Omega)).^2;
+0058     n2 = ddotr./(r.*Omega.^2);
+0059     n3 = n1.*prstar.^2;
+0060     <span class="comment">%}</span>
+0061     
+0062     hnqc_22 = (1+NQC.a{1}(LM2K(2,2))*n1 + NQC.a{2}(LM2K(2,2))*n2 + NQC.a{3}(LM2K(2,2))*n3);
+0063     hnqc_21 = (1+NQC.a{1}(LM2K(2,1))*n1 + NQC.a{2}(LM2K(2,1))*n2 + NQC.a{3}(LM2K(2,1))*n3);
+0064     hnqc_33 = (1+NQC.a{1}(LM2K(3,3))*n1 + NQC.a{2}(LM2K(3,3))*n2 + NQC.a{3}(LM2K(3,3))*n3);
+0065 
+0066     <span class="comment">% FIXME: to include NQC corrections for all multipoles one should just</span>
+0067     <span class="comment">% use something like</span>
+0068     <span class="comment">%</span>
+0069     <span class="comment">%hnqc = (1+NQC.a1 * n1 + NQC.a2 * n2 + NQC.a3 * n3);</span>
+0070     <span class="comment">%</span>
+0071     <span class="comment">% where hnqc is the matrix of size = (no multipoles )x( length(Omega) )</span>
+0072     <span class="comment">% Code below should be fixed accordingly.</span>
+0073 
+0074 <span class="keyword">else</span>
+0075         
+0076     <span class="comment">% Compute flm = (rho_lm)^ell</span>
+0077     flm  = <a href="EOBflm0.html" class="code" title="function [flm, rholm] = EOBflm0(x, EOBopt)">EOBflm0</a>(xarg,EOBopt);    
+0078     
+0079     hnqc_22 = 1;
+0080     hnqc_21 = 1;
+0081     hnqc_33 = 1;        
+0082     
+0083 <span class="keyword">end</span>
+0084 
+0085 
+0086 <span class="comment">% Compute The PN correction to the waveform amplitude</span>
+0087 <span class="comment">% Note that jhat must be put to 1 when 1 has factored</span>
+0088 <span class="comment">% the full angular momentum J Omega in the Newtonian part</span>
+0089 <span class="comment">% Beware this is the absolute value of the \hat{h}_lm</span>
+0090 <span class="comment">%MTlm  = EOBModTail( L, M, E.*Omega );</span>
+0091 <span class="comment">% MEX-file version ( speed - O(100) )</span>
+0092 MTlm  = <a href="EOBModTailm.html" class="code" title="">EOBModTailm</a>( L, M, E.*Omega );
+0093 
+0094 
+0095 <span class="comment">% Calculate prefactor (extend vectors to matrices)</span>
+0096 kmax   = length(L);
+0097 nx     = length(xarg);
+0098 lmeven = (~mod(L+M,2))';
+0099 lmodd  = ( mod(L+M,2))';
+0100 Heff   = reshape(Heff,1,nx); <span class="comment">% do not resize back, if not needed below</span>
+0101 jhat   = reshape(jhat,1,nx);              
+0102 
+0103 prefact = lmeven*Heff + lmodd*jhat; 
+0104 
+0105 
+0106 <span class="comment">% Compute modulus of hhat_lm</span>
+0107 Modhhatlm = prefact .* MTlm .* flm;
+0108 
+0109 
+0110 <span class="comment">% Include NQC corrections</span>
+0111 <span class="comment">% (only for some multipoles)</span>
+0112 Modhhatlm(LM2K(2,2),:) = Modhhatlm(LM2K(2,2),:) .* hnqc_22;
+0113 Modhhatlm(LM2K(2,1),:) = Modhhatlm(LM2K(2,1),:) .* hnqc_21;
+0114 Modhhatlm(LM2K(3,3),:) = Modhhatlm(LM2K(3,3),:) .* hnqc_33;
+0115 
+0116 <span class="comment">% FIXME: for all multipoles this becomes</span>
+0117 <span class="comment">%</span>
+0118 <span class="comment">%Mod_hhatlm = Mod_hhatlm .* hnqclm;</span>
+0119 <span class="comment">%</span>
+0120 
+0121 
+0122 <span class="comment">% Compute Newtonian flux</span>
+0123 FNewtlm = <a href="EOBflmNewt.html" class="code" title="function Nlm = EOBflmNewt(x,nu, EOBopt)">EOBflmNewt</a>(x,nu,EOBopt);
+0124 FNewt22 = FNewtlm( LM2K(2,2) , : );
+0125 
+0126 
+0127 <span class="comment">% Total flux multipoles</span>
+0128 Flm = Modhhatlm.^2 .* FNewtlm; 
+0129 
+0130 
+0131 <span class="comment">% Sum over multipoles and normalize to the 22 Newtonian multipole</span>
+0132 hatF = sum(Flm)./FNewt22;
+0133</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

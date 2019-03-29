@@ -1,0 +1,892 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBRun_DIN_mod</title>
+  <meta name="keywords" content="EOBRun_DIN_mod">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBRun_DIN_mod.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBRun_DIN_mod
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBAdiabLSO.html" class="code" title="function LSO = EOBAdiabLSO(nu, EOBopt)">EOBAdiabLSO</a>	EOBAdiabLSO Compute Last-Stable-Orbit (LSO) in the EOB formalism.</li><li><a href="EOBExtractAPO.html" class="code" title="function varargout = EOBExtractAPO(hlm,t)">EOBExtractAPO</a>	EOBExtractAPO Compute amplitude, phase and frequency of waveform.</li><li><a href="EOBFluxHorizonFitCoefs.html" class="code" title="function c = EOBFluxHorizonFitCoefs(nu, EOBopt)">EOBFluxHorizonFitCoefs</a>	EOBFluxHorizonFitCoefs Coefficients for hybrid expression of rho_lm22 at the horizon.</li><li><a href="EOBHam.html" class="code" title="function varargout = EOBHam(nu, r,pph,prstar, EOBopt, varargin)">EOBHam</a>	EOBHam Computes the EOB real and effective Hamiltonian for EOB dynamics</li><li><a href="EOBHam0.html" class="code" title="function varargout = EOBHam0(nu, r,pph,prstar, EOBopt, varargin)">EOBHam0</a>	EOBHam0 Computes the EOB real and effective Hamiltonian for particle</li><li><a href="EOBIdPostAdiab0.html" class="code" title="function y0 = EOBIdPostAdiab0( nu, r0, EOBopt )">EOBIdPostAdiab0</a>	EOBIdPostAdiab0 Provides initial data in post-circular (or post-adiabatic)</li><li><a href="EOBIdPostAdiab_mod.html" class="code" title="function y0 = EOBIdPostAdiab_mod( nu, r0, EOBopt )">EOBIdPostAdiab_mod</a>	EOBIdPostAdiab Provides initial data in post-post-circular approximation for</li><li><a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>	EOBMetric Computes the EOB metric potentials and derivatives.</li><li><a href="EOBNQCab0.html" class="code" title="function [a,b]=EOBNQCab0(EOBopt)">EOBNQCab0</a>	EOBNQCabFit Coefficients for NQC in the test-mass limit</li><li><a href="EOBNQCabFind.html" class="code" title="function [a,b] = EOBNQCabFind( t,Omega,n,Alm,omglm,domglm,d2omglm, NRPTS )">EOBNQCabFind</a>	EOBNQCabFind Compute a's and b's</li><li><a href="EOBNQCabFit.html" class="code" title="function [a,b] = EOBNQCabFit(nu, EOBopt)">EOBNQCabFit</a>	EOBNQCabFit Coefficients for NQC as fitted function of nu.</li><li><a href="EOBNQCn.html" class="code" title="function varargout = EOBNQCn(r,prstar, Omega,ddotr)">EOBNQCn</a>	EOBNQCn Compute n's quantities for NQC.</li><li><a href="EOBOmgE.html" class="code" title="function [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt, varargin)">EOBOmgE</a>	EOBOmgE Computes Energy and orbital frequency along dynamics.</li><li><a href="EOBPotential.html" class="code" title="function W = EOBPotential(nu, r, j, EOBopt, varargin)">EOBPotential</a>	EOBPotential Compute the adiabatic EOB effective potential.</li><li><a href="EOBQNMKerrFit.html" class="code" title="function sigma = EOBQNMKerrFit(nqnm,lmax, L,M,abh, datadir)">EOBQNMKerrFit</a>	EOBQNMKerrFit Fit to the perturbative QNM sigma's.</li><li><a href="EOBRRDIN.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN</a>	EOBRRDIN Compute radiation reaction with resummed flux.</li><li><a href="EOBRRDIN0.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN0(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN0</a>	EOBRRDIN0 Compute radiation reaction with resummed flux for nu->0.</li><li><a href="EOBRRDIN_mod.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN_mod(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN_mod</a>	EOBRRDIN Compute radiation reaction with resummed flux.</li><li><a href="EOBRRGeo.html" class="code" title="function [Fphi, Frstar] = EOBRRGeo(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRGeo</a>	EOBRRno Compute radiation reaction for geodesic motion (dummy routine).</li><li><a href="EOBRRNewt.html" class="code" title="function [Fphi, Frstar] = EOBRRNewt(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRNewt</a>	EOBRRno Compute radiation reaction for generic orbits at Newtonian order.</li><li><a href="EOBRRPN.html" class="code" title="function [Fphi, Frstar] = EOBRRPN(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRPN</a>	EOBRRno Compute radiation reaction with PN-Taylor flux.</li><li><a href="EOBRhs.html" class="code" title="function dydt = EOBRhs(t,y, nu, EOBopt)">EOBRhs</a>	EOBRhs Compute r.h.s. of the full EOB equations.</li><li><a href="EOBRhs0.html" class="code" title="function dydt = EOBRhs0(t,y, nu, EOBopt)">EOBRhs0</a>	EOBRhs0 Compute r.h.s. of the full EOB equations in the particle limit (nu<<1).</li><li><a href="EOBRhsCons.html" class="code" title="function dydt = EOBRhsCons(t,y, nu, EOBopt, varargin)">EOBRhsCons</a>	EOBRhs Compute conservative r.h.s. of the full EOB equations.</li><li><a href="EOBSet_mod.html" class="code" title="function options = EOBSet_mod(varargin)">EOBSet_mod</a>	EOBSet Create/alter EOB OPTIONS structure.</li><li><a href="EOBStop.html" class="code" title="function [value,isterminal,direction] = EOBStop(t,y, rmin)">EOBStop</a>	EOBStop Event function to stop EOB integration.</li><li><a href="EOBddotrBoot2.html" class="code" title="function [ddotr dr_dt] = EOBddotrBoot2(nu,y,dydt,EOBopt,EOBmet,EOBHam)">EOBddotrBoot2</a>	EOBddotrBoot2.m Computes an approximate value for \ddot{r}.</li><li><a href="EOBddotrNoFlux.html" class="code" title="function [ddotr dr_dt dprstar_dt] = EOBddotrNoFlux(nu,y,dydt,EOBopt,EOBmet,EOBHam)">EOBddotrNoFlux</a>	EOBddotrBoot2.m Computes an approximate value for \ddot{r}.</li><li><a href="EOBhlm.html" class="code" title="function varargout = EOBhlm(nu, t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet)">EOBhlm</a>	EOBhlm Compute the multipolar resummed waveform.</li><li><a href="EOBhlmNQC.html" class="code" title="function psilmnqc = EOBhlmNQC( nu, r,prstar, Omega,ddotr, a,b, EOBopt )">EOBhlmNQC</a>	EOBhNQC Calculate NQC corrections to the RWZ multipolar waveform.</li><li><a href="EOBhlmQNMMatch.html" class="code" title="function varargout = EOBhlmQNMMatch(Omega,t, sigma, nqnm, dt, wav )">EOBhlmQNMMatch</a>	EOBhlmQNMMatch Perform the matching to QNM multipolar wave.</li><li><a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>	FDdrvt Compute finite differences of the function f(t).</li><li><a href="FindMax.html" class="code" title="function [xm,fm,dfm] = FindMax(x,f,n)">FindMax</a>	FindMax Compute extremum of f(x)</li><li><a href="LagInt1d.html" class="code" title="">LagInt1d</a>	LAGINT1D Lagrangian interpolation routine of 1d data</li><li><a href="Multipidx.html" class="code" title="function [LM2K, L,M] = Multipidx(lmax)">Multipidx</a>	MULTIPIDX Compute maps between multipolar indexes.</li><li><a href="PrintSFields.html" class="code" title="function PrintSFields( s, fid )">PrintSFields</a>	PrintSFields print fields of a structure and their content</li><li><a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>	SetVOutput Manage variables in output.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="Example_DIN_mod.html" class="code" title="">Example_DIN_mod</a>	Main example of EOB run</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = EOBRun_DIN_mod( nu, </a><span class="keyword">...</span>
+0002     ainput, <span class="keyword">...</span><span class="comment"> % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)</span>
+0003     r0, tmax, dt, nqnm,lmaxqnm, <span class="keyword">...</span>
+0004     varargin)
+0005 
+0006 <span class="comment">%EOBRun Run EOB simulation.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   DATA = EOBRun( nu, a, r0, tmax,dt, nqnm,lmaxqnm ) perform EOB</span>
+0009 <span class="comment">%   run with default options (see EOBSet.m) and parameters</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    nu      : symmetric mass ratio (scalar)</span>
+0012 <span class="comment">%    a       : a{1} ,..., a{4}, a{5}, a{6} NQC parameters for the</span>
+0013 <span class="comment">%    multipolar waveform and deformation paramters (1x6 cell array</span>
+0014 <span class="comment">%    of vectors)</span>
+0015 <span class="comment">%    r0      : initial value of EOB radius</span>
+0016 <span class="comment">%    tmax    : final time for dynamics</span>
+0017 <span class="comment">%    dt      : time spacing output</span>
+0018 <span class="comment">%    nqnm    : number of positive and negative QNM (vector size=2)</span>
+0019 <span class="comment">%    lmaxqnm : max l-value to be used in QNM match (scalar)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   Return a data structure with dynamics and waveform.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   DATA = EOBRun( ... , lmaxqnm, EOBOPTIONS ) specify options from</span>
+0024 <span class="comment">%   structure EOBOPTIONS (see EOBSet.m)</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   DATA = EOBRun( ... , lmaxqnm, [], modus ) specify modus</span>
+0027 <span class="comment">%   operandi</span>
+0028 <span class="comment">%             0 = dynamics</span>
+0029 <span class="comment">%             1 = dynamics + inspl wave</span>
+0030 <span class="comment">%             2 = dynamics + inspl-merg wave</span>
+0031 <span class="comment">%             3 = dynamics + inspl-merg-ringdown wave (default)</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%   DATA = EOBRun( ... , lmaxqnm, [],[], verbose ) screen info</span>
+0034 <span class="comment">%   level</span>
+0035 <span class="comment">%             0 = minimum text (default)</span>
+0036 <span class="comment">%             1 = text</span>
+0037 <span class="comment">%             2 = text + figures</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">%   DATA = EOBRun( ... , lmaxqnm, [],[],[], saveme ) save data 0 =</span>
+0040 <span class="comment">%   no 1 = yes (default)</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%   DATA = EOBRun( ... , lmaxqnm, [],[],[],[], basedir ) specify</span>
+0043 <span class="comment">%   output directory, default = 'mydata'.</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%   [dyn,wav] = EOBRun( ... ) Return structures with dynamics and</span>
+0046 <span class="comment">%   waveform seprately.</span>
+0047 <span class="comment">%</span>
+0048 
+0049 
+0050 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0051 <span class="comment">% Settings</span>
+0052 
+0053 fprintf(<span class="string">'===&gt; EOB run\n'</span>);
+0054 tottime = tic;
+0055 
+0056 <span class="comment">% Manage args in</span>
+0057 EOBopt  = [];                      <span class="comment">% struct of options (EOBSet.m)</span>
+0058 modus   = 3;                       <span class="comment">%</span>
+0059 verbose = 0;                       <span class="comment">% do not print info</span>
+0060 saveme  = 1;                       <span class="comment">% do save results</span>
+0061 basedir = <span class="string">'mydata/'</span>;
+0062 
+0063 optargs = {EOBopt modus verbose saveme basedir modus};
+0064 na = length(varargin);
+0065 <span class="keyword">if</span> (na&gt;6)
+0066     error(<span class="string">'too many input args'</span>)
+0067 <span class="keyword">end</span>
+0068 newvals = cellfun(@(x) ~isempty(x), varargin);
+0069 optargs(newvals) = varargin(newvals);
+0070 [EOBopt, modus, verbose, saveme, basedir] = optargs{:};
+0071 
+0072 <span class="comment">% Set default EOB options</span>
+0073 defaultopt = <a href="EOBSet_mod.html" class="code" title="function options = EOBSet_mod(varargin)">EOBSet_mod</a>(<span class="keyword">...</span>
+0074     <span class="string">'Dynamics'</span>,<span class="string">'eob'</span>,<span class="keyword">...</span>
+0075     <span class="string">'RadReac'</span>,<span class="string">'din_mod'</span>,<span class="keyword">...</span>
+0076     <span class="string">'ddotrMethodDyn'</span>,<span class="string">'noflux'</span>,<span class="keyword">...</span>
+0077     <span class="string">'ddotrMethodWav'</span>,<span class="string">'noflux'</span>,<span class="keyword">...</span>
+0078     <span class="string">'HorizonFlux'</span>,<span class="string">'yes'</span>,<span class="keyword">...</span>
+0079     <span class="string">'RadialFlux'</span>,<span class="string">'yes'</span>,<span class="keyword">...</span>
+0080     <span class="string">'FIterms'</span>,<span class="string">'yes'</span>,<span class="keyword">...</span>
+0081     <span class="string">'rholmarg'</span>,<span class="string">'v_phi'</span>,<span class="keyword">...</span>
+0082     <span class="string">'PNorder'</span>,<span class="string">'5pnlog'</span>,<span class="keyword">...</span>
+0083     <span class="string">'resumD'</span>,<span class="string">'pade03'</span>,<span class="keyword">...</span>
+0084     <span class="string">'resumf22'</span>,<span class="string">'no'</span>,<span class="keyword">...</span>
+0085     <span class="string">'Tidal'</span>,<span class="string">'no'</span>,<span class="keyword">...</span>
+0086     <span class="string">'PNTidal'</span>,<span class="string">'nnlo'</span>,<span class="keyword">...</span>
+0087     <span class="string">'NewtonWaves'</span>,<span class="string">'no'</span>,<span class="keyword">...</span>
+0088     <span class="string">'DetermineNQCab'</span>,<span class="string">'no'</span>,<span class="keyword">...</span><span class="comment">   </span>
+0089     <span class="string">'fac'</span>,1.0,<span class="keyword">...</span>
+0090     <span class="string">'NQCFileNR'</span>,<span class="string">'../DataNR/NRpts4NQC.dat'</span>,<span class="keyword">...</span>
+0091     <span class="string">'QNMDataDir'</span>,<span class="string">'../DataQNMs/'</span>,<span class="keyword">...</span>
+0092     <span class="string">'textend'</span>,500,<span class="keyword">...</span>
+0093     <span class="string">'ODEEventFunRmin'</span>,1.0,<span class="keyword">...</span>
+0094     <span class="string">'ODESolverRelTol'</span>,1e-9,<span class="keyword">...</span>
+0095     <span class="string">'ODESolverAbsTol'</span>,1e-12,<span class="keyword">...</span>
+0096     <span class="string">'ODESolverRefine'</span>,1);
+0097 
+0098 <span class="comment">% Overwrite EOB options</span>
+0099 EOBopt = <a href="EOBSet_mod.html" class="code" title="function options = EOBSet_mod(varargin)">EOBSet_mod</a>(defaultopt, EOBopt );
+0100 
+0101 <span class="comment">% Lower the string entries in EOBoptions</span>
+0102 Name   = fieldnames(EOBopt);
+0103 idx    = strcmp(cellfun(@(x) class(EOBopt.(x)),Name,<span class="string">'UniformOutput'</span>,0),<span class="string">'char'</span>);
+0104 EOBopt = cellfun(@(x) setfield(EOBopt,x,lower(EOBopt.(x))),Name(idx));
+0105 EOBopt = EOBopt(1);
+0106 
+0107 
+0108 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0109 <span class="comment">% Initialize run</span>
+0110 
+0111 fprintf(<span class="string">' ===&gt; Init run\n'</span>);
+0112 tstart = tic;
+0113 
+0114 <span class="comment">% Compute multipolar indexes</span>
+0115 lmax = 8;
+0116 [LM2K, L,M] = <a href="Multipidx.html" class="code" title="function [LM2K, L,M] = Multipidx(lmax)">Multipidx</a>(lmax);
+0117 
+0118 EOBopt.LM2K = LM2K;
+0119 EOBopt.L    = L;
+0120 EOBopt.M    = M;
+0121 
+0122 kmax = length(L);
+0123 
+0124 <span class="comment">% Store dynamics pars</span>
+0125 EOBopt.a5  = ainput{5};
+0126 EOBopt.a6  = ainput{6};
+0127 
+0128 <span class="comment">% Set function handles</span>
+0129 <span class="keyword">switch</span> EOBopt.Dynamics
+0130     <span class="keyword">case</span> <span class="string">'eob'</span>
+0131         EOBopt.ComputeEOBHam = @<a href="EOBHam.html" class="code" title="function varargout = EOBHam(nu, r,pph,prstar, EOBopt, varargin)">EOBHam</a>;
+0132         EOBopt.ComputeRhs    = @<a href="EOBRhs.html" class="code" title="function dydt = EOBRhs(t,y, nu, EOBopt)">EOBRhs</a>;
+0133         EOBopt.ComputeID     = @<a href="EOBIdPostAdiab_mod.html" class="code" title="function y0 = EOBIdPostAdiab_mod( nu, r0, EOBopt )">EOBIdPostAdiab_mod</a>;                
+0134     <span class="keyword">case</span> <span class="string">'particle'</span>
+0135         EOBopt.ComputeEOBHam = @<a href="EOBHam0.html" class="code" title="function varargout = EOBHam0(nu, r,pph,prstar, EOBopt, varargin)">EOBHam0</a>;
+0136         EOBopt.ComputeRhs    = @<a href="EOBRhs0.html" class="code" title="function dydt = EOBRhs0(t,y, nu, EOBopt)">EOBRhs0</a>;
+0137         EOBopt.ComputeID     = @<a href="EOBIdPostAdiab0.html" class="code" title="function y0 = EOBIdPostAdiab0( nu, r0, EOBopt )">EOBIdPostAdiab0</a>;        
+0138     <span class="keyword">otherwise</span>
+0139         error(<span class="string">'unknown option %s for Dynamics.'</span>,EOBopt.Dynamics);
+0140 <span class="keyword">end</span>
+0141 
+0142 <span class="keyword">switch</span> EOBopt.RadReac
+0143     <span class="keyword">case</span> <span class="string">'din'</span>
+0144         <span class="keyword">if</span> strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>)
+0145             EOBopt.ComputeRRForce = @<a href="EOBRRDIN0.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN0(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN0</a>;
+0146         <span class="keyword">else</span>
+0147             EOBopt.ComputeRRForce = @<a href="EOBRRDIN.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN</a>;
+0148         <span class="keyword">end</span>        
+0149     <span class="keyword">case</span> <span class="string">'din_mod'</span>
+0150             EOBopt.ComputeRRForce = @<a href="EOBRRDIN_mod.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN_mod(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN_mod</a>;
+0151     <span class="keyword">case</span> <span class="string">'pn'</span>
+0152             EOBopt.ComputeRRForce = @<a href="EOBRRPN.html" class="code" title="function [Fphi, Frstar] = EOBRRPN(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRPN</a>;
+0153     <span class="keyword">case</span> <span class="string">'newt'</span>    
+0154         EOBopt.ComputeRRForce = @<a href="EOBRRNewt.html" class="code" title="function [Fphi, Frstar] = EOBRRNewt(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRNewt</a>;
+0155     <span class="keyword">case</span> <span class="string">'geo'</span>
+0156         EOBopt.ComputeRRForce = @<a href="EOBRRGeo.html" class="code" title="function [Fphi, Frstar] = EOBRRGeo(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRGeo</a>;
+0157     <span class="keyword">otherwise</span>
+0158         error(<span class="string">'unknown option %s for RadReac.'</span>,EOBopt.RadReac);
+0159 <span class="keyword">end</span>
+0160 
+0161 <span class="keyword">switch</span> EOBopt.ddotrMethodDyn
+0162     <span class="keyword">case</span> <span class="string">'boot2'</span>
+0163         <span class="keyword">if</span> strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>)
+0164             EOBopt.Computeddotr = @EOBddotrBoot20;            
+0165         <span class="keyword">else</span>
+0166             EOBopt.Computeddotr = @<a href="EOBddotrBoot2.html" class="code" title="function [ddotr dr_dt] = EOBddotrBoot2(nu,y,dydt,EOBopt,EOBmet,EOBHam)">EOBddotrBoot2</a>;            
+0167         <span class="keyword">end</span>
+0168     <span class="keyword">case</span> <span class="string">'noflux'</span>
+0169         EOBopt.Computeddotr = @<a href="EOBddotrNoFlux.html" class="code" title="function [ddotr dr_dt dprstar_dt] = EOBddotrNoFlux(nu,y,dydt,EOBopt,EOBmet,EOBHam)">EOBddotrNoFlux</a>;
+0170     <span class="keyword">otherwise</span>
+0171         error(<span class="string">'unknown option %s for ddotrMethodDyn.'</span>,EOBopt.ddotrMethodDyn);
+0172 <span class="keyword">end</span>
+0173 
+0174 EOBopt.ODESolverEventF = @(t,y) <a href="EOBStop.html" class="code" title="function [value,isterminal,direction] = EOBStop(t,y, rmin)">EOBStop</a>(t,y, EOBopt.ODEEventFunRmin);
+0175 
+0176 <span class="comment">% Set options for ODE solver and time vector</span>
+0177 ODEopt = odeset( <span class="string">'RelTol'</span>,EOBopt.ODESolverRelTol,<span class="keyword">...</span>
+0178     <span class="string">'AbsTol'</span>,EOBopt.ODESolverAbsTol,<span class="keyword">...</span>
+0179     <span class="string">'Refine'</span>,EOBopt.ODESolverRefine,<span class="keyword">...</span>
+0180     <span class="string">'Events'</span>,EOBopt.ODESolverEventF );
+0181 
+0182 <span class="comment">% Build time vector</span>
+0183 <span class="comment">% NOTE: dt given as input is the width of the matching grid. The spacing between each</span>
+0184 <span class="comment">%       point of the &quot;matching grid&quot; is given by dt/(#QNMs - 1).</span>
+0185 <span class="comment">%       FIXME: this can be probably done just locally after the integration.</span>
+0186 
+0187 dt    = dt/(sum(nqnm)-1); 
+0188 tspan = 0:dt:tmax;
+0189 
+0190 <span class="comment">% Init NQC</span>
+0191 <span class="keyword">if</span> strcmp(EOBopt.DetermineNQCab,<span class="string">'yes'</span>) 
+0192     <span class="comment">% Allocate memory</span>
+0193     a{1} = zeros(1,kmax);
+0194     a{2} = a{1};
+0195     a{3} = a{1};
+0196     b{1} = a{1};
+0197     b{2} = a{1};
+0198     b{3} = a{1};
+0199     <span class="comment">% Set some for dynamics</span>
+0200     <span class="comment">% a' and b's will be overwritten by the call EOBNQCabFind.m</span>
+0201     a{1}(1:length(ainput{1})) = ainput{1};
+0202     a{2}(1:length(ainput{2})) = ainput{2};
+0203     a{3}(1:length(ainput{3})) = ainput{3};
+0204     a{4}(1:length(ainput{4})) = ainput{4};
+0205     <span class="keyword">if</span> exist(EOBopt.NQCFileNR,<span class="string">'file'</span>)
+0206         NRPTS = importdata(EOBopt.NQCFileNR,<span class="string">' '</span>,3);
+0207         NRPTS = NRPTS.data;
+0208     <span class="keyword">else</span>
+0209         error(<span class="string">'file %s does not exist'</span>,EOBopt.NQCFileNR);
+0210     <span class="keyword">end</span>
+0211 <span class="keyword">else</span>
+0212   <span class="comment">% do not determine a's and b's</span>
+0213   <span class="comment">% use pre-computed</span>
+0214   <span class="keyword">if</span> strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>)    
+0215     [a,b] = <a href="EOBNQCab0.html" class="code" title="function [a,b]=EOBNQCab0(EOBopt)">EOBNQCab0</a>(EOBopt);
+0216   <span class="keyword">else</span>
+0217     [a,b] = <a href="EOBNQCabFit.html" class="code" title="function [a,b] = EOBNQCabFit(nu, EOBopt)">EOBNQCabFit</a>(nu, EOBopt);
+0218   <span class="keyword">end</span>
+0219 <span class="keyword">end</span>
+0220 
+0221 EOBopt.NQC.a = a;
+0222 EOBopt.NQC.b = b;
+0223 
+0224 <span class="keyword">if</span> (strcmp(lower(EOBopt.RadReac),<span class="string">'din'</span>) || strcmp(lower(EOBopt.RadReac),<span class="string">'din_mod'</span>)) <span class="keyword">...</span>
+0225         &amp;&amp; strcmp(lower(EOBopt.HorizonFlux),<span class="string">'yes'</span>)
+0226     <span class="comment">% Init coefficients used in horizon flux</span>
+0227     c = <a href="EOBFluxHorizonFitCoefs.html" class="code" title="function c = EOBFluxHorizonFitCoefs(nu, EOBopt)">EOBFluxHorizonFitCoefs</a>(nu, EOBopt);
+0228     EOBopt.HorizonFluxCoefs.c = c;
+0229 <span class="keyword">end</span>
+0230 
+0231 
+0232 <span class="keyword">if</span> modus&lt;0 || modus &gt;3
+0233     error(<span class="string">'unknown value for ''modus'' par, {0,1,2,3}'</span>);
+0234 <span class="keyword">end</span>
+0235 
+0236 <span class="keyword">if</span> verbose&lt;0 || verbose &gt;2    
+0237     error(<span class="string">'unknown value for ''verbose'' par, {0,1,2} =&gt; no, screen info, screen info and fig'</span>);
+0238 <span class="keyword">end</span>
+0239 fhIdx = 0; <span class="comment">% figures index</span>
+0240 
+0241 <span class="keyword">if</span> nqnm(2)&gt;nqnm(1) || nqnm(1)&lt;0
+0242     error(<span class="string">'nQNM must have two entries, nQNM(1)&gt;=0 and nQNM(2)&lt;=nQNM(1)'</span>)
+0243 <span class="keyword">end</span>
+0244 
+0245 <span class="comment">% Create output dirs (if necessary)</span>
+0246 <span class="keyword">if</span> saveme
+0247     
+0248     basedir = strcat(basedir,<span class="string">'/'</span>);
+0249     [ok,mess,messid] = mkdir(basedir);       
+0250     <span class="keyword">if</span> ~ok, error(mess); <span class="keyword">end</span>;
+0251     
+0252     fid = fopen(strcat(basedir,<span class="string">'log.txt'</span>),<span class="string">'w'</span>);
+0253     fprintf(fid,<span class="string">'%s\n Notes:\n'</span>,datestr(now, <span class="string">'mm/dd/yyyy HH:MM:SS'</span>));
+0254     fclose(fid);
+0255     
+0256     <span class="keyword">if</span> verbose==2
+0257         [ok,mess,messid] = mkdir(basedir,<span class="string">'Fig'</span>); <span class="keyword">if</span> ~ok, error(mess); <span class="keyword">end</span>;
+0258     <span class="keyword">end</span>
+0259     
+0260 <span class="keyword">end</span>
+0261 
+0262 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0263 
+0264 <span class="keyword">if</span> verbose
+0265   <a href="PrintSFields.html" class="code" title="function PrintSFields( s, fid )">PrintSFields</a>(EOBopt,1);
+0266 <span class="keyword">end</span>
+0267 
+0268 
+0269 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0270 <span class="comment">% Initial data</span>
+0271 
+0272 fprintf(<span class="string">' ===&gt; Compute initial data for evolution\n'</span>);
+0273 tstart = tic;
+0274 y  = EOBopt.ComputeID(nu, r0, EOBopt );
+0275 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0276 
+0277 y0      = y(1:4); <span class="comment">% this goes into theDyn     ODE call</span>
+0278 r0      = y0(2);
+0279 pph0    = y0(3);
+0280 prstar0 = y0(4);
+0281 j0      = y(6);
+0282 
+0283 <span class="keyword">if</span> verbose
+0284     fprintf(<span class="string">' r      = %+.12e\n'</span>,y0(2));
+0285     fprintf(<span class="string">' pph    = %+.12e\n'</span>,y0(3));
+0286     fprintf(<span class="string">' prstar = %+.12e\n'</span>,y0(4));
+0287     fprintf(<span class="string">' pr     = %+.12e\n'</span>,y(5));
+0288     fprintf(<span class="string">' j      = %+.12e\n'</span>,y(6)); 
+0289 <span class="keyword">end</span>
+0290 
+0291 
+0292 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0293 <span class="comment">% Adiabatic LSO, EOB potential and Hamiltonian (if required)</span>
+0294 
+0295 <span class="keyword">if</span> verbose
+0296     
+0297     fprintf(<span class="string">' ===&gt; Compute Adiabatic LSO\n'</span>);
+0298     tstart = tic;
+0299     LSO = <a href="EOBAdiabLSO.html" class="code" title="function LSO = EOBAdiabLSO(nu, EOBopt)">EOBAdiabLSO</a>(nu, EOBopt);
+0300     fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));    
+0301     
+0302     fprintf(<span class="string">' Omega        [LSO Adiab] = %+.12e\n'</span>,LSO.Omega);
+0303     fprintf(<span class="string">' omega22      [LSO Adiab] = %+.12e\n'</span>,LSO.w22);
+0304     fprintf(<span class="string">' Omega   Newt [LSO Adiab] = %+.12e\n'</span>,LSO.Newt_Omega);
+0305     fprintf(<span class="string">' omega22 Newt [LSO Adiab] = %+.12e\n'</span>,LSO.Newt_w22);
+0306     fprintf(<span class="string">' r            [LSO Adiab] = %+.12e\n'</span>,LSO.r);
+0307     fprintf(<span class="string">' u            [LSO Adiab] = %+.12e\n'</span>,LSO.u);
+0308         
+0309     fprintf(<span class="string">' ===&gt; Compute EOB metric, potential and Hamiltonian\n'</span>);
+0310     tstart = tic;
+0311     R          = 1.1:0.01:100;
+0312     Metric     = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>( nu, R, EOBopt );
+0313     Wadiab     = <a href="EOBPotential.html" class="code" title="function W = EOBPotential(nu, r, j, EOBopt, varargin)">EOBPotential</a>(nu, R, j0  , EOBopt, Metric );
+0314     W          = <a href="EOBPotential.html" class="code" title="function W = EOBPotential(nu, r, j, EOBopt, varargin)">EOBPotential</a>(nu, R, pph0, EOBopt, Metric );
+0315     [H0 Heff0] = EOBopt.ComputeEOBHam(nu, r0,pph0,prstar0, EOBopt);
+0316     fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));    
+0317     
+0318     fprintf(<span class="string">' nu H0 = %+.12e\n'</span>,nu*H0);
+0319     fprintf(<span class="string">' Heff0 = %+.12e\n'</span>,Heff0);
+0320         
+0321     <span class="keyword">if</span> verbose==2
+0322         
+0323         fhIdx  = fhIdx+1; fhName{fhIdx} = <span class="string">'Potential'</span>; fh(fhIdx) = figure;
+0324         plot(R,W,<span class="string">'b-'</span>,R,Wadiab,<span class="string">'r--'</span>);
+0325         hold on        
+0326         <span class="keyword">if</span> strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>)
+0327             line([min(R) max(R)],[H0 H0],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineStyle'</span>,<span class="string">'--'</span>);
+0328         <span class="keyword">else</span>
+0329             line([min(R) max(R)],[nu*H0 nu*H0],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineStyle'</span>,<span class="string">'--'</span>);
+0330         <span class="keyword">end</span>
+0331         line([r0 r0],[min(W) max(W)],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineStyle'</span>,<span class="string">'--'</span>);
+0332         xlabel(<span class="string">'r'</span>);
+0333         legend(<span class="string">'W[p_{\phi}(0)]'</span>,<span class="string">'W[j(0)]'</span>,1);
+0334         title(<span class="string">'EOB potential'</span>)
+0335         
+0336     <span class="keyword">end</span>
+0337     
+0338 <span class="keyword">end</span>
+0339 
+0340 
+0341 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0342 <span class="comment">% Evolve</span>
+0343 
+0344 fprintf(<span class="string">' ===&gt; Compute dynamics\n'</span>);
+0345 tstart = tic;
+0346 [t,y] = ode113(@(t,y) EOBopt.ComputeRhs(t,y, nu,EOBopt), tspan, y0, ODEopt);
+0347 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0348 
+0349 <span class="keyword">if</span> verbose
+0350             
+0351     <span class="keyword">if</span> verbose==2
+0352         
+0353         fhIdx  = fhIdx+1; fhName{fhIdx} = <span class="string">'Dyn_rt'</span>; fh(fhIdx) = figure;
+0354         plot(t,y(:,2))
+0355         xlabel(<span class="string">'t/M'</span>); ylabel(<span class="string">'r/M'</span>);
+0356         title(<span class="string">'EOB dynamics r(t)'</span>)
+0357         
+0358         fhIdx  = fhIdx+1; fhName{fhIdx} = <span class="string">'Dyn_rphi'</span>; fh(fhIdx) = figure;
+0359         polar(y(:,1),y(:,2))
+0360         title(<span class="string">'EOB dynamics r(\phi)'</span>)
+0361         
+0362     <span class="keyword">end</span>
+0363     
+0364 <span class="keyword">end</span>
+0365 
+0366 
+0367 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0368 <span class="comment">% Unpack and Extend variables (if necessary)</span>
+0369 
+0370 nt     = length(t);
+0371 
+0372 phi    = y(:,1);
+0373 r      = y(:,2);
+0374 pph    = y(:,3);
+0375 prstar = y(:,4);
+0376 
+0377 text = EOBopt.textend;
+0378 tdyn = t(end);
+0379 
+0380 text = [(tdyn+dt):dt:(tdyn+text)]';
+0381 t    = [t; text];
+0382 nt   = length(t);
+0383 
+0384 phi     = phi(end)   *ones(nt,1);
+0385 r       = r(end)     *ones(nt,1);
+0386 pph     = pph(end)   *ones(nt,1);
+0387 prstar  = prstar(end)*ones(nt,1);
+0388 
+0389 Idx = (t&lt;=tdyn);
+0390 phi(Idx)    = y(:,1);
+0391 r(Idx)      = y(:,2);
+0392 pph(Idx)    = y(:,3);
+0393 prstar(Idx) = y(:,4);
+0394 
+0395 y = [phi r pph prstar]';
+0396 
+0397 
+0398 
+0399 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0400 <span class="comment">% Energy, angular momentum and frequency along the EOB dynamics</span>
+0401 
+0402 fprintf(<span class="string">' ===&gt; Compute energy, angular momentum and orbital frequency\n'</span>);
+0403 tstart = tic;
+0404 Metric            = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>( nu, r, EOBopt );
+0405 [Omega E pr Heff] = <a href="EOBOmgE.html" class="code" title="function [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt, varargin)">EOBOmgE</a>( nu, r,pph,prstar, EOBopt, Metric );
+0406 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0407 
+0408 
+0409 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0410 <span class="comment">% Derivatives of orbital frequency and ddotr</span>
+0411 
+0412 fprintf(<span class="string">' ===&gt; Compute derivatives of orbital frequency ...\n'</span>);
+0413 tstart = tic;
+0414 dotOmega = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(Omega,t,4).';
+0415 A_Omg    = dotOmega./(96*nu/5*Omega.^(11/3));
+0416 Q_Omg    = Omega.^2./dotOmega;
+0417 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0418 
+0419 fprintf(<span class="string">' ===&gt; Compute ddot r ...\n'</span>);
+0420 <span class="keyword">switch</span> EOBopt.ddotrMethodWav
+0421     <span class="keyword">case</span> <span class="string">'boot2'</span>
+0422         Ham   = EOBopt.ComputeEOBHam(nu,r,pph,prstar,EOBopt,Metric);
+0423         dydt  = <a href="EOBRhsCons.html" class="code" title="function dydt = EOBRhsCons(t,y, nu, EOBopt, varargin)">EOBRhsCons</a>(t,y, nu, EOBopt, Metric, Ham);
+0424         ddotr = <a href="EOBddotrBoot2.html" class="code" title="function [ddotr dr_dt] = EOBddotrBoot2(nu,y,dydt,EOBopt,EOBmet,EOBHam)">EOBddotrBoot2</a>(nu, y,dydt, EOBopt, Metric, Ham);
+0425     <span class="keyword">case</span> <span class="string">'noflux'</span>
+0426         Ham   = EOBopt.ComputeEOBHam(nu,r,pph,prstar,EOBopt,Metric);
+0427         dydt  = <a href="EOBRhsCons.html" class="code" title="function dydt = EOBRhsCons(t,y, nu, EOBopt, varargin)">EOBRhsCons</a>(t,y, nu, EOBopt, Metric, Ham);
+0428         ddotr = <a href="EOBddotrNoFlux.html" class="code" title="function [ddotr dr_dt dprstar_dt] = EOBddotrNoFlux(nu,y,dydt,EOBopt,EOBmet,EOBHam)">EOBddotrNoFlux</a>(nu, y,dydt, EOBopt, Metric, Ham);
+0429     <span class="keyword">case</span> <span class="string">'fd'</span>
+0430         <span class="keyword">if</span> strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>)
+0431             dotr = Metric.A.*prstar./Heff;
+0432         <span class="keyword">elseif</span> strcmp(EOBopt.PNorder,<span class="string">'1pn'</span>) || strcmp(EOBopt.PNorder,<span class="string">'2pn'</span>)
+0433             dotr = sqrt(Metric.A ./ Metric.B).*prstar./(E.*Heff);
+0434         <span class="keyword">else</span>
+0435             dotr = sqrt(Metric.A./Metric.B).*(prstar + <span class="keyword">...</span>
+0436                 4*nu*(4-3*nu)*Metric.A.*(1./r).^2.*prstar.^3)./(E.*Heff);
+0437         <span class="keyword">end</span>
+0438         ddotr = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(dotr,t,4);
+0439     <span class="keyword">otherwise</span>
+0440         error(<span class="string">'unknown option %s for ddotrMethodWav.'</span>,EOBopt.ddotrMethodWav);
+0441 <span class="keyword">end</span>
+0442 ddotr = reshape(ddotr,size(r));
+0443 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0444 
+0445 <span class="comment">% Pack dynamics</span>
+0446 dyn.t      = t;
+0447 dyn.r      = r;
+0448 dyn.phi    = phi;
+0449 dyn.pph    = pph;
+0450 dyn.E      = E;
+0451 dyn.e      = (E-1)/nu;
+0452 dyn.prstar = prstar;
+0453 dyn.pr     = pr;
+0454 dyn.ddotr  = ddotr;
+0455 dyn.Omg    = Omega;
+0456 dyn.Heff   = Heff;
+0457 dyn.dotOmg = dotOmega;
+0458 dyn.A_Omg  = A_Omg;
+0459 dyn.Q_Omg  = Q_Omg;
+0460       
+0461 
+0462 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0463 <span class="comment">% LSO and LR crossing (if required)</span>
+0464 
+0465 <span class="keyword">if</span> verbose
+0466     
+0467     fprintf(<span class="string">' ===&gt; Compute LSO and LR crossing\n'</span>);
+0468     tstart = tic;
+0469     
+0470     <span class="comment">% Locate the crossing of adiabatic LSO position and write into LSO struct</span>
+0471     <span class="comment">% NOTE: upper case vars are the dynamical ones !</span>
+0472     idxLSO     = find(r &lt;= LSO.r,1,<span class="string">'last'</span>);
+0473     LSO.idxLSO = idxLSO;
+0474     LSO.T      = t(idxLSO);
+0475     LSO.OMEGA  = Omega(idxLSO);
+0476     LSO.R      = r(idxLSO);
+0477     LSO.U      = 1/r(idxLSO);
+0478         
+0479     <span class="comment">% Locate the maximum of orbital frequency (EOB &quot;light-ring crossing&quot;)</span>
+0480     [MaxOmega, idxLR] = max(Omega);
+0481     
+0482     jIdx = idxLR-5:idxLR+5;    
+0483     [tmax,MaxOmega] = <a href="FindMax.html" class="code" title="function [xm,fm,dfm] = FindMax(x,f,n)">FindMax</a>( t(jIdx), Omega(jIdx), 2 );
+0484     LR.idxLR   = idxLR;
+0485     LR.OMEGA   = MaxOmega;
+0486     LR.omega22 = 2 * MaxOmega;
+0487     LR.T   = tmax;
+0488     LR.R   = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 4, t, r, tmax );
+0489     LR.U   = 1/LR.R;
+0490     LR.E   = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 4, t, dyn.E  , tmax );
+0491     LR.pph = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 4, t, dyn.pph, tmax );
+0492     
+0493     <span class="comment">% Pack data</span>
+0494     dyn.LSO = LSO;
+0495     dyn.LR = LR;
+0496     
+0497     fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0498     
+0499     fprintf(<span class="string">' t            [LSO Dyn] = %+.12e\n'</span>,LSO.T);
+0500     fprintf(<span class="string">' Omega        [LSO Dyn] = %+.12e\n'</span>,LSO.OMEGA);
+0501     fprintf(<span class="string">' r            [LSO Dyn] = %+.12e\n'</span>,LSO.R);
+0502     fprintf(<span class="string">' u            [LSO Dyn] = %+.12e\n'</span>,LSO.U);
+0503     
+0504     fprintf(<span class="string">' t            [LR]      = %+.12e\n'</span>,LR.T);
+0505     fprintf(<span class="string">' Omega        [LR]      = %+.12e\n'</span>,LR.OMEGA);
+0506     fprintf(<span class="string">' omega22      [LR]      = %+.12e\n'</span>,LR.omega22);
+0507     fprintf(<span class="string">' r            [LR]      = %+.12e\n'</span>,LR.R);
+0508     fprintf(<span class="string">' u            [LR]      = %+.12e\n'</span>,LR.U);
+0509     fprintf(<span class="string">' E            [LR]      = %+.12e\n'</span>,LR.E);
+0510     fprintf(<span class="string">' pph          [LR]      = %+.12e\n'</span>,LR.pph);
+0511     
+0512     <span class="keyword">if</span> verbose==2
+0513         
+0514         fhIdx  = fhIdx+1; fhName{fhIdx} = <span class="string">'EOBdyn_epph'</span>; fh(fhIdx) = figure;
+0515         plot(pph,(E-1)/nu,<span class="string">'k'</span>)
+0516         title(<span class="string">'Binding energy vs angular momentum'</span>);
+0517         xlabel(<span class="string">'p_\phi'</span>);
+0518         ylabel(<span class="string">'e = (E-1)/\nu'</span>);
+0519         
+0520     <span class="keyword">end</span>
+0521     
+0522 <span class="keyword">end</span>
+0523 
+0524 
+0525 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0526 <span class="comment">% Save (if required) ... End here ?</span>
+0527 
+0528 <span class="keyword">if</span> saveme
+0529     
+0530     <span class="comment">% *.mat file(s)</span>
+0531     fprintf(<span class="string">' ===&gt; Save *.mat files ...\n'</span>);
+0532     tstart = tic;        
+0533     
+0534     filename  = strcat(basedir,<span class="string">'Settings'</span>);
+0535     save(filename,<span class="string">'EOBopt'</span>);
+0536     [err mess] = system(sprintf(<span class="string">'du -h %s.mat '</span>,filename));
+0537     <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0538     fprintf(<span class="string">' %s'</span>,mess);    
+0539     
+0540     filename  = strcat(basedir,<span class="string">'Dynamics'</span>);
+0541     save(filename,<span class="string">'dyn'</span>);
+0542     [err mess] = system(sprintf(<span class="string">'du -h %s.mat '</span>,filename));
+0543     <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0544     fprintf(<span class="string">' %s'</span>,mess);    
+0545     
+0546     fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0547     
+0548     <span class="keyword">if</span> verbose==2
+0549         <span class="comment">% *.fig(s)</span>
+0550         fprintf(<span class="string">' ===&gt; Save *.fig files ...\n'</span>);
+0551         <span class="keyword">for</span> k=1:fhIdx
+0552             saveas(fh(k),strcat(basedir,<span class="string">'/Fig/'</span>,fhName{fhIdx}),<span class="string">'fig'</span>);
+0553         <span class="keyword">end</span>        
+0554         fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0555         <span class="comment">%close all;</span>
+0556         fhIdx = 0;      
+0557     <span class="keyword">end</span>
+0558     
+0559 <span class="keyword">end</span>
+0560 
+0561 <span class="keyword">if</span> modus==0
+0562     varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, EOBopt,dyn );
+0563     fprintf(<span class="string">'End %4.3f sec\n'</span>,toc(tottime));
+0564     <span class="keyword">return</span>
+0565 <span class="keyword">end</span>
+0566 
+0567 
+0568 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0569 <span class="comment">% Insplunge waveform</span>
+0570 
+0571 fprintf(<span class="string">' ===&gt; Insplunge waveform ...\n'</span>);
+0572 tstart = tic;
+0573 wav = <a href="EOBhlm.html" class="code" title="function varargout = EOBhlm(nu, t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet)">EOBhlm</a>(nu, t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, Metric);
+0574 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0575 
+0576 wav.t = t;
+0577 
+0578 <span class="keyword">if</span> verbose
+0579   
+0580     fprintf(<span class="string">' # of orbits     = %g\n'</span>,phi(end)/(2*pi));
+0581 
+0582     <span class="keyword">if</span> verbose==2
+0583         
+0584         fhIdx  = fhIdx+1; fhName{fhIdx} = <span class="string">'Wav_inspl'</span>; 
+0585         fh(fhIdx) = figure(<span class="string">'Name'</span>,<span class="string">'Insplunge waveform'</span>);
+0586         plot(t,abs(wav.psilm(LM2K(2,2),:)),<span class="string">'b-'</span>,<span class="keyword">...</span>
+0587             t,wav.omglm(LM2K(2,2),:),<span class="string">'r--'</span>,<span class="keyword">...</span>
+0588             t,Omega,<span class="string">'g-.'</span>)        
+0589         title(<span class="string">'Insplunge waveform'</span>);
+0590         xlabel(<span class="string">'t/M'</span>);
+0591         ylim([0 0.56]);
+0592         legend(<span class="string">'|\Psi_{22}|/\nu'</span>,<span class="string">'M\omega_{22}'</span>,<span class="string">'M\Omega'</span>);        
+0593         
+0594     <span class="keyword">end</span>
+0595     
+0596 <span class="keyword">end</span>
+0597 
+0598 
+0599 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0600 <span class="comment">% Save (if required) ... End here ?</span>
+0601 
+0602 <span class="keyword">if</span> saveme
+0603     
+0604     fprintf(<span class="string">' ===&gt; Save *.mat files ...\n'</span>);
+0605     tstart = tic;        
+0606     
+0607     filename  = strcat(basedir,<span class="string">'WavInspl'</span>);
+0608     save(filename,<span class="string">'wav'</span>);
+0609     [err,mess] = system(sprintf(<span class="string">'du -h %s.mat '</span>,filename));
+0610     <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0611     fprintf(<span class="string">' %s'</span>,mess);
+0612     
+0613     fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0614     
+0615     <span class="keyword">if</span> verbose==2
+0616         <span class="comment">% *.fig(s)</span>
+0617         fprintf(<span class="string">' ===&gt; Save *.fig files ...\n'</span>);
+0618         <span class="keyword">for</span> k=1:fhIdx
+0619             saveas(fh(k),strcat(basedir,<span class="string">'/Fig/'</span>,fhName{fhIdx}),<span class="string">'fig'</span>);
+0620         <span class="keyword">end</span>        
+0621         fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0622         <span class="comment">%close all;</span>
+0623         fhIdx = 0; 
+0624     <span class="keyword">end</span>
+0625     
+0626 <span class="keyword">end</span>
+0627 
+0628 <span class="keyword">if</span> modus==1
+0629     varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, EOBopt,dyn,wav );    
+0630     fprintf(<span class="string">'End %4.3f sec\n'</span>,toc(tottime));
+0631     <span class="keyword">return</span>
+0632 <span class="keyword">end</span>
+0633 
+0634 
+0635 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0636 <span class="comment">% Insplunge+merger waveform</span>
+0637 
+0638 <span class="comment">% Determine a's and b's (if necessary)</span>
+0639 <span class="keyword">if</span> strcmp(EOBopt.DetermineNQCab,<span class="string">'yes'</span>)    
+0640     fprintf(<span class="string">' ===&gt; Determine QNM from NR data ...\n'</span>);
+0641     tstart = tic;    
+0642     n = struct2cell(<a href="EOBNQCn.html" class="code" title="function varargout = EOBNQCn(r,prstar, Omega,ddotr)">EOBNQCn</a>(r,prstar, Omega,ddotr));    
+0643     [a,b] = <a href="EOBNQCabFind.html" class="code" title="function [a,b] = EOBNQCabFind( t,Omega,n,Alm,omglm,domglm,d2omglm, NRPTS )">EOBNQCabFind</a>( t,Omega, n, <span class="keyword">...</span>
+0644         wav.Alm, wav.omglm, wav.domglm, wav.d2omglm,  NRPTS );    
+0645     fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0646 <span class="keyword">end</span>
+0647 
+0648 <span class="comment">% NQC corrections</span>
+0649 fprintf(<span class="string">' ===&gt; Insplunge+NQC correction waveform ...\n'</span>);
+0650 tstart = tic;
+0651 psilmnqc = <a href="EOBhlmNQC.html" class="code" title="function psilmnqc = EOBhlmNQC( nu, r,prstar, Omega,ddotr, a,b, EOBopt )">EOBhlmNQC</a>( nu, r,prstar, Omega,ddotr, a,b, EOBopt );
+0652 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0653 
+0654 <span class="comment">% Update  waveform</span>
+0655 fprintf(<span class="string">' ===&gt; Update waveform ...\n'</span>);
+0656 <span class="keyword">if</span> strcmp(EOBopt.Dynamics,<span class="string">'eob'</span>)
+0657     cnu = 12/5*2.0^(1/3)*nu;
+0658 <span class="keyword">else</span>
+0659     cnu = 1; <span class="comment">% FIXME ?</span>
+0660 <span class="keyword">end</span>
+0661 nell = sqrt((L+2).*(L+1).*L.*(L-1))' * ones(1,nt);
+0662 
+0663 t         = wav.t;
+0664 psilm     = wav.psilm .* psilmnqc;
+0665 hlm       = nell.*psilm;
+0666 
+0667 wav          = <a href="EOBExtractAPO.html" class="code" title="function varargout = EOBExtractAPO(hlm,t)">EOBExtractAPO</a>(psilm,t);
+0668 wav.t        = t;
+0669 wav.psilm    = psilm;
+0670 wav.hlm      = hlm;
+0671 wav.psilmnqc = psilmnqc;
+0672 
+0673 wav.A_omg  = wav.domglm./( cnu*wav.omglm.^(11/3) ) ;
+0674 wav.Q_omg  = wav.omglm.^2./wav.domglm;
+0675 
+0676 wav.NQCa = a; 
+0677 wav.NQCb = b; 
+0678 
+0679 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0680 
+0681 
+0682 <span class="keyword">if</span> verbose
+0683     
+0684     <span class="keyword">if</span> verbose==2
+0685         
+0686         fhIdx     = fhIdx+1; fhName{fhIdx} = <span class="string">'Wav_inspl'</span>; 
+0687         fh(fhIdx) = figure(<span class="string">'Name'</span>,<span class="string">'Insplumerg waveform'</span>);
+0688         plot(t,abs(wav.psilm(LM2K(2,2),:)),<span class="string">'b-'</span>,<span class="keyword">...</span>
+0689             t,wav.omglm(LM2K(2,2),:),<span class="string">'r--'</span>,<span class="keyword">...</span>
+0690             t,Omega,<span class="string">'g-.'</span>)
+0691         ylim([-0.32 0.55]);        
+0692         title(<span class="string">'Insplunge+NQC waveform'</span>);
+0693         xlabel(<span class="string">'t/M'</span>);
+0694         legend(<span class="string">'|\psi_{22}|/\nu'</span>,<span class="string">'\omega_{22}'</span>,<span class="string">'\Omega'</span>)
+0695         
+0696     <span class="keyword">end</span>
+0697     
+0698 <span class="keyword">end</span>
+0699 
+0700 
+0701 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0702 <span class="comment">% Save (if required) ... End here ?</span>
+0703 
+0704 <span class="keyword">if</span> saveme
+0705     
+0706     fprintf(<span class="string">' ===&gt; Save *.mat files ...\n'</span>);
+0707     tstart = tic;    
+0708         
+0709     filename  = strcat(basedir,<span class="string">'WavInsplMerg'</span>);
+0710     save(filename,<span class="string">'wav'</span>);
+0711     [err mess] = system(sprintf(<span class="string">'du -h %s.mat'</span>,filename));
+0712     <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0713     fprintf(<span class="string">' %s'</span>,mess);
+0714     
+0715     <span class="keyword">if</span> strcmp(EOBopt.DetermineNQCab,<span class="string">'yes'</span>)
+0716         filename  = strcat(basedir,<span class="string">'NQCcorr'</span>);
+0717         save(filename,<span class="string">'a'</span>,<span class="string">'b'</span>);
+0718         [err mess] = system(sprintf(<span class="string">'du -h %s.mat'</span>,filename));
+0719         <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0720         fprintf(<span class="string">' %s'</span>,mess);        
+0721     <span class="keyword">end</span>
+0722     
+0723     fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0724      
+0725     <span class="keyword">if</span> verbose==2
+0726         <span class="comment">% *.fig(s)</span>
+0727         fprintf(<span class="string">' ===&gt; Save *.fig files ...\n'</span>);
+0728         <span class="keyword">for</span> k=1:fhIdx
+0729             saveas(fh(k),strcat(basedir,<span class="string">'/Fig/'</span>,fhName{fhIdx}),<span class="string">'fig'</span>);
+0730         <span class="keyword">end</span>        
+0731         fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0732         <span class="comment">%close all;</span>
+0733         fhIdx = 0; 
+0734     <span class="keyword">end</span>   
+0735 
+0736 <span class="keyword">end</span>
+0737 
+0738 <span class="keyword">if</span> modus==2
+0739     varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, EOBopt,dyn,wav );       
+0740     fprintf(<span class="string">'End %4.3f sec\n'</span>,toc(tottime));
+0741     <span class="keyword">return</span>
+0742 <span class="keyword">end</span>
+0743 
+0744 
+0745 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0746 <span class="comment">% Insplunge + merger + ringdown waveform</span>
+0747 
+0748 <span class="comment">% Compute complex QNM frequencies</span>
+0749 fprintf(<span class="string">' ===&gt; QNM frequencies ...\n'</span>);
+0750 tstart = tic;
+0751 Mbh = LR.E;
+0752 abh = LR.pph*nu/Mbh^2;
+0753 sigma = <a href="EOBQNMKerrFit.html" class="code" title="function sigma = EOBQNMKerrFit(nqnm,lmax, L,M,abh, datadir)">EOBQNMKerrFit</a>(nqnm(1),lmaxqnm, EOBopt.L,EOBopt.M,abh, EOBopt.QNMDataDir);
+0754 <span class="keyword">if</span> nqnm(2)&gt;0
+0755     sigma = [sigma conj(sigma(1:nqnm(2)))];
+0756 <span class="keyword">end</span>
+0757 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0758 
+0759 fprintf(<span class="string">' ===&gt; Insplunge+merger+ringdown waveform ...\n'</span>);
+0760 tstart = tic;
+0761 sigma = sigma/Mbh; <span class="comment">% rescale units !</span>
+0762 [psilm,dpsilm,omglm] = <a href="EOBhlmQNMMatch.html" class="code" title="function varargout = EOBhlmQNMMatch(Omega,t, sigma, nqnm, dt, wav )">EOBhlmQNMMatch</a>(Omega,t, sigma, nqnm, dt, wav );
+0763 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0764 
+0765 fprintf(<span class="string">' ===&gt; Update waveform ...\n'</span>);
+0766 wav        = <a href="EOBExtractAPO.html" class="code" title="function varargout = EOBExtractAPO(hlm,t)">EOBExtractAPO</a>(psilm,t);  
+0767 wav.t      = t;
+0768 wav.psilm  = psilm;
+0769 wav.dpsilm = dpsilm;
+0770 wav.omglm  = omglm;
+0771 wav.hlm    = nell.*psilm;
+0772 wav.A_omg  = wav.domglm./( cnu*wav.omglm.^(11/3) ) ;
+0773 wav.Q_omg  = wav.omglm.^2./wav.domglm;
+0774 wav.NQCa   = a; 
+0775 wav.NQCb   = b; 
+0776 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0777 
+0778 
+0779 <span class="keyword">if</span> verbose
+0780     
+0781     fprintf(<span class="string">' Mbh      [LSO Dyn] = %+.12e\n'</span>,Mbh);
+0782     fprintf(<span class="string">' abh      [LSO Dyn] = %+.12e\n'</span>,abh);    
+0783 
+0784     <span class="keyword">if</span> verbose==2
+0785         
+0786         fhIdx  = fhIdx+1; fhName{fhIdx} = <span class="string">'Wav_inspl'</span>; fh(fhIdx) = figure;
+0787         plot(wav.t,abs(wav.psilm(LM2K(2,2),:)),<span class="string">'b-.'</span>,<span class="keyword">...</span><span class="comment">  </span>
+0788             wav.t,real(wav.psilm(LM2K(2,2),:)),<span class="string">'b-'</span>,<span class="keyword">...</span><span class="comment">        </span>
+0789             wav.t,wav.omglm(LM2K(2,2),:),<span class="string">'r--'</span>,<span class="keyword">...</span>
+0790             wav.t,Omega,<span class="string">'g-.'</span>)
+0791         title(<span class="string">'Insplunge+NQC+ringdown waveform'</span>);
+0792         xlabel(<span class="string">'t/M'</span>);        
+0793         legend(<span class="string">'|\psi_{22}|/\nu'</span>,<span class="string">'Re\psi_{22}/\nu'</span>,<span class="string">'\omega_{22}'</span>,<span class="string">'\Omega'</span>)
+0794         
+0795     <span class="keyword">end</span>
+0796     
+0797 <span class="keyword">end</span>
+0798 
+0799 
+0800 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0801 <span class="comment">% Save (if required) and End</span>
+0802 
+0803 <span class="keyword">if</span> saveme
+0804     
+0805     fprintf(<span class="string">' ===&gt; Save *.mat files ...\n'</span>);
+0806     tstart = tic;        
+0807     
+0808     <span class="comment">% *.mat file(s)</span>
+0809     filename  = strcat(basedir,<span class="string">'WavInsplMergRing'</span>);
+0810     save(filename,<span class="string">'wav'</span>);
+0811     [err mess] = system(sprintf(<span class="string">'du -h %s.mat '</span>,filename));
+0812     <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0813     fprintf(<span class="string">' %s'</span>,mess);
+0814     
+0815     filename  = strcat(basedir,<span class="string">'FinalBH'</span>);
+0816     save(filename,<span class="string">'Mbh'</span>,<span class="string">'abh'</span>,<span class="string">'sigma'</span>);
+0817     [err mess] = system(sprintf(<span class="string">'du -h %s.mat '</span>,filename));
+0818     <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0819     fprintf(<span class="string">' %s'</span>,mess);
+0820     
+0821     fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0822 
+0823     <span class="keyword">if</span> strcmp(EOBopt.DetermineNQCab,<span class="string">'yes'</span>)
+0824         filename  = strcat(basedir,<span class="string">'NQCcorr'</span>);
+0825         save(filename,<span class="string">'a'</span>,<span class="string">'b'</span>);
+0826         [err mess] = system(sprintf(<span class="string">'du -h %s.mat'</span>,filename));
+0827         <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0828         fprintf(<span class="string">' %s'</span>,mess);        
+0829     <span class="keyword">end</span>
+0830     
+0831     <span class="keyword">if</span> verbose==2
+0832         <span class="comment">% *.fig(s)</span>
+0833         fprintf(<span class="string">' ===&gt; Save *.fig files ...\n'</span>);
+0834         <span class="keyword">for</span> k=1:fhIdx
+0835             saveas(fh(k),strcat(basedir,<span class="string">'/Fig/'</span>,fhName{fhIdx}),<span class="string">'fig'</span>);
+0836         <span class="keyword">end</span>        
+0837         fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0838         <span class="comment">%close all;</span>
+0839         fhIdx = 0; 
+0840     <span class="keyword">end</span> 
+0841             
+0842 <span class="keyword">end</span>
+0843 
+0844 varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, EOBopt,dyn,wav );
+0845 fprintf(<span class="string">'End %4.3f sec\n'</span>,toc(tottime));</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

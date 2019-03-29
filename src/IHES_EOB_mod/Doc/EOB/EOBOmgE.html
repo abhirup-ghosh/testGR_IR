@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBOmgE</title>
+  <meta name="keywords" content="EOBOmgE">
+  <meta name="description" content="EOBOmgE Computes Energy and orbital frequency along dynamics.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBOmgE.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBOmgE
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBOmgE Computes Energy and orbital frequency along dynamics.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBOmgE Computes Energy and orbital frequency along dynamics.
+
+   [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt) 
+
+   [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt, EOBmet) pass the
+   structure output by EOBMetric.m, and do not call the routine.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>	EOBMetric Computes the EOB metric potentials and derivatives.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBAdiabLSO.html" class="code" title="function LSO = EOBAdiabLSO(nu, EOBopt)">EOBAdiabLSO</a>	EOBAdiabLSO Compute Last-Stable-Orbit (LSO) in the EOB formalism.</li><li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt, varargin)</a>
+0002 
+0003 <span class="comment">%EOBOmgE Computes Energy and orbital frequency along dynamics.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt, EOBmet) pass the</span>
+0008 <span class="comment">%   structure output by EOBMetric.m, and do not call the routine.</span>
+0009 <span class="comment">%</span>
+0010 
+0011 
+0012 particle_dynamics = strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>);
+0013 PNorder = EOBopt.PNorder;
+0014 
+0015 
+0016 <span class="comment">% Manage args in</span>
+0017 na = length(varargin);
+0018 <span class="keyword">if</span> (na&gt;1)
+0019     error(<span class="string">'too many input args'</span>)
+0020 <span class="keyword">elseif</span> na==1
+0021     Metric = varargin{1};    
+0022 <span class="keyword">else</span>
+0023     <span class="comment">% Compute the EOB metric</span>
+0024     Metric = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>( nu, r, EOBopt );
+0025 <span class="keyword">end</span>
+0026 
+0027 
+0028 <span class="comment">% Shorthands</span>
+0029 A        = Metric.A;
+0030 B        = Metric.B;
+0031 pph2     = pph.^2;
+0032 u        = 1./r;
+0033 r2       = r.^2;
+0034 u2       = u.^2;
+0035 z3       = 2.0*nu*(4.0-3.0*nu);
+0036 prstar2  = prstar.^2;
+0037 prstar4  = prstar.^4;
+0038 
+0039 
+0040 <span class="keyword">if</span> particle_dynamics
+0041     <span class="comment">% Effective Hamiltonian (divided by mu)</span>
+0042     Heff  = sqrt(A.*(1.0 + pph2.*u2) + prstar2);
+0043     <span class="comment">% Energy (divided by M)</span>
+0044     E     = ones(size(Heff));                             
+0045     Omega = A.*pph./( r2.*Heff );   
+0046 <span class="keyword">else</span>
+0047     <span class="comment">% Effective Hamiltonian (divided by mu)</span>
+0048     <span class="keyword">if</span> strcmp(PNorder,<span class="string">'1pn'</span>) || strcmp(PNorder,<span class="string">'2pn'</span>)    
+0049         Heff = sqrt(A.*(1.0 + pph2.*u2)+ prstar2);    
+0050     <span class="keyword">else</span>    
+0051         Heff = sqrt(A.*(1.0 + pph2.*u2) + prstar2 + z3.*A.*u2.*prstar4);  
+0052     <span class="keyword">end</span>
+0053     <span class="comment">% Energy (divided by M)</span>
+0054     E     = sqrt( 1.0 + 2.0*nu*(Heff - 1.0) );
+0055     Omega = A.*pph./( r2.*E.*Heff );
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">% radial momentum</span>
+0059 pr = sqrt(B./A).*prstar;
+0060</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

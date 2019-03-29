@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBhlmNewt</title>
+  <meta name="keywords" content="EOBhlmNewt">
+  <meta name="description" content="EOB_hlmNewt Computes the leading-order (Newtonian) prefactor of the">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBhlmNewt.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBhlmNewt
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOB_hlmNewt Computes the leading-order (Newtonian) prefactor of the</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function hlmNewt = EOBhlmNewt(r,Omega,phi, nu, EOBopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOB_hlmNewt Computes the leading-order (Newtonian) prefactor of the
+multipolar resummed waveform.  
+
+   hlmNewt = EOB_hlmNewt(r,Omega,phi, nu)
+
+   Reference(s)
+    Damour, Iyer &amp; Nagar, PRD 79, 064004 (2009)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBhlm.html" class="code" title="function varargout = EOBhlm(nu, t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet)">EOBhlm</a>	EOBhlm Compute the multipolar resummed waveform.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function hlmNewt = EOBhlmNewt(r,Omega,phi, nu, EOBopt)</a>
+0002 
+0003 <span class="comment">%EOB_hlmNewt Computes the leading-order (Newtonian) prefactor of the</span>
+0004 <span class="comment">%multipolar resummed waveform.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   hlmNewt = EOB_hlmNewt(r,Omega,phi, nu)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   Reference(s)</span>
+0009 <span class="comment">%    Damour, Iyer &amp; Nagar, PRD 79, 064004 (2009)</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">% TODO: this routine requires optimization</span>
+0013 <span class="comment">% - precompute coefficients c(nu)</span>
+0014 <span class="comment">% - evaluate efficiently polynomials</span>
+0015 
+0016 L         = EOBopt.L;
+0017 M         = EOBopt.M;
+0018 LM2K      = EOBopt.LM2K;
+0019 
+0020 
+0021 <span class="comment">% Shorthands</span>
+0022 nu2   = nu.^2;
+0023 nu3   = nu.^3;
+0024 
+0025 vphi  = r.*Omega;
+0026 vphi2 = vphi.^2;
+0027 vphi3 = vphi.^3;
+0028 vphi4 = vphi.^4;
+0029 vphi5 = vphi.^5;
+0030 vphi6 = vphi.^6;
+0031 vphi7 = vphi.^7;
+0032 vphi8 = vphi.^8;
+0033 
+0034 
+0035 <span class="comment">% Poly in nu</span>
+0036 p1 = 1;
+0037 p2 = sqrt(1-4*nu);
+0038 p3 = (3*nu-1);
+0039 p4 = (2*nu-1)*sqrt(1-4*nu);
+0040 p5 = 1-5*nu+5*nu2;
+0041 p6 = (1-4*nu+3*nu2)*sqrt(1-4*nu);
+0042 p7 = 7*nu3 - 14*nu2 + 7*nu -1;
+0043 
+0044 
+0045 <span class="comment">% Allocate memory</span>
+0046 kmax  = length(L);
+0047 nx    = length(r);
+0048 hlmNewt = zeros(kmax,length(r));
+0049 <span class="comment">%hlmNewt = sparse(zeros(kmax,length(r)));</span>
+0050 
+0051 
+0052 <span class="comment">% Phase factor</span>
+0053 M   = reshape(M,kmax,1);
+0054 phi = reshape(phi,1,nx);
+0055 
+0056 expimphi = M*phi;
+0057 expimphi = exp(- 1i* expimphi);
+0058 
+0059 
+0060 <span class="comment">% Compute hlmNewt (without phase factor)</span>
+0061 
+0062 <span class="comment">% l=2 ------------------------------------------------------------------</span>
+0063 
+0064 hlmNewt(LM2K(2,2),:) = -8.*sqrt(pi/5)         * p1 * vphi2; <span class="keyword">...</span><span class="comment"> .*exp(-2*1i.*phi);</span>
+0065 hlmNewt(LM2K(2,1),:) = -8/3*1i*sqrt(pi/5)     * p2 * vphi3; <span class="keyword">...</span><span class="comment"> .*exp(-1i.*phi);</span>
+0066 
+0067 <span class="comment">% l=3 ------------------------------------------------------------------</span>
+0068 
+0069 hlmNewt(LM2K(3,3),:) = 3*1i*sqrt(6*pi/7)     * p2 * vphi3; <span class="keyword">...</span><span class="comment"> .*exp(-3*1i.*phi);</span>
+0070 hlmNewt(LM2K(3,2),:) = 8/3*sqrt(pi/7)        * p3 * vphi4; <span class="keyword">...</span><span class="comment"> .*exp(-2*1i.*phi);</span>
+0071 hlmNewt(LM2K(3,1),:) = -1/3*1i*sqrt(2*pi/35) * p2 * vphi3; <span class="keyword">...</span><span class="comment"> .*exp(-1i.*phi);</span>
+0072 
+0073 <span class="comment">% l=4 ------------------------------------------------------------------</span>
+0074 
+0075 hlmNewt(LM2K(4,4),:) = -64/9*sqrt(pi/7)       * p3 * vphi4; <span class="keyword">...</span><span class="comment"> .*exp(-4*1i.*phi);</span>
+0076 hlmNewt(LM2K(4,3),:) = -9/5*1i*sqrt(2*pi/7)   * p4 * vphi5; <span class="keyword">...</span><span class="comment"> .*exp(-3*1i.*phi);</span>
+0077 hlmNewt(LM2K(4,2),:) = 8/63*sqrt(pi)          * p3 * vphi4; <span class="keyword">...</span><span class="comment"> .*exp(-2*1i.*phi);</span>
+0078 hlmNewt(LM2K(4,1),:) = 1/105*1i*sqrt(2*pi)    * p4 * vphi5; <span class="keyword">...</span><span class="comment"> .*exp(-1i.*phi);</span>
+0079 
+0080 <span class="comment">% l=5 ------------------------------------------------------------------</span>
+0081 
+0082 hlmNewt(LM2K(5,5),:) = 125/12*1i*sqrt(5*pi/66)* p4 * vphi5; <span class="keyword">...</span><span class="comment"> .*exp(-5*1i.*phi);</span>
+0083 hlmNewt(LM2K(5,4),:) = 256/45*sqrt(pi/33)     * p5 * vphi6; <span class="keyword">...</span><span class="comment"> .*exp(-4*1i.*phi);</span>
+0084 hlmNewt(LM2K(5,3),:) = -9*1i/20*sqrt(3*pi/22) * p4 * vphi5; <span class="keyword">...</span><span class="comment"> .*exp(-3*1i.*phi);</span>
+0085 hlmNewt(LM2K(5,2),:) = -16/135*sqrt(pi/11)    * p5 * vphi6; <span class="keyword">...</span><span class="comment"> .*exp(-2*1i.*phi);</span>
+0086 hlmNewt(LM2K(5,1),:) = 1i/180*sqrt(pi/77)     * p4 * vphi5; <span class="keyword">...</span><span class="comment"> .*exp(-1i.*phi);</span>
+0087 
+0088 <span class="comment">% l=6 ------------------------------------------------------------------</span>
+0089 
+0090 hlmNewt(LM2K(6,6),:) = -432/5*sqrt(pi/715)      * p5 * vphi6; <span class="keyword">...</span><span class="comment"> .*exp(-6.*1i.*phi);</span>
+0091 hlmNewt(LM2K(6,5),:) = -1i*625/63*sqrt(5*pi/429)* p6 * vphi7; <span class="keyword">...</span><span class="comment"> .*exp(-5.*1i.*phi);</span>
+0092 hlmNewt(LM2K(6,4),:) = 1024/495*sqrt(2*pi/195)  * p5 * vphi6; <span class="keyword">...</span><span class="comment"> .*exp(-4.*1i.*phi);</span>
+0093 hlmNewt(LM2K(6,3),:) = 1i*81/385*sqrt(pi/13)    * p6 * vphi7; <span class="keyword">...</span><span class="comment"> .*exp(-3.*1i.*phi);</span>
+0094 hlmNewt(LM2K(6,2),:) = -16/1485*sqrt(pi/13)     * p5 * vphi6; <span class="keyword">...</span><span class="comment"> .*exp(-2.*1i.*phi);</span>
+0095 hlmNewt(LM2K(6,1),:) = -1i/2079*sqrt(2*pi/65)   * p6 * vphi7; <span class="keyword">...</span><span class="comment"> .*exp(-1i.*phi);</span>
+0096 
+0097 <span class="comment">% l=7 ------------------------------------------------------------------</span>
+0098 
+0099 hlmNewt(LM2K(7,7),:) = 16807/180*1i*sqrt(7*pi/4290)  * p6 * vphi7; <span class="keyword">...</span><span class="comment"> .*exp(-7.*1i.*phi);</span>
+0100 hlmNewt(LM2K(7,6),:) = 648/35*sqrt(3*pi/715)         * p7 * vphi8; <span class="keyword">...</span><span class="comment"> .*exp(-6.*1i.*phi);</span>
+0101 hlmNewt(LM2K(7,5),:) = -1i*3125/3276*sqrt(5*pi/66)   * p6 * vphi7; <span class="keyword">...</span><span class="comment"> .*exp(-5.*1i.*phi);</span>
+0102 hlmNewt(LM2K(7,4),:) = -1024/1365*sqrt(2*pi/165)     * p7 * vphi8; <span class="keyword">...</span><span class="comment"> .*exp(-4.*1i.*phi);</span>
+0103 hlmNewt(LM2K(7,3),:) = 1i*243/20020*sqrt(3*pi/10)    * p6 * vphi7; <span class="keyword">...</span><span class="comment"> .*exp(-3.*1i.*phi);</span>
+0104 hlmNewt(LM2K(7,2),:) = 8/3003*sqrt(pi/15)            * p7 * vphi8; <span class="keyword">...</span><span class="comment"> .*exp(-2.*1i.*phi);</span>
+0105 hlmNewt(LM2K(7,1),:) = -1i/108108*sqrt(pi/10)        * p6 * vphi7; <span class="keyword">...</span><span class="comment"> .*exp(-1i.*phi);</span>
+0106 
+0107 <span class="comment">% l=8 ------------------------------------------------------------------</span>
+0108 
+0109 hlmNewt(LM2K(8,8),:) = -131072/315*sqrt(2*pi/17017)  * p7 * vphi8; <span class="keyword">...</span><span class="comment"> .*exp(-8.*1i.*phi);</span>
+0110 
+0111 
+0112 <span class="comment">% Multiply by phase factor</span>
+0113 hlmNewt = hlmNewt .* expimphi;
+0114</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

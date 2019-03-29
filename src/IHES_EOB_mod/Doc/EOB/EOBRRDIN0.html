@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBRRDIN0</title>
+  <meta name="keywords" content="EOBRRDIN0">
+  <meta name="description" content="EOBRRDIN0 Compute radiation reaction with resummed flux for nu-&gt;0.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBRRDIN0.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBRRDIN0
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBRRDIN0 Compute radiation reaction with resummed flux for nu-&gt;0.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [Fphi, Frstar] = EOBRRDIN0(nu, dydt, y, EOBopt, EOBmet, EOBHam) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBRRDIN0 Compute radiation reaction with resummed flux for nu-&gt;0. 
+
+   Damour,Iyer &amp; Nagar RR for circular orbits.
+
+   [Fphi, Frstar] = EOBRRDIN0(nu, omega, y, EOBopt, EOBmet, EOBHam)
+
+   Reference(s)
+   Damour,Iyer &amp; Nagar ...</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBFluxDIN.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN</a>	EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</li><li><a href="EOBFluxHorizon.html" class="code" title="function [hatFH FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt)">EOBFluxHorizon</a>	EOBFluxHorizon Compute horizon-absorbed fluxes.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Fphi, Frstar] = EOBRRDIN0(nu, dydt, y, EOBopt, EOBmet, EOBHam)</a>
+0002 
+0003 <span class="comment">%EOBRRDIN0 Compute radiation reaction with resummed flux for nu-&gt;0.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   Damour,Iyer &amp; Nagar RR for circular orbits.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   [Fphi, Frstar] = EOBRRDIN0(nu, omega, y, EOBopt, EOBmet, EOBHam)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Reference(s)</span>
+0010 <span class="comment">%   Damour,Iyer &amp; Nagar ...</span>
+0011 <span class="comment">%</span>
+0012 
+0013 
+0014 <span class="comment">% Compute ddot r (approximate value) - NOT USED FOR PARTICLE !</span>
+0015 <span class="comment">%[ddotr dr_dt] = EOBopt.Computeddotr(nu, y,dydt, EOBopt, EOBmet, EOBHam);</span>
+0016 ddotr = 0.;    
+0017 
+0018 
+0019 <span class="comment">% Compute the RR</span>
+0020 Omega = dydt(1);
+0021 <span class="comment">%[Fphi, Frstar] = EOBRRDINddotr(nu,Omega,y,EOBopt,EOBmet,EOBHam,ddotr);</span>
+0022 
+0023 
+0024 <span class="comment">% specific code for particle, here below:</span>
+0025 
+0026 
+0027 <span class="comment">% Unpack y</span>
+0028 phi    = y(1);
+0029 r      = y(2);
+0030 pph    = y(3);
+0031 prstar = y(4);
+0032 
+0033 
+0034 <span class="comment">% Metric</span>
+0035 A  = EOBmet.A;
+0036 dA = EOBmet.dA;
+0037 
+0038 
+0039 <span class="comment">% Hamiltoinian</span>
+0040 Heff = EOBHam.Heff;
+0041 H    = EOBHam.H;
+0042 E    = 1;
+0043 
+0044 
+0045 <span class="comment">% Shorhands</span>
+0046 u        = 1./r;
+0047 u2       = u.^2;
+0048 
+0049 
+0050 <span class="comment">% Angular momentum flux</span>
+0051 rw   = r;
+0052 vw   = rw.*Omega;
+0053 jhat = pph./(rw.*vw);
+0054 x    = vw.^2; 
+0055 hatF = <a href="EOBFluxDIN.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN</a>(x,Omega,E,Heff,jhat,0, r,prstar,ddotr,EOBopt);
+0056 
+0057 
+0058 <span class="keyword">if</span> strcmp(EOBopt.HorizonFlux,<span class="string">'yes'</span>)
+0059   
+0060   <span class="comment">% Add horizon absorbed contribute</span>
+0061   hatFH = <a href="EOBFluxHorizon.html" class="code" title="function [hatFH FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt)">EOBFluxHorizon</a>(x,Heff,jhat,nu, EOBopt);
+0062   hatF  = hatF + hatFH;
+0063     
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="comment">% put together contributes and LO:</span>
+0067 Fphi = -32.d0/5.d0 * nu * Omega.^5 .* rw.^4 .* hatF;
+0068 
+0069 
+0070 <span class="comment">% Radial flux</span>
+0071 Frstar = 0;
+0072 
+0073 <span class="keyword">if</span> strcmp(EOBopt.RadialFlux,<span class="string">'yes'</span>)
+0074 
+0075     <span class="comment">% Add dissipation of radial momentum.</span>
+0076     <span class="comment">% Consistency argument, Bini &amp; Damour, arXiv:1210.2834</span>
+0077     c1     = (-227/140*nu + 1957/1680);
+0078     c2     = (753/560*nu^2 + 165703/70560*nu - 25672541/5080320);
+0079     Frhat  = 1 + c1.*u + c2.*u2;
+0080     Frstar = -5/3*prstar./pph .*Fphi.*Frhat;
+0081 
+0082 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

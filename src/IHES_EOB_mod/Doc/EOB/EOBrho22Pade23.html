@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBrho22Pade23</title>
+  <meta name="keywords" content="EOBrho22Pade23">
+  <meta name="description" content="EOBrho22Pade23 Computes the (2,3) Padé approximant to the rho_22.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBrho22Pade23.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBrho22Pade23
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBrho22Pade23 Computes the (2,3) Padé approximant to the rho_22.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function rho22 = EOBrho22Pade23(x,nu) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBrho22Pade23 Computes the (2,3) Padé approximant to the rho_22. 
+
+   rho22 = EOBrho22Pade23(x,nu)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBFluxDIN.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN</a>	EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</li><li><a href="EOBFluxDIN_mod.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN_mod(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN_mod</a>	EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</li><li><a href="EOBhlm.html" class="code" title="function varargout = EOBhlm(nu, t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet)">EOBhlm</a>	EOBhlm Compute the multipolar resummed waveform.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function rho22 = EOBrho22Pade23(x,nu)</a>
+0002 
+0003 <span class="comment">%EOBrho22Pade23 Computes the (2,3) Padé approximant to the rho_22.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   rho22 = EOBrho22Pade23(x,nu)</span>
+0006 <span class="comment">%</span>
+0007 
+0008 
+0009 <span class="comment">% Shorthands &amp; constants</span>
+0010 one        =  1.0;
+0011 two        =  2.0;
+0012 EulerGamma =  0.5772156649015329;
+0013 eulerlog22 =  EulerGamma + two*log(two) + 0.5d0*log(x);
+0014 
+0015 
+0016 <span class="comment">% Coefficients of the Taylor expansion (at 5PN) of rho22</span>
+0017 <span class="comment">% after the square-root resummation. It is:</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% rho22 = 1 + f1*x + f2*x^2 + f3*x^3 + f4*x^4 + f5*x^5</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Note the use of the eulerlog22 function</span>
+0022 f1  = -43/42 + 55*nu/84;
+0023 f2  = -20555/10584 - 33025/21168*nu + 19583/42336*nu^2;
+0024 f3  =  1556919113/122245200 - 428/105*eulerlog22     - 48993925*nu/9779616 <span class="keyword">...</span>
+0025       -6292061*nu^2/3259872 + 10620745*nu^3/39118464 + 41*nu*pi^2/192;
+0026 f4  = -387216563023/160190110080 + 9202*eulerlog22/2205;
+0027 f5  = -16094530514677/533967033600 + 439877/55566*eulerlog22;
+0028 
+0029 
+0030 <span class="comment">% Coefficients of the (2,3) Padé approximant</span>
+0031 c1 =  -f1;
+0032 c2 =   f1 - f2/f1;
+0033 c3 =  (f1 .* f3-f2.^2)./(f1.*(f1.^2-f2));
+0034 c4 =  -f1 .* (f2.^3+f3.^2+f1.^2.*f4-f2.*(two.*f1.*f3+f4))./((f1.^2-f2)*(f1.*f3-f2.^2));
+0035 c5 =  -(f1.^2-f2).*(-f3.^3+two.*f2.*f3.*f4-f1.*f4.^2-f2.^2.*f5+f1.*f3.*f5)<span class="keyword">...</span>
+0036         ./ ( (f1.*f3-f2.^2).*(f2.^3+f3.^2+f1.^2.*f4-f2.*(two*f1.*f3+f4) ) );
+0037     
+0038 <span class="comment">% Compute the (2,3) Padé approximant</span>
+0039 y     = one + c4.*x./(one+c5.*x);
+0040 y     = one + c3.*x./y;
+0041 y     = one + c2.*x./y;
+0042 y     = one + c1.*x./y;
+0043 
+0044 rho22 = 1./y;  
+0045 
+0046</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

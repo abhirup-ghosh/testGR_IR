@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBHam0</title>
+  <meta name="keywords" content="EOBHam0">
+  <meta name="description" content="EOBHam0 Computes the EOB real and effective Hamiltonian for particle">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBHam0.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBHam0
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBHam0 Computes the EOB real and effective Hamiltonian for particle</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = EOBHam0(nu, r,pph,prstar, EOBopt, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBHam0 Computes the EOB real and effective Hamiltonian for particle
+   dynamics (nu=0).
+
+   [H Heff dHeff_dr dHeff_dprstar dHeff_dpphi] = EOBHam0(nu, r,pph,prstar, EOBopt)
+      H             = real EOB Hamiltonian divided by mu=m1m2/(m1+m2)
+      Heff          = effective EOB Hamiltonian (divided by mu)
+      dHeff_dr      = drvtv of Heff wrt r
+      dHeff_dprstar = drvtv of Heff wrt prstar
+      dHeff_dprstar = drvtv of Heff wrt pphi
+
+   [...] = EOBHam0(nu,r,pph,prstar,EOBopt,EOBmet) pass the structure
+   output by EOBMetric.m, and do not call the routine.   
+
+   EOBHAM = EOBHam0( nu, ... ) return a structure with the Hamiltonian
+   variables and derivatives.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>	EOBMetric Computes the EOB metric potentials and derivatives.</li><li><a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>	SetVOutput Manage variables in output.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = EOBHam0(nu, r,pph,prstar, EOBopt, varargin)</a>
+0002 
+0003 <span class="comment">%EOBHam0 Computes the EOB real and effective Hamiltonian for particle</span>
+0004 <span class="comment">%   dynamics (nu=0).</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   [H Heff dHeff_dr dHeff_dprstar dHeff_dpphi] = EOBHam0(nu, r,pph,prstar, EOBopt)</span>
+0007 <span class="comment">%      H             = real EOB Hamiltonian divided by mu=m1m2/(m1+m2)</span>
+0008 <span class="comment">%      Heff          = effective EOB Hamiltonian (divided by mu)</span>
+0009 <span class="comment">%      dHeff_dr      = drvtv of Heff wrt r</span>
+0010 <span class="comment">%      dHeff_dprstar = drvtv of Heff wrt prstar</span>
+0011 <span class="comment">%      dHeff_dprstar = drvtv of Heff wrt pphi</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   [...] = EOBHam0(nu,r,pph,prstar,EOBopt,EOBmet) pass the structure</span>
+0014 <span class="comment">%   output by EOBMetric.m, and do not call the routine.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   EOBHAM = EOBHam0( nu, ... ) return a structure with the Hamiltonian</span>
+0017 <span class="comment">%   variables and derivatives.</span>
+0018 
+0019 
+0020 <span class="comment">% Manage args in</span>
+0021 na = length(varargin);
+0022 <span class="keyword">if</span> (na&gt;1)
+0023     error(<span class="string">'too many input args'</span>)
+0024 <span class="keyword">elseif</span> na==1
+0025     Metric = varargin{1};    
+0026 <span class="keyword">else</span>
+0027     <span class="comment">% Compute the EOB metric</span>
+0028     Metric = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>( nu, r, EOBopt );
+0029 <span class="keyword">end</span>
+0030 
+0031 
+0032 <span class="comment">% Shorthands &amp; constants</span>
+0033 pph2    = pph.^2;
+0034 u       = 1./r;
+0035 u2      = u.^2;
+0036 prstar2 = prstar.^2;
+0037 
+0038 
+0039 <span class="comment">%A       = Metric.A; % Metric not needed</span>
+0040 A       = 1-2*u;
+0041 
+0042 
+0043 <span class="comment">% H</span>
+0044 Heff  = sqrt(A.*(1. + pph2.*u2) + prstar2);
+0045 H     = ones(size(Heff)); <span class="comment">% H/nu</span>
+0046 
+0047 dHeff_dr      = zeros(size(Heff));
+0048 dHeff_dprstar = zeros(size(Heff));
+0049 dHeff_dpphi   = zeros(size(Heff));
+0050     
+0051 
+0052 <span class="comment">% Manage args out</span>
+0053 varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>(nargout, H,Heff,dHeff_dr,dHeff_dprstar,dHeff_dpphi); 
+0054</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

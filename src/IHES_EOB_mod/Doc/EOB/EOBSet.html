@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBSet</title>
+  <meta name="keywords" content="EOBSet">
+  <meta name="description" content="EOBSet Create/alter EOB OPTIONS structure.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBSet.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBSet
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBSet Create/alter EOB OPTIONS structure.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function options = EOBSet(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBSet Create/alter EOB OPTIONS structure.
+
+   OPTION = EOBSet('NAME1',VALUE1,'NAME2',VALUE2,...) creates a structure
+   OPTIONS in which the named properties have the specified values. Any
+   unspecified properties have default values. 
+
+   OPTIONS = EOBSet(OLDOPTS,NEWOPTS) combines an existing options structure
+   OLDOPTS with a new options structure NEWOPTS. Any new properties
+   overwrite corresponding old properties. 
+
+   EOBSet with no input arguments displays all property names and the
+   possible values.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li><li><a href="Example_3PN.html" class="code" title="">Example_3PN</a>	Example of EOB run: specify to order 3PN</li><li><a href="Example_EOBRunq1.html" class="code" title="">Example_EOBRunq1</a>	Main example of EOB run</li><li><a href="Example_EOBRunq1_insplunge_ringdown.html" class="code" title="">Example_EOBRunq1_insplunge_ringdown</a>	Main example of EOB run</li><li><a href="Example_NQCdetermine.html" class="code" title="">Example_NQCdetermine</a>	Example of EOB run: determine NQC corrections</li><li><a href="Example_Particle.html" class="code" title="">Example_Particle</a>	Example of EOB run: test-mass case</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function options = EOBSet(varargin)</a>
+0002 
+0003 <span class="comment">%EOBSet Create/alter EOB OPTIONS structure.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   OPTION = EOBSet('NAME1',VALUE1,'NAME2',VALUE2,...) creates a structure</span>
+0006 <span class="comment">%   OPTIONS in which the named properties have the specified values. Any</span>
+0007 <span class="comment">%   unspecified properties have default values.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   OPTIONS = EOBSet(OLDOPTS,NEWOPTS) combines an existing options structure</span>
+0010 <span class="comment">%   OLDOPTS with a new options structure NEWOPTS. Any new properties</span>
+0011 <span class="comment">%   overwrite corresponding old properties.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   EOBSet with no input arguments displays all property names and the</span>
+0014 <span class="comment">%   possible values.</span>
+0015 <span class="comment">%</span>
+0016 
+0017 
+0018 <span class="comment">% Properties names</span>
+0019 Names = [
+0020     <span class="string">'Dynamics                  '</span> <span class="comment">% EOB dynamics flag</span>
+0021     <span class="string">'RadReac                   '</span> <span class="comment">% Radiation Reaction flag</span>
+0022     <span class="string">'ddotrMethodDyn            '</span> <span class="comment">% how to compute ddotr during dynamics</span>
+0023     <span class="string">'ddotrMethodWav            '</span> <span class="comment">% how to compute ddotr in the waves</span>
+0024     <span class="string">'HorizonFlux               '</span> <span class="comment">% Use horizon flux ?</span>
+0025     <span class="string">'RadialFlux                '</span> <span class="comment">% Use radial flux ?</span>
+0026     <span class="string">'FIterms                   '</span> <span class="comment">% Include Fujita-Iyer term inm rho_lm ?</span>
+0027     <span class="string">'rholmarg                  '</span> <span class="comment">% Argument of rho_lm in DIN flux</span>
+0028     <span class="string">'PNorder                   '</span> <span class="comment">% PN order to be used</span>
+0029     <span class="string">'resumD                    '</span> <span class="comment">% Resum metric poential D ?</span>
+0030     <span class="string">'resumf22                  '</span> <span class="comment">% Resum f_{22} amplitude</span>
+0031     <span class="string">'Tidal                     '</span> <span class="comment">% Use tidal corrections ?</span>
+0032     <span class="string">'PNTidal                   '</span> <span class="comment">% PN order of tidal correction</span>
+0033     <span class="string">'NewtonWaves               '</span>
+0034     <span class="string">'DetermineNQCab            '</span>
+0035     <span class="string">'NQCFileNR                 '</span>
+0036     <span class="string">'QNMDataDir                '</span>
+0037     <span class="string">'textend                   '</span>
+0038     <span class="string">'ODEEventFunRmin           '</span>
+0039     <span class="string">'ODESolverAbsTol           '</span> <span class="comment">% options for Matlab ODExx ...</span>
+0040     <span class="string">'ODESolverRelTol           '</span>
+0041     <span class="string">'ODESolverRefine           '</span>    
+0042     ];
+0043 
+0044 [m,n]=size(Names);
+0045 names = lower(Names);
+0046 
+0047 
+0048 <span class="comment">% Print out possible values of properties</span>
+0049 <span class="keyword">if</span> (nargin == 0) &amp;&amp; (nargout == 0)
+0050     
+0051     <span class="comment">% Description</span>
+0052     Description = {
+0053         <span class="string">' string                     {''eob''}                '</span>
+0054         <span class="string">' string                     {''din''}                '</span>
+0055         <span class="string">' string                     {''boot2''}              '</span>
+0056         <span class="string">' string                     {''fd''}                 '</span>
+0057         <span class="string">' string                     {''yes''}                '</span>
+0058         <span class="string">' string                     {''yes''}                '</span>
+0059         <span class="string">' string                     {''yes''}                '</span>
+0060         <span class="string">' string                     {''v_phi'' }             '</span>
+0061         <span class="string">' string                     {''5pnlog''}             '</span>
+0062         <span class="string">' string                     {''pade03''}             '</span>
+0063         <span class="string">' string                     {''no''}                 '</span>
+0064         <span class="string">' string                     {''no''}                 '</span>
+0065         <span class="string">' string                     {''nnlo''}               '</span>
+0066         <span class="string">' string                     {''no''}                 '</span>
+0067         <span class="string">' string                     {''no''}                 '</span>
+0068         <span class="string">' string                     {''''}                   '</span>
+0069         <span class="string">' string                     {''''}                   '</span>
+0070         <span class="string">' positive scalar            {1.0}                   '</span>
+0071         <span class="string">' positive scalar            {100}                    '</span>
+0072         <span class="string">' positive scalar or vector  {1e-12}                  '</span>        
+0073         <span class="string">' positive scalar            {1e-9}                   '</span>
+0074         <span class="string">' positive integer           {4}                      '</span>
+0075         };
+0076 
+0077     Names = mat2cell(Names,ones(m,1),n);
+0078     cellfun(@(x,y) fprintf(<span class="string">' %s [ %s ] \n'</span>,x,y),Names,Description);
+0079     
+0080     <span class="keyword">return</span>;
+0081     
+0082 <span class="keyword">end</span>
+0083 
+0084 
+0085 <span class="comment">% Combine all leading options structures o1, o2, ... in odeset(o1,o2,...)</span>
+0086 options = [];
+0087 <span class="keyword">for</span> j = 1:m
+0088   options.(deblank(Names(j,:))) = [];
+0089 <span class="keyword">end</span>
+0090 i = 1;
+0091 <span class="keyword">while</span> i &lt;= nargin
+0092   arg = varargin{i};
+0093   <span class="keyword">if</span> ischar(arg)                        <span class="comment">% arg is an option name</span>
+0094     <span class="keyword">break</span>;
+0095   <span class="keyword">end</span>
+0096   <span class="keyword">if</span> ~isempty(arg)                      <span class="comment">% [] is a valid options argument</span>
+0097     <span class="keyword">if</span> ~isa(arg,<span class="string">'struct'</span>)
+0098       error(<span class="string">'EOBSet:NoPropNameOrStruct'</span>,<span class="keyword">...</span>
+0099             [<span class="string">'Expected argument %d to be a string property name '</span> <span class="keyword">...</span>
+0100                      <span class="string">'or an options structure\ncreated with EOBSet.'</span>], i);
+0101     <span class="keyword">end</span>
+0102     <span class="keyword">for</span> j = 1:m
+0103       <span class="keyword">if</span> any(strcmp(fieldnames(arg),deblank(Names(j,:))))
+0104         val = arg.(deblank(Names(j,:)));
+0105       <span class="keyword">else</span>
+0106         val = [];
+0107       <span class="keyword">end</span>
+0108       <span class="keyword">if</span> ~isempty(val)
+0109         options.(deblank(Names(j,:))) = val;
+0110       <span class="keyword">end</span>
+0111     <span class="keyword">end</span>
+0112   <span class="keyword">end</span>
+0113   i = i + 1;
+0114 <span class="keyword">end</span>
+0115 
+0116 
+0117 <span class="comment">% A finite state machine to parse name-value pairs</span>
+0118 <span class="keyword">if</span> rem(nargin-i+1,2) ~= 0
+0119   error(<span class="string">'EOBSet:ArgNameValueMismatch'</span>,<span class="keyword">...</span>
+0120         <span class="string">'Arguments must occur in name-value pairs.'</span>);
+0121 <span class="keyword">end</span>
+0122 expectval = 0;                       <span class="comment">% start expecting a name, not a value</span>
+0123 <span class="keyword">while</span> i &lt;= nargin
+0124   arg = varargin{i};
+0125     
+0126   <span class="keyword">if</span> ~expectval
+0127     <span class="keyword">if</span> ~ischar(arg)
+0128       error(<span class="string">'EOBSet:NoPropName'</span>,<span class="keyword">...</span>
+0129             <span class="string">'Expected argument %d to be a string property name.'</span>, i);
+0130     <span class="keyword">end</span>
+0131     
+0132     lowArg = lower(arg);
+0133     j = strmatch(lowArg,names);
+0134     <span class="keyword">if</span> isempty(j)                       <span class="comment">% if no matches</span>
+0135       error(<span class="string">'EOBSet:InvalidPropName'</span>,<span class="keyword">...</span>
+0136             <span class="string">'Unrecognized property name ''%s''.'</span>, arg);
+0137     <span class="keyword">elseif</span> length(j) &gt; 1                <span class="comment">% if more than one match</span>
+0138       <span class="comment">% Check for any exact matches (in case any names are subsets of others)</span>
+0139       k = strmatch(lowArg,names,<span class="string">'exact'</span>);
+0140       <span class="keyword">if</span> length(k) == 1
+0141         j = k;
+0142       <span class="keyword">else</span>
+0143         msg = sprintf(<span class="string">'Ambiguous property name ''%s'' '</span>, arg);
+0144         msg = [msg <span class="string">'('</span> deblank(Names(j(1),:))];
+0145         <span class="keyword">for</span> k = j(2:length(j))'
+0146           msg = [msg <span class="string">', '</span> deblank(Names(k,:))];
+0147         <span class="keyword">end</span>
+0148         msg = sprintf(<span class="string">'%s).'</span>, msg);
+0149         error(<span class="string">'EOBSet:AmbiguousPropName'</span>, msg);
+0150       <span class="keyword">end</span>
+0151     <span class="keyword">end</span>
+0152     expectval = 1;                      <span class="comment">% we expect a value next</span>
+0153     
+0154   <span class="keyword">else</span>
+0155     options.(deblank(Names(j,:))) = arg;
+0156     expectval = 0;
+0157       
+0158   <span class="keyword">end</span>
+0159   i = i + 1;
+0160 <span class="keyword">end</span>
+0161 
+0162 <span class="keyword">if</span> expectval
+0163   error(<span class="string">'EOBSet:NoValueForProp'</span>,<span class="keyword">...</span>
+0164         <span class="string">'Expected value for property ''%s''.'</span>, arg);
+0165 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBflmNewt</title>
+  <meta name="keywords" content="EOBflmNewt">
+  <meta name="description" content="EOBFlmNewt Computes the GW multipolar flux for a binary in circular motion">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBflmNewt.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBflmNewt
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBFlmNewt Computes the GW multipolar flux for a binary in circular motion</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function Nlm = EOBflmNewt(x,nu, EOBopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBFlmNewt Computes the GW multipolar flux for a binary in circular motion
+generic nu.  
+
+   fNewtlm = EOBflmNewt(x,nu, EOBopt) return Flm/nu^2</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBFluxDIN.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN</a>	EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</li><li><a href="EOBFluxDIN_mod.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN_mod(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN_mod</a>	EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Nlm = EOBflmNewt(x,nu, EOBopt)</a>
+0002 
+0003 <span class="comment">%EOBFlmNewt Computes the GW multipolar flux for a binary in circular motion</span>
+0004 <span class="comment">%generic nu.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   fNewtlm = EOBflmNewt(x,nu, EOBopt) return Flm/nu^2</span>
+0007 <span class="comment">%</span>
+0008 
+0009 <span class="comment">% TODO: this routine requires optimization</span>
+0010 <span class="comment">% - precompute coefficients c(nu)</span>
+0011 
+0012 
+0013 LM2K = EOBopt.LM2K;
+0014 
+0015 <span class="comment">% Shorthands</span>
+0016 nu2 = nu^2;
+0017 nu3 = nu^3;
+0018 
+0019 x5  = x.^5;
+0020 x6  = x.^6;
+0021 x7  = x.^7;
+0022 x8  = x.^8;
+0023 x9  = x.^9;
+0024 x10 = x.^10;
+0025 x11 = x.^11;
+0026 x12 = x.^12;
+0027 
+0028 sp2 = 1-4*nu;
+0029 sp3 = (1-3*nu)^2;
+0030 sp4 = (1-4*nu)*(1-2*nu)^2;
+0031 sp5 = (1-5*nu+5*nu2)^2;
+0032 sp6 = (1-4*nu)*(3*nu2-4*nu +1)^2;
+0033 sp7 = (1 - 7*nu + 14*nu2 - 7*nu3)^2;
+0034 
+0035 
+0036 <span class="comment">% Newtonian partial fluxes</span>
+0037 <span class="keyword">if</span> nu~=0
+0038     
+0039     Nlm(LM2K(2,2),:) =   32/5        *       x5;
+0040     Nlm(LM2K(2,1),:) =   8/45        * sp2 * x6;
+0041     
+0042     Nlm(LM2K(3,3),:) = 243/28        * sp2 * x6;
+0043     Nlm(LM2K(3,2),:) = 32/63         * sp3 * x7;
+0044     Nlm(LM2K(3,1),:) = 1/1260        * sp2 * x6;
+0045     
+0046     Nlm(LM2K(4,4),:) = 8192/567      * sp3 * x7;
+0047     Nlm(LM2K(4,3),:) = 729/700       * sp4 * x8;
+0048     Nlm(LM2K(4,2),:) = 32/3969       * sp3 * x7;
+0049     Nlm(LM2K(4,1),:) = 1/44100       * sp4 * x8;
+0050     
+0051     Nlm(LM2K(5,5),:) = 1953125/76032 * sp4 * x8;
+0052     Nlm(LM2K(5,4),:) = 131072/66825  * sp5 * x9;
+0053     Nlm(LM2K(5,3),:) = 2187/70400    * sp4 * x8;
+0054     Nlm(LM2K(5,2),:) = 256/400950    * sp5 * x9;
+0055     Nlm(LM2K(5,1),:) = 1/19958400    * sp4 * x8;
+0056     
+0057     Nlm(LM2K(6,6),:) = 839808/17875             * sp5 * x9;
+0058     Nlm(LM2K(6,5),:) = 48828125/13621608        * sp6 * x10;
+0059     Nlm(LM2K(6,4),:) = 4194304/47779875         * sp5 * x9;
+0060     Nlm(LM2K(6,3),:) = 59049/15415400           * sp6 * x10;
+0061     Nlm(LM2K(6,2),:) = 128/28667925             * sp5 * x9;
+0062     Nlm(LM2K(6,1),:) = 1/1123782660             * sp6 * x10;
+0063     
+0064     Nlm(LM2K(7,7),:) = 96889010407/1111968000   * sp6 * x10;
+0065     Nlm(LM2K(7,6),:) = 5668704/875875           * sp7 * x11;
+0066     Nlm(LM2K(7,5),:) = 1220703125/5.666588928e9 * sp6 * x10;
+0067     Nlm(LM2K(7,4),:) = (4194304*(1 - 7*nu + 14*nu2 - 7*nu3)^2*x11)/3.07432125e8;
+0068     Nlm(LM2K(7,3),:) = (1594323*(1 - 4*nu)*(1 - 4*nu + 3*nu2)^2*x10)/3.2064032e10;
+0069     Nlm(LM2K(7,2),:) = (32*(1 - 7*nu + 14*nu2 - 7*nu3)^2*x11)/1.35270135e8;
+0070     Nlm(LM2K(7,1),:) = ((1 - 4*nu)*(1 - 4*nu + 3*nu2)^2*x10)/9.3498717312e11;
+0071     
+0072     Nlm(LM2K(8,8),:) = (7*nu3-14*nu2+7*nu-1)^2*274877906944/1688511825*x11;
+0073     Nlm(LM2K(8,7),:) = (4747561509943*(1 - 4*nu)*(1 - 6*nu + 10*nu2 - 4*nu3)^2*x12)/4.083146496e11;
+0074     Nlm(LM2K(8,6),:) = (51018336*(1 - 7*nu + 14*nu2 - 7*nu3)^2*x11)/1.04229125e8;
+0075     Nlm(LM2K(8,5),:) = (30517578125*(1 - 4*nu)*(1 - 6*nu + 10*nu2 - 4*nu3)^2*x12)/8.00296713216e11;
+0076     Nlm(LM2K(8,4),:) = (4194304*(1 - 7*nu + 14*nu2 - 7*nu3)^2*x11)/1.5679038375e10;
+0077     Nlm(LM2K(8,3),:) = (177147*(1 - 4*nu)*(1 - 6*nu + 10*nu2 - 4*nu3)^2*x12)/3.96428032e10;
+0078     Nlm(LM2K(8,2),:) = (32*(1 - 7*nu + 14*nu2 - 7*nu3)^2*x11)/3.4493884425e10;
+0079     Nlm(LM2K(8,1),:) = ((1 - 4*nu)*(1 - 6*nu + 10*nu2 - 4*nu3)^2*x12)/8.174459284992e13;
+0080     
+0081 <span class="keyword">else</span>
+0082     
+0083     Nlm(LM2K(2,2),:) = x5* 32.d0/5.d0;
+0084     Nlm(LM2K(2,1),:) = x6* 8.d0/45.d0;
+0085     
+0086     Nlm(LM2K(3,3),:) = x6* 243.d0/28.d0;
+0087     Nlm(LM2K(3,2),:) = x7* 32.d0/63.d0;
+0088     Nlm(LM2K(3,1),:) = x6/ 1260.d0;
+0089     
+0090     Nlm(LM2K(4,4),:) = x7* 8192.d0/567.d0;
+0091     Nlm(LM2K(4,3),:) = x8* 729.d0/700.d0;
+0092     Nlm(LM2K(4,2),:) = x7* 32.d0/3969.d0;
+0093     Nlm(LM2K(4,1),:) = x8/ 44100.d0;
+0094     
+0095     Nlm(LM2K(5,5),:) = x8* 1953125.d0/76032.d0;
+0096     Nlm(LM2K(5,4),:) = x9* 131072.d0/66825.d0;
+0097     Nlm(LM2K(5,3),:) = x8* 2187.d0/70400.d0;
+0098     Nlm(LM2K(5,2),:) = x9* 256.d0/400950.d0;
+0099     Nlm(LM2K(5,1),:) = x8/ 19958400.d0;
+0100     
+0101     Nlm(LM2K(6,6),:) = x9* 839808.d0/17875.d0;
+0102     Nlm(LM2K(6,5),:) = x10* 48828125.d0/13621608.d0;
+0103     Nlm(LM2K(6,4),:) = x9* 4194304.d0/47779875.d0;
+0104     Nlm(LM2K(6,3),:) = x10* 59049.d0/15415400.d0;
+0105     Nlm(LM2K(6,2),:) = x9* 128.d0/28667925.d0;
+0106     Nlm(LM2K(6,1),:) = x10/ 1123782660.d0;
+0107     
+0108     Nlm(LM2K(7,7),:) = x10* 96889010407.d0/1111968000.d0;
+0109     Nlm(LM2K(7,6),:) = x11* 5668704.d0/875875.d0;
+0110     Nlm(LM2K(7,5),:) = x10* 1220703125.d0/5.666588928d9;
+0111     Nlm(LM2K(7,4),:) = x11* 4194304.d0/3.07432125d8;
+0112     Nlm(LM2K(7,3),:) = x10* 1594323.d0/3.2064032d10;
+0113     Nlm(LM2K(7,2),:) = x11* 32.d0/1.35270135d8;
+0114     Nlm(LM2K(7,1),:) = x10/ 9.3498717312d11;
+0115     
+0116     Nlm(LM2K(8,8),:) = x11* 274877906944.d0/1688511825.d0;
+0117     Nlm(LM2K(8,7),:) = x12* 4747561509943.d0/4.083146496d11;
+0118     Nlm(LM2K(8,6),:) = x11* 51018336.d0/1.04229125d8;
+0119     Nlm(LM2K(8,5),:) = x12* 30517578125.d0/8.00296713216d11;
+0120     Nlm(LM2K(8,4),:) = x11* 4194304.d0/1.5679038375d10;
+0121     Nlm(LM2K(8,3),:) = x12* 177147.d0/3.96428032d10;
+0122     Nlm(LM2K(8,2),:) = x11* 32.d0/3.4493884425d10;
+0123     Nlm(LM2K(8,1),:) = x12/ 8.174459284992d13;
+0124     
+0125 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

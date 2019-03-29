@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBIdPostAdiab0</title>
+  <meta name="keywords" content="EOBIdPostAdiab0">
+  <meta name="description" content="EOBIdPostAdiab0 Provides initial data in post-circular (or post-adiabatic)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBIdPostAdiab0.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBIdPostAdiab0
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBIdPostAdiab0 Provides initial data in post-circular (or post-adiabatic)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function y0 = EOBIdPostAdiab0( nu, r0, EOBopt ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBIdPostAdiab0 Provides initial data in post-circular (or post-adiabatic) 
+   approximation for point-particle dynamics (nu&lt;&lt;1). 
+
+   For nu&lt;&lt;1, the post-circular approximation is sufficient to
+   yield an initial configuration with negligible 
+   eccentricity. Note that for generic nu one computes initial
+   data in the post-post-circular approximation in a different routine
+   (EOBIdPostAdiab(nu,r0,EOBopt)
+
+   Two steps procedure:
+    1. Compute j                      =&gt; circular ID, j!=0, pr =0
+    2. From j, compute pr*            =&gt; post circular ID, j!=0, pr!=0  
+
+   Y0 = EOBIdPostAdiab0( nu, r0, EOBopt ) given the radius, return
+   the initial data vector Y0 = [0,r0,pph,prstar,pr,j] 
+
+   Reference(s)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBFluxDIN.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN</a>	EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</li><li><a href="EOBFluxHorizon.html" class="code" title="function [hatFH FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt)">EOBFluxHorizon</a>	EOBFluxHorizon Compute horizon-absorbed fluxes.</li><li><a href="EOBFluxTaylor.html" class="code" title="function hatF = EOBFluxTaylor(nu,v)">EOBFluxTaylor</a>	EOBFluxTaylor.m Compute the Taylor expanded GW flux at 3.5PN order for</li><li><a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>	EOBMetric Computes the EOB metric potentials and derivatives.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y0 = EOBIdPostAdiab0( nu, r0, EOBopt )</a>
+0002 
+0003 <span class="comment">%EOBIdPostAdiab0 Provides initial data in post-circular (or post-adiabatic)</span>
+0004 <span class="comment">%   approximation for point-particle dynamics (nu&lt;&lt;1).</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   For nu&lt;&lt;1, the post-circular approximation is sufficient to</span>
+0007 <span class="comment">%   yield an initial configuration with negligible</span>
+0008 <span class="comment">%   eccentricity. Note that for generic nu one computes initial</span>
+0009 <span class="comment">%   data in the post-post-circular approximation in a different routine</span>
+0010 <span class="comment">%   (EOBIdPostAdiab(nu,r0,EOBopt)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Two steps procedure:</span>
+0013 <span class="comment">%    1. Compute j                      =&gt; circular ID, j!=0, pr =0</span>
+0014 <span class="comment">%    2. From j, compute pr*            =&gt; post circular ID, j!=0, pr!=0</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   Y0 = EOBIdPostAdiab0( nu, r0, EOBopt ) given the radius, return</span>
+0017 <span class="comment">%   the initial data vector Y0 = [0,r0,pph,prstar,pr,j]</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Reference(s)</span>
+0020 <span class="comment">%</span>
+0021 
+0022 
+0023 use_DIN_RR = strcmp(EOBopt.RadReac,<span class="string">'din'</span>);
+0024 
+0025 
+0026 <span class="comment">% Compute everything in a neighbourhood of r0</span>
+0027 <span class="comment">% (take a finite diff drvt later, quick way)</span>
+0028 N  = 6;
+0029 dr = 1e-8;
+0030 r  = r0-(N-1)*dr:dr:r0+N*dr;
+0031 r2 = r.^2;
+0032 r3 = r.^3;
+0033 u  = 1./r;
+0034 
+0035 
+0036 <span class="comment">% Compute metric</span>
+0037 [A dA d2A B] = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>( nu, r, EOBopt );
+0038 
+0039 
+0040 <span class="comment">% Angular momentum stuff</span>
+0041 j2   =  r3.*dA./(2*A-r.*dA);
+0042 j    =  sqrt(j2);
+0043 j3   =  j2.*j;
+0044 djdr = -j3./r3.*( 2.0 - 3.0*A./(r.*dA) - A.*d2A./(dA.^2) );
+0045 
+0046 
+0047 <span class="comment">% Adiabatic energy</span>
+0048 H0eff    = sqrt(A.*(1.0 + j2./r2));
+0049 E0       = 1.0;
+0050 Omega_j  = A.*j./(r2.*H0eff);
+0051 r_omega  = r;
+0052 v_phi    = Omega_j.*r_omega;
+0053 
+0054 
+0055 <span class="keyword">if</span> use_DIN_RR
+0056         
+0057     <span class="comment">% DIN resummmation of radiation reaction</span>
+0058     x    = v_phi.^2;
+0059     jhat = j./(r_omega.*v_phi);
+0060     hatF = <a href="EOBFluxDIN.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN</a>(x,Omega_j,E0,H0eff,jhat,nu,r,0,0, EOBopt);
+0061     
+0062     <span class="keyword">if</span> strcmp(lower(EOBopt.HorizonFlux),<span class="string">'yes'</span>) 
+0063     
+0064         <span class="comment">% Add horizon absorbed contribute</span>
+0065         hatFH = <a href="EOBFluxHorizon.html" class="code" title="function [hatFH FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt)">EOBFluxHorizon</a>(x,H0eff,jhat,nu, EOBopt);
+0066         hatF  = hatF + hatFH;
+0067     
+0068     <span class="keyword">end</span>
+0069 
+0070     Fphi = -32.0/5.0*nu * Omega_j.^5 .*  r_omega.^4 .*hatF;
+0071         
+0072 <span class="keyword">else</span> 
+0073         
+0074     <span class="comment">% Taylor form</span>
+0075     hatF = <a href="EOBFluxTaylor.html" class="code" title="function hatF = EOBFluxTaylor(nu,v)">EOBFluxTaylor</a>(v_phi,nu);    
+0076     Fphi = -32.0/5.0*nu * Omega_j.^(7/3) .* hatF;
+0077     
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">% Radial momentum conjugate to r*: post-circular ID</span>
+0081 Ctmp      =  sqrt(B./A).*H0eff;
+0082 prstar    =  Ctmp.*Fphi./djdr;
+0083 pph       =  j; 
+0084 
+0085 
+0086 <span class="comment">% Radial momentum conjugate to r</span>
+0087 pr = prstar.*sqrt(B./A);
+0088 
+0089 
+0090 <span class="comment">% Compute the variables at r(N)</span>
+0091 pr     = pr(N);
+0092 prstar = prstar(N);
+0093 pph    = pph(N);
+0094 j      = j(N);
+0095 
+0096 
+0097 y0 = [0,r0,pph,prstar,pr,j];</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

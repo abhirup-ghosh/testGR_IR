@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBHam</title>
+  <meta name="keywords" content="EOBHam">
+  <meta name="description" content="EOBHam Computes the EOB real and effective Hamiltonian for EOB dynamics">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBHam.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBHam
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBHam Computes the EOB real and effective Hamiltonian for EOB dynamics</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = EOBHam(nu, r,pph,prstar, EOBopt, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBHam Computes the EOB real and effective Hamiltonian for EOB dynamics
+   (generic nu). 
+
+   [H Heff dHeff_dr dHeff_dprstar dHeff_dpphi] = EOBHam(nu, r,pph,prstar, EOBopt)
+      H             = real EOB Hamiltonian divided by mu=m1m2/(m1+m2)
+      Heff          = effective EOB Hamiltonian (divided by mu)
+      dHeff_dr      = drvtv of Heff wrt r
+      dHeff_dprstar = drvtv of Heff wrt prstar
+      dHeff_dprstar = drvtv of Heff wrt pphi
+
+   [H Heff dHeff_dr dHeff_dprstar] = EOBHam(nu,r,pph,prstar,EOBopt,EOBmet)
+   pass the structure output by EOBMetric.m, and do not call the routine.  
+
+   EOBHAM = EOBHam( nu, ... ) return a structure with the Hamiltonian
+   variables and derivatives.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>	EOBMetric Computes the EOB metric potentials and derivatives.</li><li><a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>	SetVOutput Manage variables in output.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRRDIN.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN</a>	EOBRRDIN Compute radiation reaction with resummed flux.</li><li><a href="EOBRRDIN_mod.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN_mod(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN_mod</a>	EOBRRDIN Compute radiation reaction with resummed flux.</li><li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li><li><a href="EOBddotrBoot2.html" class="code" title="function [ddotr dr_dt] = EOBddotrBoot2(nu,y,dydt,EOBopt,EOBmet,EOBHam)">EOBddotrBoot2</a>	EOBddotrBoot2.m Computes an approximate value for \ddot{r}.</li><li><a href="EOBddotrBoot2_mod.html" class="code" title="function [ddotr dr_dt] = EOBddotrBoot2_mod(nu,y,dydt,EOBopt,EOBmet,EOBHam)">EOBddotrBoot2_mod</a>	EOBddotrBoot2.m Computes an approximate value for \ddot{r}.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = EOBHam(nu, r,pph,prstar, EOBopt, varargin)</a>
+0002 
+0003 <span class="comment">%EOBHam Computes the EOB real and effective Hamiltonian for EOB dynamics</span>
+0004 <span class="comment">%   (generic nu).</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   [H Heff dHeff_dr dHeff_dprstar dHeff_dpphi] = EOBHam(nu, r,pph,prstar, EOBopt)</span>
+0007 <span class="comment">%      H             = real EOB Hamiltonian divided by mu=m1m2/(m1+m2)</span>
+0008 <span class="comment">%      Heff          = effective EOB Hamiltonian (divided by mu)</span>
+0009 <span class="comment">%      dHeff_dr      = drvtv of Heff wrt r</span>
+0010 <span class="comment">%      dHeff_dprstar = drvtv of Heff wrt prstar</span>
+0011 <span class="comment">%      dHeff_dprstar = drvtv of Heff wrt pphi</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   [H Heff dHeff_dr dHeff_dprstar] = EOBHam(nu,r,pph,prstar,EOBopt,EOBmet)</span>
+0014 <span class="comment">%   pass the structure output by EOBMetric.m, and do not call the routine.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   EOBHAM = EOBHam( nu, ... ) return a structure with the Hamiltonian</span>
+0017 <span class="comment">%   variables and derivatives.</span>
+0018 <span class="comment">%</span>
+0019 
+0020 
+0021 PNorder = EOBopt.PNorder;
+0022 
+0023 
+0024 <span class="comment">% Manage args in</span>
+0025 na = length(varargin);
+0026 <span class="keyword">if</span> (na&gt;1)
+0027     error(<span class="string">'too many input args'</span>)
+0028 <span class="keyword">elseif</span> na==1
+0029     Metric = varargin{1};    
+0030 <span class="keyword">else</span>
+0031     <span class="comment">% Compute the EOB metric</span>
+0032     Metric = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>( nu, r, EOBopt );
+0033 <span class="keyword">end</span>
+0034 
+0035 
+0036 <span class="comment">% Shorthands &amp; constants</span>
+0037 z3      = 2.0*nu*(4.0-3.0*nu);
+0038 pph2    = pph.^2;
+0039 u       = 1./r;
+0040 u2      = u.^2;
+0041 u3      = u.^3;
+0042 prstar2 = prstar.^2;
+0043 prstar3 = prstar.^3;
+0044 prstar4 = prstar.^4;
+0045 
+0046 A       = Metric.A;
+0047 dA      = Metric.dA;
+0048 
+0049 
+0050 <span class="comment">% Ham</span>
+0051 <span class="keyword">if</span> strcmp(PNorder,<span class="string">'1pn'</span>) || strcmp(PNorder,<span class="string">'2pn'</span>)
+0052     
+0053     Heff          = sqrt(A.*(1.d0 + pph2.*u2) + prstar2);
+0054     dHeff_dr      = 0.;
+0055     dHeff_dprstar = 0.;
+0056     dHeff_dpphi   = 0.;
+0057     
+0058 <span class="keyword">else</span>
+0059     
+0060     Heff          = sqrt(A.*(1.d0 + pph2.*u2) + prstar2 + z3*A.*u2.*prstar4);
+0061     divHeff       = 1./Heff;     
+0062     dHeff_dr      = 0.5*(dA + (pph2 + z3*prstar4).*(dA.*u2 - 2*A.*u3)).*divHeff;
+0063     dHeff_dprstar = (prstar + z3*2.0*A.*u2.*prstar3).*divHeff;
+0064     dHeff_dpphi   =  A.*pph.*u2.*divHeff;
+0065     
+0066 <span class="keyword">end</span>
+0067 
+0068 H = sqrt( 1d0 + 2d0*nu*(Heff - 1) )/nu;
+0069     
+0070 
+0071 <span class="comment">% Manage args out</span>
+0072 varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, H,Heff,dHeff_dr,dHeff_dprstar,dHeff_dpphi );</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

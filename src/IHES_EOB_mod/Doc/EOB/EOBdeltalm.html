@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBdeltalm</title>
+  <meta name="keywords" content="EOBdeltalm">
+  <meta name="description" content="EOBdeltalm Residual phase corrections delta_{lm} up to l=m=5.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBdeltalm.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBdeltalm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBdeltalm Residual phase corrections delta_{lm} up to l=m=5.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function deltalm = EOBdeltalm(Hreal,Omega,nu, EOBopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBdeltalm Residual phase corrections delta_{lm} up to l=m=5.
+
+   EOBdeltalm(Hreal,Omega,nu, EOBopt);
+
+ 
+   nu=0, the delta_lmm are written in Taylor-expanded form and all terms
+   up to 4.5PN accuracy are included. 
+   nu~=0, 
+         (i) the 4.5PN, test-mass terms are excluded because of the too
+         large PN-gap with the nu-dependent terms 
+         (ii) the deltalmm are replaced by suitable Pade' approximants for
+         multipoles (2,2), (2,1), (3,3), (3,1)
+   The l=m=2 residual phase includes the 3.5PN (nu-dependent) correction
+   obtained in Faye et al. 
+
+   Reference(s)
+    Damour, Iyer &amp; Nagar, PRD 79, 064004 (2008) 
+    Fujita &amp; Iyer, PRD 82 044051 (2010)
+    Faye et al., Class. Q. Grav. 29 175004 (2012)
+    Damour, Nagar &amp; Bernuzzi, PRD 87, 084035 (2013)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBhlm.html" class="code" title="function varargout = EOBhlm(nu, t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet)">EOBhlm</a>	EOBhlm Compute the multipolar resummed waveform.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function deltalm = EOBdeltalm(Hreal,Omega,nu, EOBopt)</a>
+0002 
+0003 
+0004 <span class="comment">%EOBdeltalm Residual phase corrections delta_{lm} up to l=m=5.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   EOBdeltalm(Hreal,Omega,nu, EOBopt);</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   nu=0, the delta_lmm are written in Taylor-expanded form and all terms</span>
+0010 <span class="comment">%   up to 4.5PN accuracy are included.</span>
+0011 <span class="comment">%   nu~=0,</span>
+0012 <span class="comment">%         (i) the 4.5PN, test-mass terms are excluded because of the too</span>
+0013 <span class="comment">%         large PN-gap with the nu-dependent terms</span>
+0014 <span class="comment">%         (ii) the deltalmm are replaced by suitable Pade' approximants for</span>
+0015 <span class="comment">%         multipoles (2,2), (2,1), (3,3), (3,1)</span>
+0016 <span class="comment">%   The l=m=2 residual phase includes the 3.5PN (nu-dependent) correction</span>
+0017 <span class="comment">%   obtained in Faye et al.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   Reference(s)</span>
+0020 <span class="comment">%    Damour, Iyer &amp; Nagar, PRD 79, 064004 (2008)</span>
+0021 <span class="comment">%    Fujita &amp; Iyer, PRD 82 044051 (2010)</span>
+0022 <span class="comment">%    Faye et al., Class. Q. Grav. 29 175004 (2012)</span>
+0023 <span class="comment">%    Damour, Nagar &amp; Bernuzzi, PRD 87, 084035 (2013)</span>
+0024 <span class="comment">%</span>
+0025 
+0026 
+0027 <span class="comment">% TODO: this routine requires optimization</span>
+0028 <span class="comment">% - precompute coefficients c(nu)</span>
+0029 <span class="comment">% - evaluate efficiently polynomials</span>
+0030 
+0031 L         = EOBopt.L;
+0032 LM2K      = EOBopt.LM2K;
+0033 
+0034 
+0035 <span class="comment">% Shorthands</span>
+0036 pi2    = pi.^2;
+0037 nu2    = nu^2;
+0038 
+0039 y      = (Hreal.*Omega).^(2/3);
+0040 sqrt_y = sqrt(y);
+0041 y3     = y.^3;
+0042 y32    = Hreal.*Omega;
+0043 y92    = y.^(9/2);
+0044 
+0045 
+0046 
+0047 <span class="comment">% Compute deltalm</span>
+0048 kmax  = length(L);
+0049 deltalm = zeros(kmax,length(y));
+0050 
+0051 <span class="keyword">if</span> nu==0
+0052         
+0053     <span class="comment">% Residual phases in Taylor-expanded form</span>
+0054     
+0055     <span class="comment">% l=2 ---------------------------------------------------------------</span>
+0056     
+0057     deltalm(LM2K(2,2),:) =   7d0/3d0*y32 + 428d0/105d0*pi * y3  + (-2203/81 + 1712/315*pi2) * y92;
+0058     deltalm(LM2K(2,1),:) =   2d0/3d0*y32 + 107d0/105d0*pi * y3  + (-272/81  +  214/315*pi2) * y92;
+0059     
+0060     <span class="comment">% l=3 ---------------------------------------------------------------</span>
+0061     
+0062     deltalm(LM2K(3,3),:) = 13d0/10d0 * y32  + 39/7 *pi * y3 + (-227827/3000  + 78/7  *pi2) * y92;
+0063     deltalm(LM2K(3,2),:) = 2d0/2     * y32  + 52/21*pi * y3 + (-9112/405     + 208/63*pi2) * y92;
+0064     deltalm(LM2K(3,1),:) = 13d0/30d0 * y32  + 13/21*pi * y3 + (-227827/81000 + 26/63 *pi2) * y92;
+0065         
+0066     <span class="comment">% l=4 ---------------------------------------------------------------</span>
+0067 
+0068     deltalm(LM2K(4,4),:) = 112d0/120d0  * y32 + 25136/3465*pi*y3 + (-55144/375 + 201088/10395*pi2)*y92;
+0069     deltalm(LM2K(4,3),:) = 486d0/810d0  * y32 + 1571/385*pi*y3;
+0070     deltalm(LM2K(4,2),:) =   7d0/15d0   * y32 + 6284/3465*pi*y3  + ( -6893/375 +  25136/10395*pi2)*y92;
+0071     deltalm(LM2K(4,1),:) =   2d0/10d0   * y32 + 1571/3465*pi*y3;
+0072     
+0073     <span class="comment">% l=5 ---------------------------------------------------------------</span>
+0074     
+0075     deltalm(LM2K(5,5),:) = 96875/131250 * y32;
+0076     
+0077     <span class="keyword">return</span>
+0078     
+0079 <span class="keyword">end</span>
+0080 
+0081 
+0082 <span class="comment">% Residual phases in Pade-resummed form when possible</span>
+0083 
+0084 <span class="comment">% Leading order contributions</span>
+0085 delta22LO = 7d0/3d0   * y32;
+0086 delta21LO = 2d0/3d0   * y32;
+0087 delta33LO = 13d0/10d0 * y32;
+0088 delta31LO = 13d0/30d0 * y32;
+0089 
+0090 <span class="comment">% l=2 ------------------------------------------------------------------</span>
+0091 
+0092 <span class="comment">% Pade(2,2) approximant</span>
+0093 num        = (808920*nu*pi*sqrt(y) + 137388*pi2*y + 35*nu2*(136080 + (154975 - 1359276*nu)*y));
+0094 den        = (808920*nu*pi*sqrt(y) + 137388*pi2*y + 35*nu2*(136080 + (154975 + 40404*nu)*y));
+0095 deltalm(LM2K(2,2),:) = delta22LO.*num./den;
+0096 
+0097 <span class="comment">% Pade(1,2) approximant</span>
+0098 num        = 69020*nu + 5992*pi*sqrt_y;
+0099 den        = 5992*pi*sqrt_y + 2456*nu*(28+493*nu*y);
+0100 deltalm(LM2K(2,1),:) = delta21LO.*num./den;
+0101 
+0102 <span class="comment">% l=3 ------------------------------------------------------------------</span>
+0103 
+0104 <span class="comment">% Pade(1,2) approximant</span>
+0105 num        = 1   + 94770*pi/(566279*nu)*sqrt_y;
+0106 den        = num + 80897*nu/3159*y;
+0107 deltalm(LM2K(3,3),:) = delta33LO.*num./den;
+0108 
+0109 <span class="comment">% Taylor-expanded form</span>
+0110 deltalm(LM2K(3,2),:) = (10d0+33d0*nu)/(15*(1-3*nu))*y32    +  52/21*pi*y3;
+0111 
+0112 <span class="comment">% Pade(1,2) approximant</span>
+0113 num        = 4641*nu + 1690*pi*sqrt_y;
+0114 den        = num + 18207*nu2*y;
+0115 deltalm(LM2K(3,1),:) = delta31LO.*num./den;
+0116 
+0117 <span class="comment">% l=4 ------------------------------------------------------------------</span>
+0118 
+0119 deltalm(LM2K(4,4),:) =  (112d0+219*nu)/(120d0*(1-3d0*nu)) * y32 + 25136/3465*pi*y3;
+0120 deltalm(LM2K(4,3),:) = (486d0+4961*nu)/(810*(1d0-2d0*nu)) * y32 +   1571/385*pi*y3;
+0121 deltalm(LM2K(4,2),:) =  7d0*(1+6d0*nu)/(15d0*(1-3d0*nu))  * y32 +  6284/3465*pi*y3;
+0122 deltalm(LM2K(4,1),:) =   (2d0+507*nu)/(10d0*(1-2d0*nu))   * y32 +  1571/3465*pi*y3;
+0123 
+0124 <span class="comment">% l=5 ------------------------------------------------------------------</span>
+0125 
+0126 deltalm(LM2K(5,5),:) = (96875 + 857528*nu)/(131250*(1-2d0*nu)) * y32;
+0127</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

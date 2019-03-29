@@ -1,0 +1,74 @@
+
+	The code needs only a running standard Matlab installation,
+	and the compilation of few MEX files.
+
+	To generate the documentation type
+	>> MakeDoc
+	at Matlab prompt. A directory Doc/ and html files will be
+	created.
+	
+	Perturbative (quasi-normal-mode tables) and numerical
+	relativity data can be passed to the code in the way described
+	here below. 
+
+
+	# MEX files
+	
+	Some routines are written in C and MEX files need to be
+	compiled. This can be done by simply running in Matlab the
+	script compilemex.m, ie
+	>> cd EOB/
+	>> compilemex
+	You may need to edit the script and options inside depending
+	on your system. 
+
+
+	# QNM data
+
+	If you want to generate waveforms with ringdown, you need
+	perturbative data with Kerr QNM frequencies. At the moment the
+	code works with ASCII tables organized in subdirectory and files
+	as follows
+
+	1. A main directory, default "DataQNMs", whose absolute path and 
+	   name must be pass to the EOB code (see EOBSet.m and examples)
+ 	
+	2. l-multipole directories, named "DataQNMs/l[2-9]"
+	
+	3. Data files with index n (overtones), l, and m, named
+	"n[0-9]l[2-9]m[0-9].dat"
+
+	Example
+
+		DataQNM/l2/n0l2m0.dat
+	
+	
+	A complete catalog is provided by
+
+	E. Berti, V. Cardoso, A. Starinets, 
+	Quasinormal modes of black holes and black branes, 
+	Class. Quant. Grav. 26, 163001 (2009), arXiv:0905.2975
+
+	You can find public available tables in the required format
+	here 
+
+	http://www.phy.olemiss.edu/~berti/
+	http://www.phy.olemiss.edu/~berti/qnms.html
+
+	Please, cite the required reference(s).
+
+
+	# NR data for NQC corrections
+
+	The calibration of NQC correction needs input data from
+	numerical relativity. Data must be supplied in a file in ASCII
+	format. An example file is given in  
+
+		  DataNR/NRpts4NQC.dat
+
+
+
+
+     
+
+

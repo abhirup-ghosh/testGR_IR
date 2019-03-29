@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBRhs0</title>
+  <meta name="keywords" content="EOBRhs0">
+  <meta name="description" content="EOBRhs0 Compute r.h.s. of the full EOB equations in the particle limit (nu&lt;&lt;1).">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBRhs0.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBRhs0
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBRhs0 Compute r.h.s. of the full EOB equations in the particle limit (nu&lt;&lt;1).</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function dydt = EOBRhs0(t,y, nu, EOBopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBRhs0 Compute r.h.s. of the full EOB equations in the particle limit (nu&lt;&lt;1). 
+
+   dydt = EOBRhs0(t,y, nu, EOBopt) return the r.h.s. of EOB equations
+   written using prstar, i.e. the conjugate momentum to the generalized
+   tortoise coordinate.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function dydt = EOBRhs0(t,y, nu, EOBopt)</a>
+0002 
+0003 <span class="comment">%EOBRhs0 Compute r.h.s. of the full EOB equations in the particle limit (nu&lt;&lt;1).</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   dydt = EOBRhs0(t,y, nu, EOBopt) return the r.h.s. of EOB equations</span>
+0006 <span class="comment">%   written using prstar, i.e. the conjugate momentum to the generalized</span>
+0007 <span class="comment">%   tortoise coordinate.</span>
+0008 <span class="comment">%</span>
+0009 
+0010 
+0011 <span class="comment">% Allocate memory</span>
+0012 dydt = zeros(4,1);
+0013 
+0014 
+0015 <span class="comment">% Unpack y</span>
+0016 phi    = y(1);
+0017 r      = y(2);
+0018 pph    = y(3);
+0019 prstar = y(4);
+0020 
+0021 
+0022 <span class="comment">% Shorhands</span>
+0023 r2        = r.^2;
+0024 u         = 1./r;
+0025 u2        = u.^2;
+0026 <span class="comment">%u3        = u.^3;</span>
+0027 <span class="comment">%u4        = u.^4;</span>
+0028 <span class="comment">%u5        = u.^5;</span>
+0029 pph2      = pph.^2;
+0030 <span class="comment">%prstar2   = prstar.^2;</span>
+0031 <span class="comment">%prstar3   = prstar.^3;</span>
+0032 
+0033 
+0034 <span class="comment">% Metric</span>
+0035 A   = 1 - 2.*u;        
+0036 dA  = 2*u2;
+0037 
+0038 Metric.A = A;      
+0039 Metric.dA = dA;      
+0040 
+0041 
+0042 <span class="comment">% Energy</span>
+0043 Ham = EOBopt.ComputeEOBHam(nu, r,pph,prstar, EOBopt, Metric);
+0044 Heff = Ham.Heff;
+0045 <span class="comment">%Heff = sqrt(A.*(1+pph2./r2)+prstar2);</span>
+0046 
+0047 
+0048 <span class="comment">% d\phi/dt</span>
+0049 dydt(1) = A*pph/( r2*Heff );
+0050     
+0051 
+0052 <span class="comment">% dr/dt</span>
+0053 dydt(2) = A*prstar/Heff;
+0054 
+0055 
+0056 <span class="comment">% dp_{r*}/dt (conservative)</span>
+0057 dydt(4) = -A*( pph2.*u2.*(dA-2.0*A.*u) + dA )/(2.0*Heff);
+0058     
+0059 
+0060 <span class="comment">% Compute radiation reaction force</span>
+0061 [Fphi, Frstar] = EOBopt.ComputeRRForce(nu, dydt, y, EOBopt, Metric, Ham);                    
+0062 
+0063 
+0064 <span class="comment">% dp_{\phi}/dt</span>
+0065 dydt(3) = Fphi;
+0066 
+0067 
+0068 <span class="comment">% dp_{r*}/dt</span>
+0069 dydt(4) = dydt(4) + Frstar;   
+0070 
+0071 
+0072     
+0073</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

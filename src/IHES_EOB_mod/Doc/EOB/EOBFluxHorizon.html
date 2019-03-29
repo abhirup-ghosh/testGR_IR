@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBFluxHorizon</title>
+  <meta name="keywords" content="EOBFluxHorizon">
+  <meta name="description" content="EOBFluxHorizon Compute horizon-absorbed fluxes.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBFluxHorizon.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBFluxHorizon
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBFluxHorizon Compute horizon-absorbed fluxes.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [hatFH FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBFluxHorizon Compute horizon-absorbed fluxes.
+
+   [hatF FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt)
+
+   Nagar &amp; Akcay, PRD 85, 044025 (2012)
+   Bernuzzi, Nagar &amp; Zenginoglu, PRD 86, 104038 (2012)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBIdPostAdiab.html" class="code" title="function y0 = EOBIdPostAdiab( nu, r0, EOBopt )">EOBIdPostAdiab</a>	EOBIdPostAdiab Provides initial data in post-post-circular approximation for</li><li><a href="EOBIdPostAdiab0.html" class="code" title="function y0 = EOBIdPostAdiab0( nu, r0, EOBopt )">EOBIdPostAdiab0</a>	EOBIdPostAdiab0 Provides initial data in post-circular (or post-adiabatic)</li><li><a href="EOBIdPostAdiab_mod.html" class="code" title="function y0 = EOBIdPostAdiab_mod( nu, r0, EOBopt )">EOBIdPostAdiab_mod</a>	EOBIdPostAdiab Provides initial data in post-post-circular approximation for</li><li><a href="EOBRRDIN0.html" class="code" title="function [Fphi, Frstar] = EOBRRDIN0(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRDIN0</a>	EOBRRDIN0 Compute radiation reaction with resummed flux for nu->0.</li><li><a href="EOBRRDINddotr.html" class="code" title="function [Fphi, Frstar] = EOBRRDINddotr(nu, Omega, y, EOBopt, EOBmet, EOBHam, ddotr)">EOBRRDINddotr</a>	EOBRRDINddotr Compute radiation reaction with resummed flux for a given ddotr.</li><li><a href="EOBRRDINddotr_mod.html" class="code" title="function [Fphi, Frstar] = EOBRRDINddotr_mod(nu, Omega, y, EOBopt, EOBmet, EOBHam, ddotr)">EOBRRDINddotr_mod</a>	EOBRRDINddotr Compute radiation reaction with resummed flux for a given ddotr.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [hatFH FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt)</a>
+0002 
+0003 <span class="comment">%EOBFluxHorizon Compute horizon-absorbed fluxes.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   [hatF FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   Nagar &amp; Akcay, PRD 85, 044025 (2012)</span>
+0008 <span class="comment">%   Bernuzzi, Nagar &amp; Zenginoglu, PRD 86, 104038 (2012)</span>
+0009 
+0010 
+0011 L    = EOBopt.L;
+0012 LM2K = EOBopt.LM2K;
+0013 
+0014 
+0015 <span class="comment">% Allocate memory</span>
+0016 kmax   = length(L);
+0017 rhoHlm = zeros(kmax, length(x));
+0018 FlmHLO = rhoHlm;
+0019 FlmH   = rhoHlm;
+0020 
+0021 
+0022 <span class="comment">% Shorthands</span>
+0023 nu2 = nu.^2;
+0024 nu3 = nu.^3;
+0025 
+0026 x2  = x.^2;
+0027 x3  = x.^3;
+0028 x4  = x.^4;
+0029 x5  = x.^5;
+0030 x9  = x.^9;
+0031 x10 = x.^10;
+0032 
+0033 k22 = LM2K(2,2);
+0034 k21 = LM2K(2,1);
+0035 k33 = LM2K(3,3);
+0036 k32 = LM2K(3,2);
+0037 k31 = LM2K(3,1);
+0038 k44 = LM2K(4,4);
+0039 k43 = LM2K(4,3);
+0040 k42 = LM2K(4,2);
+0041 k41 = LM2K(4,1);
+0042 
+0043 
+0044 <span class="comment">% The Newtonian asymptotic contribution</span>
+0045 FNewt22 = 32/5*x5;
+0046 F22_1PN = 1 + (3-17*nu+25*nu2 - 8*nu3)/(1-4*nu+2*nu2)*x;
+0047 
+0048 
+0049 <span class="comment">% Compute leading-order part (nu-dependent)</span>
+0050 FlmHLO(k22,:) = 32/5*(1-4*nu+2*nu2)*x9;
+0051 FlmHLO(k21,:) = 32/5*(1-4*nu+2*nu2)*x10;
+0052 
+0053 
+0054 <span class="comment">% Compute rho_lm</span>
+0055 <span class="comment">% Hybrid expression for tilde(rho)22</span>
+0056 <span class="comment">% The 1PN  term is  the exact analytical one, while the others come</span>
+0057 <span class="comment">% from the expansion of the (constrained) fit above.</span>
+0058 <span class="comment">% 4PN fractional accuracy for all rho_lm^H up to l=4.</span>
+0059 
+0060 <span class="comment">% Coefficients are pre-computed by EOBFluxHorizonFitCoefs.m</span>
+0061 c1 = EOBopt.HorizonFluxCoefs.c{1};
+0062 c2 = EOBopt.HorizonFluxCoefs.c{2};
+0063 c3 = EOBopt.HorizonFluxCoefs.c{3};
+0064 c4 = EOBopt.HorizonFluxCoefs.c{4};
+0065 
+0066 <span class="comment">% NOTE: the following is a polynomial evaluation, can be optimized</span>
+0067 rhoH(k22,:) = 1 + c1(k22)*x + c2(k22)*x2 + c3(k22)*x3 + c4(k22)*x4;
+0068 rhoH(k21,:) = 1 + c1(k21)*x + c2(k21)*x2 + c3(k21)*x3 + c4(k21)*x4;
+0069 <span class="comment">%{</span>
+0070 rhoH(k33,:) = 1 + c1(k33)*x + c2(k33)*x2 + c3(k33)*x3 + c4(k33)*x4;
+0071 rhoH(k32,:) = 1 + c1(k32)*x + c2(k32)*x2 + c3(k32)*x3 + c4(k32)*x4;
+0072 rhoH(k31,:) = 1 + c1(k31)*x + c2(k31)*x2 + c3(k31)*x3 + c4(k31)*x4;
+0073 rhoH(k44,:) = 1 + c1(k44)*x + c2(k44)*x2 + c3(k44)*x3 + c4(k44)*x4;
+0074 rhoH(k43,:) = 1 + c1(k43)*x + c2(k43)*x2 + c3(k43)*x3 + c4(k43)*x4;
+0075 rhoH(k42,:) = 1 + c1(k42)*x + c2(k42)*x2 + c3(k42)*x3 + c4(k42)*x4;
+0076 rhoH(k41,:) = 1 + c1(k41)*x + c2(k41)*x2 + c3(k41)*x3 + c4(k41)*x4;
+0077 <span class="comment">%}</span>
+0078 
+0079 
+0080 <span class="comment">% Compute horizon multipolar flux (only l=2)</span>
+0081 Heff2 = Heff.^2;
+0082 jhat2 = jhat.^2;
+0083 
+0084 FlmH(k22,:) = FlmHLO(k22,:) .* Heff2 .*rhoH(k22,:).^4;
+0085 FlmH(k21,:) = FlmHLO(k21,:) .* jhat2 .*rhoH(k21,:).^4;
+0086 
+0087 <span class="comment">%{</span>
+0088 <span class="comment">% PN-expanded flux (check the influence on phasing)</span>
+0089 FlmH(k22,:) = FH_LO(k22,:).*F22_1PN;
+0090 FlmH(k21,:) = FH_LO(k21,:);
+0091 <span class="comment">%}</span>
+0092 
+0093 
+0094 <span class="comment">% Sum over multipoles and normalize to the 22 Newtonian multipole</span>
+0095 hatFH = sum(FlmH)./FNewt22;
+0096 
+0097</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

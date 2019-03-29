@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBFluxTaylor</title>
+  <meta name="keywords" content="EOBFluxTaylor">
+  <meta name="description" content="EOBFluxTaylor.m Compute the Taylor expanded GW flux at 3.5PN order for">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBFluxTaylor.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBFluxTaylor
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBFluxTaylor.m Compute the Taylor expanded GW flux at 3.5PN order for</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function hatF = EOBFluxTaylor(nu,v) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBFluxTaylor.m Compute the Taylor expanded GW flux at 3.5PN order for
+nu\neq 0. 
+
+
+ Nothe that a tunable 4PN term is added by  
+ hand. Here we use the value of this term obtained by Mroue, Kidder 
+ and Teukolsky, PRD 78 044004 (2008) as input. The value that they 
+ obtained by fitting to NR data is
+
+ F(8) = -333.75
+
+ Our best value (slightly tuned) is
+
+ F(8) = -322.5
+
+ This is due to a fundamental difference between MKT and our Hamiltonian:
+ they use the Hamiltonian with pr, while we are using the one with pr*,
+ that is consistently correct at 3PN order.
+
+ USAGE: EOB_FluxTaylor(v,nu)
+
+ where nu is the symmetric mass ratio and v is some velocity of the system
+   hatF = EOBFluxTaylor(v,nu)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBIdPostAdiab.html" class="code" title="function y0 = EOBIdPostAdiab( nu, r0, EOBopt )">EOBIdPostAdiab</a>	EOBIdPostAdiab Provides initial data in post-post-circular approximation for</li><li><a href="EOBIdPostAdiab0.html" class="code" title="function y0 = EOBIdPostAdiab0( nu, r0, EOBopt )">EOBIdPostAdiab0</a>	EOBIdPostAdiab0 Provides initial data in post-circular (or post-adiabatic)</li><li><a href="EOBIdPostAdiab_mod.html" class="code" title="function y0 = EOBIdPostAdiab_mod( nu, r0, EOBopt )">EOBIdPostAdiab_mod</a>	EOBIdPostAdiab Provides initial data in post-post-circular approximation for</li><li><a href="EOBRRPN.html" class="code" title="function [Fphi, Frstar] = EOBRRPN(nu, dydt, y, EOBopt, EOBmet, EOBHam)">EOBRRPN</a>	EOBRRno Compute radiation reaction with PN-Taylor flux.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function hatF = EOBFluxTaylor(nu,v)</a>
+0002 
+0003 <span class="comment">%EOBFluxTaylor.m Compute the Taylor expanded GW flux at 3.5PN order for</span>
+0004 <span class="comment">%nu\neq 0.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Nothe that a tunable 4PN term is added by</span>
+0008 <span class="comment">% hand. Here we use the value of this term obtained by Mroue, Kidder</span>
+0009 <span class="comment">% and Teukolsky, PRD 78 044004 (2008) as input. The value that they</span>
+0010 <span class="comment">% obtained by fitting to NR data is</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% F(8) = -333.75</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Our best value (slightly tuned) is</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% F(8) = -322.5</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% This is due to a fundamental difference between MKT and our Hamiltonian:</span>
+0019 <span class="comment">% they use the Hamiltonian with pr, while we are using the one with pr*,</span>
+0020 <span class="comment">% that is consistently correct at 3PN order.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% USAGE: EOB_FluxTaylor(v,nu)</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% where nu is the symmetric mass ratio and v is some velocity of the system</span>
+0025 <span class="comment">%   hatF = EOBFluxTaylor(v,nu)</span>
+0026 <span class="comment">%</span>
+0027 
+0028 
+0029 nu2     = nu*nu;
+0030 nu3     = nu*nu2;
+0031 gE      = 0.57721566490153286061;  <span class="comment">%Euler gamma</span>
+0032 pi2     = pi*pi;
+0033 
+0034 F(1) =  0.d0;
+0035 F(2) = -1247.d0/336.d0 - 35.d0/12.d0*nu;
+0036 F(3) =  4.d0*pi;
+0037 F(4) = -44711.d0/9072.d0 + 9271.d0/504.d0*nu + 65.d0/18.d0*nu2;
+0038 F(5) = -(8191.d0/672.d0 + 583.d0/24.d0*nu)*pi;  
+0039 
+0040 
+0041 <span class="comment">% 3.5PN Radiation-Reaction force</span>
+0042 fl6   = -1712d0/105d0;
+0043 F(6)  =  6643739519d0/69854400d0 + 16d0/3d0*pi2 - 1712/105*gE + <span class="keyword">...</span>
+0044           (-134543/7776 + 41/48*pi2)*nu - 94403/3024*nu2 - 775/324*nu3;
+0045 F(7) =  (-16285/504 + 214745/1728*nu + 193385/3024*nu2)*pi;
+0046 F(8) =  -322.5; <span class="comment">% hard-coded after a minimum fine-tuning</span>
+0047 
+0048 hatF = 1 + F(2).*v.^2 + F(3).*v.^3 + F(4).*v.^4 + F(5).*v.^5 + <span class="keyword">...</span>
+0049           (F(6) + fl6.*log(4.*v)).*v.^6 + F(7).*v.^7 + F(8).*v.^8;
+0050 
+0051</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBNQCabFit</title>
+  <meta name="keywords" content="EOBNQCabFit">
+  <meta name="description" content="EOBNQCabFit Coefficients for NQC as fitted function of nu.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBNQCabFit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBNQCabFit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBNQCabFit Coefficients for NQC as fitted function of nu.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [a,b] = EOBNQCabFit(nu, EOBopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBNQCabFit Coefficients for NQC as fitted function of nu.
+
+   [a,b] = EOBInitNQCFit(nu, EOBopt )</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [a,b] = EOBNQCabFit(nu, EOBopt)</a>
+0002 
+0003 <span class="comment">%EOBNQCabFit Coefficients for NQC as fitted function of nu.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   [a,b] = EOBInitNQCFit(nu, EOBopt )</span>
+0006 <span class="comment">%</span>
+0007 
+0008 
+0009 L    = EOBopt.L;
+0010 LM2K = EOBopt.LM2K;
+0011 
+0012 
+0013 <span class="comment">% Shorthands</span>
+0014 k22 = LM2K(2,2);
+0015 k21 = LM2K(2,1);
+0016 k33 = LM2K(3,3);
+0017 k32 = LM2K(3,2);
+0018 <span class="comment">%{</span>
+0019 k31 = LM2K(3,1);
+0020 k44 = LM2K(4,4);
+0021 k43 = LM2K(4,3);
+0022 k42 = LM2K(4,2);
+0023 k41 = LM2K(4,1);
+0024 <span class="comment">%}</span>
+0025 
+0026 
+0027 nu2 = nu.^2;
+0028 
+0029 
+0030 <span class="comment">% Allocate memory</span>
+0031 kmax = length(L);
+0032 a{1} = zeros(kmax,1);
+0033 a{2} = a{1};
+0034 a{3} = a{1};
+0035 b{1} = a{1};
+0036 b{2} = a{1};
+0037 b{3} = a{1};
+0038 
+0039 
+0040 
+0041 <span class="comment">% l=2 -------------------------------------------------------------------</span>
+0042 
+0043 a{1}(k22) = +2.160054e+00*nu2 - 1.093667e+00*nu + 7.926107e-02;
+0044 a{2}(k22) = -1.080736e+01*nu2 + 7.141956e+00*nu + 7.034821e-01;
+0045 a{3}(k22) = -2.766573e+00*nu2 - 1.768795e-01*nu + 1.012170e-01;
+0046 
+0047 b{1}(k22) = -8.568345e-01*nu2 - 2.416766e-01*nu + 1.928716e-01;
+0048 b{2}(k22) = +9.638222e+00*nu2 - 7.645317e+00*nu + 3.731762e-01;
+0049 b{3}(k22) = -8.099188e+01*nu2 + 1.707519e+01*nu - 1.797447e+00;
+0050 
+0051 a{1}(k21) = +9.150277e-01*nu2 - 6.521591e-01*nu + 3.400123e-02;
+0052 a{2}(k21) = +1.903505e+00*nu2 + 4.978512e+00*nu - 7.105946e-01; 
+0053 a{3}(k21) = +2.694953e+00*nu2 - 3.160287e+00*nu + 8.650109e-01;
+0054 
+0055 b{1}(k21) = -2.247953e+00*nu2 + 5.304017e-01*nu + 2.465944e-01;
+0056 b{2}(k21) = +5.172595e+01*nu2 - 2.168939e+01*nu + 3.161619e+00;
+0057 b{3}(k21) = -1.128189e+02*nu2 + 3.055883e+01*nu - 2.607237e-03;
+0058 
+0059 
+0060 <span class="comment">% l=3 -------------------------------------------------------------------</span>
+0061 
+0062 a{1}(k33) = +2.679308e+00*nu2 - 1.279163e+00*nu + 1.456279e-01;
+0063 a{2}(k33) = -1.293179e+01*nu2 + 1.063361e+01*nu + 4.704239e-01;
+0064 a{3}(k33) = -8.931901e-01*nu2 - 2.922908e+00*nu + 5.078229e-01;
+0065 
+0066 b{1}(k33) = -1.646809e+00*nu2 - 1.611205e-01*nu + 3.464108e-01;
+0067 b{2}(k33) = +6.959682e+00*nu2 - 7.595824e+00*nu + 7.089351e-02;
+0068 b{3}(k33) = -2.134623e+02*nu2 + 5.281861e+01*nu - 3.471809e+00;
+0069 
+0070 
+0071 a{1}(k32) = +3.167065e+01*nu2 - 1.030991e+01*nu + 6.843778e-01;
+0072 a{2}(k32) = -1.327286e+02*nu2 + 5.515306e+01*nu - 3.044906e+00;
+0073 a{3}(k32) = -1.973440e+01*nu2 + 1.829857e+00*nu + 3.039708e-01;
+0074 
+0075 b{1}(k32) = -1.349680e+00*nu2 - 1.808295e+00*nu + 5.734632e-01;
+0076 b{2}(k32) = -4.486021e+00*nu2 - 7.796816e+00*nu + 3.253824e+00;
+0077 b{3}(k32) = +3.248901e+00*nu2 - 3.813272e+01*nu + 6.164847e+00;
+0078 
+0079 
+0080 <span class="keyword">return</span>
+0081 
+0082 
+0083</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

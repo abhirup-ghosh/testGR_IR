@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBQNMTemplate</title>
+  <meta name="keywords" content="EOBQNMTemplate">
+  <meta name="description" content="EOBTemplateQNM Compute QNM waveform.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBQNMTemplate.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBQNMTemplate
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBTemplateQNM Compute QNM waveform.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [y dy]=EOBQNMTemplate(ck,t, sigmak) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBTemplateQNM Compute QNM waveform.
+
+   [y dy]=EOBQNMTemplate(c,t, sigma) given complex coefficients sigma(k)
+   and c(k), and the time vector t return 
+
+   y = sum_k c_k exp( - sigma_k t )
+   
+   and the derivative</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBhlmQNMMatch.html" class="code" title="function varargout = EOBhlmQNMMatch(Omega,t, sigma, nqnm, dt, wav )">EOBhlmQNMMatch</a>	EOBhlmQNMMatch Perform the matching to QNM multipolar wave.</li><li><a href="EOBhlmQNMMatch_no_dpsilm.html" class="code" title="function varargout = EOBhlmQNMMatch_no_dpsilm(Omega,t, sigma, nqnm, dt, wav )">EOBhlmQNMMatch_no_dpsilm</a>	EOBhlmQNMMatch Perform the matching to QNM multipolar wave.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [y dy]=EOBQNMTemplate(ck,t, sigmak)</a>
+0002 
+0003 <span class="comment">%EOBTemplateQNM Compute QNM waveform.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   [y dy]=EOBQNMTemplate(c,t, sigma) given complex coefficients sigma(k)</span>
+0006 <span class="comment">%   and c(k), and the time vector t return</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   y = sum_k c_k exp( - sigma_k t )</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   and the derivative</span>
+0011 <span class="comment">%</span>
+0012 
+0013 [n,m] = size(t);
+0014 
+0015 nt = length(t);
+0016 nc = length(sigmak);
+0017 
+0018 t      = reshape(t,1,nt);
+0019 sigmak = reshape(sigmak,nc,1);
+0020 ck     = reshape(ck,nc,1);
+0021 
+0022 y = ck * ones(1,nt);
+0023 y = y .* exp(-sigmak*t);      
+0024 y = sum(y);
+0025 
+0026 y = reshape(y,n,m); <span class="comment">% give back the same size as t</span>
+0027 
+0028 <span class="keyword">if</span> nargout==2
+0029     
+0030     dk = sigmak.*ck;    
+0031     dy = - dk * ones(1,nt);
+0032     dy = dy .* exp(-sigmak*t);
+0033     dy = sum(dy);
+0034 
+0035     dy = reshape(dy,n,m);
+0036     
+0037 <span class="keyword">end</span>
+0038</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

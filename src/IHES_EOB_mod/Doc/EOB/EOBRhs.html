@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBRhs</title>
+  <meta name="keywords" content="EOBRhs">
+  <meta name="description" content="EOBRhs Compute r.h.s. of the full EOB equations.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBRhs.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBRhs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBRhs Compute r.h.s. of the full EOB equations.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function dydt = EOBRhs(t,y, nu, EOBopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBRhs Compute r.h.s. of the full EOB equations.
+
+   dydt = EOBRhs(t,y, nu, EOBopt) return the r.h.s. of EOB equations
+   written using prstar, i.e. the conjugate momentum to the generalized
+   tortoise coordinate. 
+
+   Complete reference: Damour, Nagar &amp; Bernuzzi, PRD 87, 084035 (2013)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>	EOBMetric Computes the EOB metric potentials and derivatives.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function dydt = EOBRhs(t,y, nu, EOBopt)</a>
+0002 
+0003 <span class="comment">%EOBRhs Compute r.h.s. of the full EOB equations.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   dydt = EOBRhs(t,y, nu, EOBopt) return the r.h.s. of EOB equations</span>
+0006 <span class="comment">%   written using prstar, i.e. the conjugate momentum to the generalized</span>
+0007 <span class="comment">%   tortoise coordinate.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   Complete reference: Damour, Nagar &amp; Bernuzzi, PRD 87, 084035 (2013)</span>
+0010 <span class="comment">%</span>
+0011 
+0012 
+0013 PNorder = EOBopt.PNorder;
+0014 
+0015 
+0016 <span class="comment">% Allocate memory</span>
+0017 dydt = zeros(4,1);
+0018 
+0019 
+0020 <span class="comment">% Unpack y</span>
+0021 phi    = y(1);
+0022 r      = y(2);
+0023 pph    = y(3);
+0024 prstar = y(4);
+0025 
+0026 
+0027 <span class="comment">% Metric (do not compute 2nd drvts of A)</span>
+0028 Metric = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>(nu,r, EOBopt, 0);
+0029 A      = Metric.A;
+0030 B      = Metric.B;
+0031 dA     = Metric.dA;
+0032 
+0033 
+0034 <span class="comment">% Energy</span>
+0035 <span class="comment">% H      = \hat{H}       = H/mu</span>
+0036 <span class="comment">% Heff   = \hat{H}_{eff} = H_{eff}/\mu</span>
+0037 Ham = EOBopt.ComputeEOBHam(nu, r,pph,prstar, EOBopt, Metric);
+0038 
+0039 H    = Ham.H;
+0040 Heff = Ham.Heff;
+0041 E    = nu*H;
+0042 
+0043 
+0044 <span class="comment">% Shorthands</span>
+0045 u        = 1./r;
+0046 u2       = u.^2;
+0047 u3       = u.^3;
+0048 pph2     = pph.^2;
+0049 prstar3  = prstar.^3;
+0050 sqrtAbyB = sqrt(A./B);
+0051 
+0052 
+0053 <span class="comment">% d\phi/dt</span>
+0054 dydt(1) = A*pph/(r^2*E*Heff );
+0055 
+0056 
+0057 <span class="comment">% dr/dt and (conservative part of) dp_{r*}/dt</span>
+0058 <span class="keyword">if</span> strcmp(PNorder,<span class="string">'1pn'</span>) || strcmp(PNorder,<span class="string">'2pn'</span>)
+0059     
+0060     dydt(2) =  sqrtAbyB.*prstar./(E*Heff);
+0061     dydt(4) = -sqrtAbyB*( pph2.*u2*(dA-2d0*A*u) + dA)/(2.d0*E*Heff);
+0062     
+0063 <span class="keyword">else</span>
+0064     
+0065     dydt(2) =   sqrtAbyB.*(prstar+4.0*nu*(4.0-3.0*nu)*A.*u2.*prstar3)./(E*Heff);
+0066     dydt(4) = - sqrtAbyB*( pph2.*u2*(dA-2d0*A.*u) + dA <span class="keyword">...</span>
+0067         + 2.0*nu*(4.0-3.0*nu)*(dA*u2 - 2.0*A.*u3)*prstar^4 )/(2.d0*E*Heff);        
+0068     
+0069 <span class="keyword">end</span>
+0070 
+0071 
+0072 <span class="comment">% Compute radiation reaction force</span>
+0073 [Fphi, Frstar] = EOBopt.ComputeRRForce(nu, dydt, y, EOBopt, Metric, Ham);
+0074 
+0075 
+0076 <span class="comment">% dp_{\phi}/dt</span>
+0077 dydt(3) = Fphi;
+0078 
+0079 
+0080 <span class="comment">% dp_{r*}/dt</span>
+0081 dydt(4) = dydt(4) + Frstar;    
+0082 
+0083 
+0084 
+0085 
+0086 
+0087 
+0088 
+0089</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

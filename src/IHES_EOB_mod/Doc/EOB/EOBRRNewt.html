@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBRRNewt</title>
+  <meta name="keywords" content="EOBRRNewt">
+  <meta name="description" content="EOBRRno Compute radiation reaction for generic orbits at Newtonian order.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBRRNewt.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBRRNewt
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBRRno Compute radiation reaction for generic orbits at Newtonian order.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [Fphi, Frstar] = EOBRRNewt(nu, dydt, y, EOBopt, EOBmet, EOBHam) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBRRno Compute radiation reaction for generic orbits at Newtonian order.
+
+   [Fphi, Frstar] = EOBRRNewt(nu, dydt, y, EOBopt, EOBmet, EOBHam)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Fphi, Frstar] = EOBRRNewt(nu, dydt, y, EOBopt, EOBmet, EOBHam)</a>
+0002 
+0003 <span class="comment">%EOBRRno Compute radiation reaction for generic orbits at Newtonian order.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   [Fphi, Frstar] = EOBRRNewt(nu, dydt, y, EOBopt, EOBmet, EOBHam)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%</span>
+0008 
+0009 <span class="comment">%FIXME ref in doc :   Iyer-Will 2005</span>
+0010 <span class="comment">%FIXME Frstar</span>
+0011 
+0012 <span class="comment">% take these from EOBopt</span>
+0013 ab = [-1 0]; <span class="comment">% Harmonic gauge</span>
+0014 <span class="comment">%ab = [4 5]; % ADM gauge</span>
+0015 
+0016 
+0017 alpha = ab(1);
+0018 beta  = ab(2);
+0019 
+0020 
+0021 
+0022 <span class="comment">% Unpack y</span>
+0023 phi    = y(1);
+0024 r      = y(2);
+0025 pph    = y(3);
+0026 prstar = y(4);
+0027 
+0028 
+0029 <span class="comment">% Shorhands</span>
+0030 r2       = r.^2;
+0031 r3       = r.^3;
+0032 u        = 1./r;
+0033 u2       = u.^2;
+0034 u3       = u.^3;
+0035 u4       = u.^4;
+0036 u5       = u.^5;
+0037 pph2     = pph.^2;
+0038 prstar2  = prstar.^2;
+0039 
+0040 Fphi = -nu*8/5*pph*( -u3.*prstar2.*(1+2*alpha) + <span class="keyword">...</span>
+0041     (2-alpha)*u4 + pph2*(2+alpha)*u5 );
+0042 
+0043 Fr   = nu*8/15*( u3.*prstar3.*( 2 + 6*(alpha-beta)) <span class="keyword">...</span>
+0044     + prstar .*( u4.*(17+9*(alpha-beta)) + 3*u5.*pph2.*(1+3*(3*beta-alpha)) ) );
+0045 
+0046 warning(<span class="string">' Frstar need to be fixed in this routine'</span>)
+0047 Frstar   = Fr; <span class="comment">%FIXME!</span></pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBAdiabLSO</title>
+  <meta name="keywords" content="EOBAdiabLSO">
+  <meta name="description" content="EOBAdiabLSO Compute Last-Stable-Orbit (LSO) in the EOB formalism.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBAdiabLSO.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBAdiabLSO
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBAdiabLSO Compute Last-Stable-Orbit (LSO) in the EOB formalism.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function LSO = EOBAdiabLSO(nu, EOBopt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBAdiabLSO Compute Last-Stable-Orbit (LSO) in the EOB formalism.
+
+   LSO = EOBAdiabLSO( nu, EOBopts ) return a structure with LSO data</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>	EOBMetric Computes the EOB metric potentials and derivatives.</li><li><a href="EOBOmgE.html" class="code" title="function [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt, varargin)">EOBOmgE</a>	EOBOmgE Computes Energy and orbital frequency along dynamics.</li><li><a href="EOBfLSO.html" class="code" title="function f = EOBfLSO(u, nu, EOBopt)">EOBfLSO</a>	EOBfLSO Compute function for adiabatic LSO determination.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function LSO = EOBAdiabLSO(nu, EOBopt)</a>
+0002 
+0003 <span class="comment">%EOBAdiabLSO Compute Last-Stable-Orbit (LSO) in the EOB formalism.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   LSO = EOBAdiabLSO( nu, EOBopts ) return a structure with LSO data</span>
+0006 <span class="comment">%</span>
+0007 
+0008 
+0009 <span class="comment">% LSO</span>
+0010 LSO.u = fzero( @(x) <a href="EOBfLSO.html" class="code" title="function f = EOBfLSO(u, nu, EOBopt)">EOBfLSO</a>(x, nu, EOBopt), 1/5.7 );
+0011 LSO.r = 1./LSO.u;
+0012 
+0013 
+0014 <span class="comment">% Metric potentials</span>
+0015 Metric = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>(nu, LSO.r, EOBopt);
+0016 A      = Metric.A;
+0017 dA     = Metric.dA;
+0018 
+0019 
+0020 <span class="comment">% Angular momentum</span>
+0021 j2    = LSO.r.^3.*dA./(2*A-LSO.r.*dA);
+0022 LSO.j = sqrt(j2);
+0023 
+0024 LSO.Omega = <a href="EOBOmgE.html" class="code" title="function [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt, varargin)">EOBOmgE</a>(nu, LSO.r,LSO.j,0, EOBopt, Metric);
+0025 LSO.w22   = 2*LSO.Omega;
+0026     
+0027 
+0028 <span class="comment">% Newtonian-like connection</span>
+0029 LSO.Newt_w22   = 2*LSO.u^(3/2);
+0030 LSO.Newt_Omega = LSO.u.^(3/2);
+0031</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

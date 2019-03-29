@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Example_NQCdetermine</title>
+  <meta name="keywords" content="Example_NQCdetermine">
+  <meta name="description" content="Example of EOB run: determine NQC corrections">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; Example_NQCdetermine.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>Example_NQCdetermine
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Example of EOB run: determine NQC corrections</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example of EOB run: determine NQC corrections</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBSet.html" class="code" title="function options = EOBSet(varargin)">EOBSet</a>	EOBSet Create/alter EOB OPTIONS structure.</li><li><a href="Multipidx.html" class="code" title="function [LM2K, L,M] = Multipidx(lmax)">Multipidx</a>	MULTIPIDX Compute maps between multipolar indexes.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example of EOB run: determine NQC corrections</span>
+0002 
+0003 
+0004 <span class="comment">% 1. Choose input parameters (these are needed!)</span>
+0005 
+0006 <span class="comment">% mass ratio</span>
+0007 q = 1;
+0008 
+0009 <span class="comment">% Sym mass ratio</span>
+0010 nu  = q/((1+q)^2);
+0011 nu2 = nu^2;
+0012 
+0013 <span class="comment">% EOB free pars</span>
+0014 <span class="comment">% Note: these values are used only with the option</span>
+0015 <span class="comment">%         EOBopt.DetermineNQCab = 'yes'</span>
+0016 <span class="comment">% as best guesses for the dynamics, then overwritten by determination</span>
+0017 <span class="comment">% procedure. Otherwise the values used for both dynamics and waves are</span>
+0018 <span class="comment">% those taken from the fit, ie as output of EOBNQCabFit.m</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% a_i's for radiation reaction (from fit).</span>
+0021 a1 =  2.160054e+00*nu2 - 1.093667e+00*nu + 7.926107e-02;
+0022 a2 = -1.080736e+01*nu2 + 7.141956e+00*nu + 7.034821e-01;
+0023 a3 = -2.766573e+00*nu2 - 1.768795e-01*nu + 1.012170e-01;
+0024 a4 =  0;
+0025 <span class="comment">% 4PN and 5PN effective corrections</span>
+0026 a5 =  23.5;
+0027 a6 = (-110.5 + 129*(1-4*nu)).*sqrt(1 - 1.5e-5/((nu-0.26).^2));
+0028 <span class="comment">% pack them in ainput</span>
+0029 <span class="comment">% Remark: each a_i i = 1...4 can contain all the multipoles so, here below,</span>
+0030 <span class="comment">% the order matters ! A quick way to get the correct index without thinking</span>
+0031 <span class="comment">% is to use the Multipidx.m function. As an example in the following we</span>
+0032 <span class="comment">% pass the 22 mode only:</span>
+0033 LM2K = <a href="Multipidx.html" class="code" title="function [LM2K, L,M] = Multipidx(lmax)">Multipidx</a>(2);
+0034 ainput{1} = zeros(1,length(LM2K)); 
+0035 ainput{2} = zeros(1,length(LM2K)); 
+0036 ainput{3} = zeros(1,length(LM2K)); 
+0037 ainput{4} = zeros(1,length(LM2K)); 
+0038 ainput{1}(LM2K(2,2)) = a1;
+0039 ainput{2}(LM2K(2,2)) = a2;
+0040 ainput{3}(LM2K(2,2)) = a3;
+0041 ainput{4}(LM2K(2,2)) = a4;
+0042 
+0043 ainput{5} = a5; 
+0044 ainput{6} = a6; 
+0045 
+0046 r0   = 16;   <span class="comment">% Initial radius</span>
+0047 tmax = 5000; <span class="comment">% Final time</span>
+0048 
+0049 dt   = 0.7;  <span class="comment">% Width of the matching comb</span>
+0050 nQNM = [5 0]; <span class="comment">% no QNM [ positive negative ]</span>
+0051 lmaxQNM = 2;  <span class="comment">% lmax for QNM matching</span>
+0052 
+0053 
+0054 <span class="comment">% 2. Choose optional input</span>
+0055 
+0056 options = <a href="EOBSet.html" class="code" title="function options = EOBSet(varargin)">EOBSet</a>(<span class="string">'DetermineNQCab'</span>,<span class="string">'yes'</span>,<span class="keyword">...</span>
+0057     <span class="string">'NQCFileNR'</span>,<span class="string">'/Users/nkjm/PN/EOB/EOB_1202_5PNlogNospin/DataNR/NRpts4NQC.dat'</span>,<span class="keyword">...</span>
+0058     <span class="string">'QNMDataDir'</span>,<span class="string">'/Users/nkjm/PN/EOB/EOB_1202_5PNlogNospin/DataQNM/'</span>);
+0059 
+0060 modus   = 3; <span class="comment">% (1=&gt; inspl) (2=&gt; inspl+mrg) (3=&gt; inspl+mrg+rng)</span>
+0061 verbose = 2; <span class="comment">% 0 = minimum, 1 = text ,2 = text+figs</span>
+0062 saveme  = 1; <span class="comment">% save data ?</span>
+0063 outputdir = <span class="string">'./tmp'</span>;
+0064 
+0065 
+0066 <span class="comment">% 3. Get down to work</span>
+0067 
+0068 <span class="comment">% Determine a's</span>
+0069 out = <a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>(nu, ainput, r0,tmax,dt, nQNM,lmaxQNM, <span class="keyword">...</span>
+0070     <span class="keyword">...</span><span class="comment"> the following pars are optional </span>
+0071     options,<span class="keyword">...</span><span class="comment"> </span>
+0072     modus,<span class="keyword">...</span>
+0073     verbose, <span class="keyword">...</span>
+0074     saveme, <span class="keyword">...</span>
+0075     <span class="string">'tmp'</span>)
+0076  
+0077 <span class="comment">% Re-use them</span>
+0078 ainput    = out.wav.NQCa
+0079 ainput{5} = a5; 
+0080 ainput{6} = a6;
+0081 
+0082 out = <a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>(nu, ainput, r0,tmax,dt, nQNM,lmaxQNM, <span class="keyword">...</span>
+0083     <span class="keyword">...</span><span class="comment"> the following pars are optional </span>
+0084     options,<span class="keyword">...</span><span class="comment"> </span>
+0085     modus,<span class="keyword">...</span>
+0086     verbose, <span class="keyword">...</span>
+0087     saveme, <span class="keyword">...</span>
+0088     <span class="string">'tmp'</span>)
+0089</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

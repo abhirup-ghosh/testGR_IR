@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBhlm</title>
+  <meta name="keywords" content="EOBhlm">
+  <meta name="description" content="EOBhlm Compute the multipolar resummed waveform.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBhlm.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBhlm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBhlm Compute the multipolar resummed waveform.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = EOBhlm(nu, t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBhlm Compute the multipolar resummed waveform.
+
+   [hlm,phi,omglm,domglm,d2omglm, psilm,Alm,dpsilm] = ...
+   EOBhlm(nu,t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet) 
+   return (complex) multipolar wave, phase, frequency, and derivatives,
+   and the RWZ normalized (complex) wave, its amplitude and (complex)
+   derivative.
+
+   WAVE = EOBhlm( .... ) return a structure with the wave</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBExtractAPO.html" class="code" title="function varargout = EOBExtractAPO(hlm,t)">EOBExtractAPO</a>	EOBExtractAPO Compute amplitude, phase and frequency of waveform.</li><li><a href="EOBdeltalm.html" class="code" title="function deltalm = EOBdeltalm(Hreal,Omega,nu, EOBopt)">EOBdeltalm</a>	EOBdeltalm Residual phase corrections delta_{lm} up to l=m=5.</li><li><a href="EOBf22Pade.html" class="code" title="function f22 = EOBf22Pade(x,nu)">EOBf22Pade</a>	EOBf22Pade Computes the f22(x,nu) correction factor.</li><li><a href="EOBflm.html" class="code" title="function [flm, rholm] = EOBflm(x,nu, EOBopt)">EOBflm</a>	EOBflm Compute the resummed amplitudes in the general nu-dependent case.</li><li><a href="EOBflm0.html" class="code" title="function [flm, rholm] = EOBflm0(x, EOBopt)">EOBflm0</a>	EOBflm Compute the resummed amplitudes in the nu=0 case.</li><li><a href="EOBhhatlmTail.html" class="code" title="function tlm = EOBhhatlmTail( L,M, w,e, bphys)">EOBhhatlmTail</a>	EOBhhatlmTail Computes the tail contribution to the resummed wave.</li><li><a href="EOBhlmNewt.html" class="code" title="function hlmNewt = EOBhlmNewt(r,Omega,phi, nu, EOBopt)">EOBhlmNewt</a>	EOB_hlmNewt Computes the leading-order (Newtonian) prefactor of the</li><li><a href="EOBrho22Pade23.html" class="code" title="function rho22 = EOBrho22Pade23(x,nu)">EOBrho22Pade23</a>	EOBrho22Pade23 Computes the (2,3) Padé approximant to the rho_22.</li><li><a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>	SetVOutput Manage variables in output.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = EOBhlm(nu, t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet)</a>
+0002 
+0003 <span class="comment">%EOBhlm Compute the multipolar resummed waveform.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   [hlm,phi,omglm,domglm,d2omglm, psilm,Alm,dpsilm] = ...</span>
+0006 <span class="comment">%   EOBhlm(nu,t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet)</span>
+0007 <span class="comment">%   return (complex) multipolar wave, phase, frequency, and derivatives,</span>
+0008 <span class="comment">%   and the RWZ normalized (complex) wave, its amplitude and (complex)</span>
+0009 <span class="comment">%   derivative.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   WAVE = EOBhlm( .... ) return a structure with the wave</span>
+0012 <span class="comment">%</span>
+0013 
+0014 
+0015 particle_dynamics = strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>);
+0016 rholmarg          = EOBopt.rholmarg;
+0017 newton_waves      = strcmp(EOBopt.NewtonWaves,<span class="string">'yes'</span>);
+0018 
+0019 L    = EOBopt.L;
+0020 M    = EOBopt.M;
+0021 kmax = length(L);
+0022 
+0023 nx   = length(Omega);
+0024 
+0025 
+0026 <span class="comment">% Shorthands</span>
+0027 pph2 = pph.^2;
+0028 r2   = r.^2;
+0029 u    = 1./r;
+0030 u2   = u.^2;
+0031 
+0032 A    = EOBmet.A;
+0033 dA   = EOBmet.dA;
+0034 
+0035 
+0036 <span class="comment">% Compute argument</span>
+0037 <span class="keyword">if</span> particle_dynamics
+0038     rw        = r;
+0039     vphi      = rw.*Omega;
+0040     nu_in_wav = 0;        
+0041 <span class="keyword">else</span>
+0042     W         = A.*(1 + pph2.*u2);
+0043     psi       = 2*(1 + 2*nu*(sqrt(W) - 1.))./(r2.*dA);
+0044     rw        = r.*psi.^(1./3.);
+0045     vphi      = rw.*Omega;
+0046     nu_in_wav = nu;
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="keyword">switch</span> rholmarg
+0050     <span class="keyword">case</span> <span class="string">'v_omg'</span>
+0051         x = Omega.^(2/3);
+0052     <span class="keyword">case</span> <span class="string">'v_phi'</span>
+0053         x = (Omega.*rw).^2;
+0054     <span class="keyword">case</span> <span class="string">'1_r'</span>
+0055         x = u;
+0056     <span class="keyword">otherwise</span>
+0057         error(<span class="string">'unknown option %s for rholmarg'</span>,rholmarg)
+0058 <span class="keyword">end</span>
+0059 
+0060 
+0061 
+0062 <span class="comment">% Newtonian waveform</span>
+0063 hlmNewt = <a href="EOBhlmNewt.html" class="code" title="function hlmNewt = EOBhlmNewt(r,Omega,phi, nu, EOBopt)">EOBhlmNewt</a>(rw,Omega,phi, nu_in_wav, EOBopt);
+0064 
+0065 <span class="keyword">if</span> newton_waves
+0066   hlm   = hlmNewt;
+0067   nell  = (sqrt((L+2).*(L+1).*L.*(L-1)))';
+0068   nell  = nell * ones(1,nx);
+0069   psilm = hlm./nell;
+0070   [Alm,philm, omglm,domglm,d2omglm, dpsilm] = <a href="EOBExtractAPO.html" class="code" title="function varargout = EOBExtractAPO(hlm,t)">EOBExtractAPO</a>(psilm,t);
+0071   varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, hlm,philm,omglm,domglm,d2omglm, psilm,Alm,dpsilm );
+0072   <span class="keyword">return</span>
+0073 <span class="keyword">end</span>
+0074 
+0075 
+0076 <span class="comment">% Compute corrections</span>
+0077 jhat   = pph./(rw.*vphi);
+0078 
+0079 <span class="comment">% flm = (rho_lm)^ell</span>
+0080 <span class="keyword">if</span> particle_dynamics    
+0081     flm = <a href="EOBflm0.html" class="code" title="function [flm, rholm] = EOBflm0(x, EOBopt)">EOBflm0</a>(x,EOBopt);    
+0082 <span class="keyword">else</span>    
+0083     flm = <a href="EOBflm.html" class="code" title="function [flm, rholm] = EOBflm(x,nu, EOBopt)">EOBflm</a>(x,nu_in_wav,EOBopt);    
+0084     <span class="comment">% Further resummation of rho_22 or f_22 (if needed)</span>
+0085     <span class="keyword">if</span> strcmp(EOBopt.resumf22,<span class="string">'pade23'</span>)
+0086         flm(LM2K(2,2),:) = <a href="EOBrho22Pade23.html" class="code" title="function rho22 = EOBrho22Pade23(x,nu)">EOBrho22Pade23</a>(xarg,nu).^2;
+0087     <span class="keyword">elseif</span> strcmp(EOBopt.resumf22,<span class="string">'oldpade'</span>)
+0088         flm(LM2K(2,2),:) = <a href="EOBf22Pade.html" class="code" title="function f22 = EOBf22Pade(x,nu)">EOBf22Pade</a>(xarg,nu);
+0089     <span class="keyword">end</span>    
+0090 <span class="keyword">end</span>
+0091 
+0092 <span class="comment">% Tail</span>
+0093 r0  = 1.213061319425267e+00;   <span class="comment">% 2/sqrt(e);</span>
+0094 tlm = <a href="EOBhhatlmTail.html" class="code" title="function tlm = EOBhhatlmTail( L,M, w,e, bphys)">EOBhhatlmTail</a>( L,M, Omega,E, r0);
+0095 
+0096 <span class="comment">% Prefactor</span>
+0097 Heff = reshape(Heff,1,nx);
+0098 jhat = reshape(jhat,1,nx);
+0099 lmeven  = (~mod(L+M,2))';
+0100 lmodd   = ( mod(L+M,2))';
+0101 prefact = lmeven * Heff + lmodd * jhat;
+0102 
+0103 <span class="comment">% Compute \hat{h}_lm</span>
+0104 hhatlm = prefact .* flm.*tlm;
+0105 
+0106 <span class="comment">% Residual phase corrections delta_{lm}</span>
+0107 deltalm    = <a href="EOBdeltalm.html" class="code" title="function deltalm = EOBdeltalm(Hreal,Omega,nu, EOBopt)">EOBdeltalm</a>(E,Omega, nu_in_wav, EOBopt);
+0108 
+0109 
+0110 <span class="comment">% Complete h_{lm}</span>
+0111 hlm   = hlmNewt.* hhatlm .* exp(1i*deltalm);
+0112 
+0113 
+0114 <span class="comment">% Compute phase, amplitude and frequency and RWZ normalized waveform</span>
+0115 nell  = (sqrt((L+2).*(L+1).*L.*(L-1)))';
+0116 nell  = nell * ones(1,nx);
+0117 psilm = hlm./nell;
+0118 
+0119 [Alm,philm, omglm,domglm,d2omglm, dpsilm] = <a href="EOBExtractAPO.html" class="code" title="function varargout = EOBExtractAPO(hlm,t)">EOBExtractAPO</a>(psilm,t);
+0120 
+0121 
+0122 <span class="comment">% Finalize</span>
+0123 varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, hlm,philm,omglm,domglm,d2omglm, psilm,Alm,dpsilm);
+0124</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

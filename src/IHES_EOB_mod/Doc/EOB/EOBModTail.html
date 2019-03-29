@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBModTail</title>
+  <meta name="keywords" content="EOBModTail">
+  <meta name="description" content="EOBModTail Compute the modulus of the complex tail factor |T_lm|.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBModTail.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBModTail
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBModTail Compute the modulus of the complex tail factor |T_lm|.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function mTlm = EOBModTail( L,M, w ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBModTail Compute the modulus of the complex tail factor |T_lm|.
+
+   mTlm = EOBModTail( L, M, Omega ) return |T_lm(mOmega)| given the vectors
+   of multipolar linear indexes L(k) and M(k) and value(s) of Omega.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mTlm = EOBModTail( L,M, w )</a>
+0002 
+0003 <span class="comment">%EOBModTail Compute the modulus of the complex tail factor |T_lm|.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   mTlm = EOBModTail( L, M, Omega ) return |T_lm(mOmega)| given the vectors</span>
+0006 <span class="comment">%   of multipolar linear indexes L(k) and M(k) and value(s) of Omega.</span>
+0007 <span class="comment">%</span>
+0008 
+0009 <span class="comment">% FIXME: this routine should be optimized</span>
+0010 <span class="comment">% - vectorize the k-loop</span>
+0011 <span class="comment">% - vectorize the i-loop (during dynamics w is scalar, so this should</span>
+0012 <span class="comment">% be less important)</span>
+0013 
+0014 
+0015 kmax  = length(L);
+0016 nx    = length(w);
+0017 mTlm  = zeros(kmax,nx);
+0018 
+0019 
+0020 L    = reshape(L,kmax,1);
+0021 M    = reshape(M,kmax,1);
+0022 w    = reshape(w,1,nx);
+0023 hatk = M * w;
+0024 x2   = (-2.*hatk).^2;
+0025 y    = 4*pi*hatk;
+0026 
+0027 <span class="comment">% v2 (some optimization wrt v1)</span>
+0028 
+0029 oofact2 = ( 1./(factorial(L) ) ).^2;
+0030 
+0031 <span class="keyword">for</span> i=1:nx
+0032     
+0033     yk  = y(:,i);    
+0034 
+0035     <span class="keyword">for</span> k=1:kmax
+0036         s2  = [1:L(k)].^2;
+0037         tmp(k) = prod(s2+x2(k,i));                    
+0038     <span class="keyword">end</span>
+0039     
+0040     mTlm(:,i) = oofact2 .* yk./(1 - exp(-yk)).*tmp.';
+0041     
+0042 <span class="keyword">end</span>
+0043 
+0044 mTlm = sqrt(mTlm);
+0045 
+0046 
+0047 <span class="comment">% here below old versions and tests</span>
+0048 
+0049 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0050 
+0051 <span class="comment">%{</span>
+0052 <span class="comment">% v1 (rm inner s-loop)</span>
+0053 <span class="keyword">for</span> i=1:nx  
+0054     <span class="keyword">for</span> k=1:kmax
+0055             
+0056         x2ki = x2(k,i);
+0057         yki  = y(k,i);
+0058         
+0059         s2  = [1:L(k)].^2;
+0060         tmp = prod(s2+x2ki);
+0061     
+0062         mTlm2 = 1./(factorial(L(k)).^2) .* yki./(1 - exp(-yki)).*tmp;            
+0063         mTlm(k,i)  = sqrt(mTlm2);    
+0064         
+0065     <span class="keyword">end</span>                
+0066 <span class="keyword">end</span>
+0067 <span class="comment">%}</span>
+0068 
+0069 <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0070 
+0071 <span class="comment">%{</span>
+0072 
+0073 <span class="comment">% v0 (unvectorized)</span>
+0074 <span class="comment">%for k=1:kmax</span>
+0075 <span class="keyword">for</span> i=1:nx         
+0076   <span class="keyword">for</span> k=1:kmax
+0077             
+0078             hatk = M(k)*w(i);
+0079             x    = -2.*hatk;
+0080             x2   = x.^2;
+0081             y    = 4*pi*hatk;
+0082             prod = 1;
+0083 
+0084             <span class="keyword">for</span> s=1:L(k)
+0085                 s2   = s.^2;
+0086                 prod = prod.*(s2+x2);
+0087                 <span class="comment">%fprintf(' %d  -&gt; %g %g -&gt; %g\n',s,s2,x2, prod);</span>
+0088             <span class="keyword">end</span>
+0089             
+0090             <span class="comment">%fprintf('%d (%d %d) %d -&gt; %g -&gt; %g\n',k,M(k),L(k),i, hatk,prod)</span>
+0091             <span class="comment">%fprintf('%d -&gt; y = %g\n',k,y./(1 - exp(-y)))</span>
+0092             
+0093             mTlm2 = 1./(factorial(L(k)).^2) .* y./(1 - exp(-y)).*prod;            
+0094             mTlm(k,i)  = sqrt(mTlm2);    
+0095             
+0096     <span class="keyword">end</span>    
+0097 <span class="keyword">end</span>
+0098 
+0099 <span class="comment">%}</span>
+0100</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

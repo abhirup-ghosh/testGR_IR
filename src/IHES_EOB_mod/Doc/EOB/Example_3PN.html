@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Example_3PN</title>
+  <meta name="keywords" content="Example_3PN">
+  <meta name="description" content="Example of EOB run: specify to order 3PN">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; Example_3PN.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>Example_3PN
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Example of EOB run: specify to order 3PN</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example of EOB run: specify to order 3PN</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBSet.html" class="code" title="function options = EOBSet(varargin)">EOBSet</a>	EOBSet Create/alter EOB OPTIONS structure.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example of EOB run: specify to order 3PN</span>
+0002 
+0003 
+0004 <span class="comment">% 1. Choose input parameters (these are needed!)</span>
+0005 
+0006 <span class="comment">% mass ratio</span>
+0007 q = 1;
+0008 
+0009 <span class="comment">% Sym mass ratio</span>
+0010 nu  = q/((1+q)^2);
+0011 nu2 = nu^2;
+0012 
+0013 <span class="comment">% EOB free pars</span>
+0014 <span class="comment">% a_i's for radiation reaction (from fit)</span>
+0015 a1 = 0; 
+0016 a2 = 0; 
+0017 a3 = 0; 
+0018 a4 =  0;
+0019 <span class="comment">% 4PN and 5PN effective corrections</span>
+0020 a5 =  23.5;
+0021 a6 = -122+147*(1-4*nu);
+0022 <span class="comment">% pack them in ainput (see explanation in example.m)</span>
+0023 ainput{1} = a1;
+0024 ainput{2} = a2;
+0025 ainput{3} = a3;
+0026 ainput{4} = a4;
+0027 ainput{5} = a5; 
+0028 ainput{6} = a6; 
+0029 
+0030 r0   = 16;   <span class="comment">% Initial radius</span>
+0031 tmax = 5000; <span class="comment">% Final time</span>
+0032 dt   = 0.7; <span class="comment">% Width of the matching comb</span>
+0033 
+0034 nQNM = [5 0]; <span class="comment">% no QNM [ positive negative ]</span>
+0035 lmaxQNM = 2; <span class="comment">% lmax for QNM matching</span>
+0036 
+0037 
+0038 <span class="comment">% 2. Choose optional input</span>
+0039 
+0040 options = <a href="EOBSet.html" class="code" title="function options = EOBSet(varargin)">EOBSet</a>(<span class="string">'PNorder'</span>,<span class="string">'3pn'</span>);
+0041 
+0042 <span class="comment">% use default options</span>
+0043 <span class="comment">%options = []; % Set options in this struct (see EOBSet.m)</span>
+0044 
+0045 <span class="comment">% Reminder of all default options</span>
+0046 <span class="comment">%{</span>
+0047 options =<a href="EOBSet.html" class="code" title="function options = EOBSet(varargin)">EOBSet</a>(<span class="string">'Dynamics'</span>,<span class="string">'eob'</span>,<span class="keyword">...</span>
+0048     <span class="string">'RadReac'</span>,<span class="string">'din'</span>,<span class="keyword">...</span>
+0049     <span class="string">'ddotrMethodDyn'</span>,<span class="string">'noflux'</span>,<span class="keyword">...</span>
+0050     <span class="string">'ddotrMethodWav'</span>,<span class="string">'noflux'</span>,<span class="keyword">...</span>
+0051     <span class="string">'HorizonFlux'</span>,<span class="string">'yes'</span>,<span class="keyword">...</span>
+0052     <span class="string">'RadialFlux'</span>,<span class="string">'yes'</span>,<span class="keyword">...</span>
+0053     <span class="string">'FIterms'</span>,<span class="string">'yes'</span>,<span class="keyword">...</span>
+0054     <span class="string">'rholmarg'</span>,<span class="string">'v_phi'</span>,<span class="keyword">...</span>
+0055     <span class="string">'PNorder'</span>,<span class="string">'5pnlog'</span>,<span class="keyword">...</span>
+0056     <span class="string">'resumD'</span>,<span class="string">'pade03'</span>,<span class="keyword">...</span>
+0057     <span class="string">'resumf22'</span>,<span class="string">'no'</span>,<span class="keyword">...</span>
+0058     <span class="string">'Tidal'</span>,<span class="string">'no'</span>,<span class="keyword">...</span>
+0059     <span class="string">'PNTidal'</span>,<span class="string">'nnlo'</span>,<span class="keyword">...</span>
+0060     <span class="string">'NewtonWaves'</span>,<span class="string">'no'</span>,<span class="keyword">...</span>
+0061     <span class="string">'DetermineNQCab'</span>,<span class="string">'no'</span>,<span class="keyword">...</span>
+0062     <span class="string">'NQCFileNR'</span>,<span class="string">'./DataNR/NRpts4NQC.dat'</span>,<span class="keyword">...</span>
+0063     <span class="string">'QNMDataDir'</span>,<span class="string">'./dataQNMs/'</span>,<span class="keyword">...</span><span class="comment">.</span>
+0064     <span class="string">'textend'</span>,100,<span class="keyword">...</span>
+0065     <span class="string">'ODESolverRelTol'</span>,1e-9,<span class="keyword">...</span>
+0066     <span class="string">'ODESolverAbsTol'</span>,1e-12,<span class="keyword">...</span>
+0067     <span class="string">'ODESolverRefine'</span>,1);
+0068 <span class="comment">%}</span>
+0069 modus   = 2; <span class="comment">% (1=&gt; inspl) (2=&gt; inspl+mrg) (3=&gt; inspl+mrg+rng)</span>
+0070 verbose = 2; <span class="comment">% 0 = minimum, 1 = text ,2 = text+figs</span>
+0071 saveme  = 1; <span class="comment">% save data ?</span>
+0072 outputdir = <span class="string">'./tmp'</span>;
+0073 
+0074 
+0075 <span class="comment">% 3. Get down to work</span>
+0076 
+0077 out = <a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>(nu, ainput, r0,tmax,dt, nQNM,lmaxQNM, <span class="keyword">...</span>
+0078     <span class="keyword">...</span><span class="comment"> the following pars are optional </span>
+0079     options,<span class="keyword">...</span><span class="comment"> </span>
+0080     modus,<span class="keyword">...</span>
+0081     verbose, <span class="keyword">...</span>
+0082     saveme, <span class="keyword">...</span>
+0083     <span class="string">'tmp'</span>)
+0084  
+0085</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

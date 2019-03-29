@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of T4Rhs</title>
+  <meta name="keywords" content="T4Rhs">
+  <meta name="description" content="T4Rhs Compute r.h.s. of the Taylor T4 approximation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; T4Rhs.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>T4Rhs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>T4Rhs Compute r.h.s. of the Taylor T4 approximation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function dydt = T4Rhs(t,y, nu) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">T4Rhs Compute r.h.s. of the Taylor T4 approximation
+
+   dydt = T4Rhs(t,y, nu) 
+
+   Reference(s)
+    Boyle et al, XXX YYY Eq. (46).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="T4Run.html" class="code" title="function varargout = T4Run(q,r0,Phi0,dt,tmax, varargin)">T4Run</a>	T4Run Taylor-T4 approximant.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function dydt = T4Rhs(t,y, nu)</a>
+0002 
+0003 <span class="comment">%T4Rhs Compute r.h.s. of the Taylor T4 approximation</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   dydt = T4Rhs(t,y, nu)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   Reference(s)</span>
+0008 <span class="comment">%    Boyle et al, XXX YYY Eq. (46).</span>
+0009 <span class="comment">%</span>
+0010 
+0011 
+0012 <span class="comment">% Allocate memory</span>
+0013 x    = y(1,:);
+0014 nx   = length(x);
+0015 dydt = zeros(2,nx);
+0016 
+0017 
+0018 <span class="comment">% Shorthands</span>
+0019 gamma  = 0.5772156649015329;
+0020 nu2    = nu^2;
+0021 nu3    = nu^3;
+0022 pi2    = pi^2;
+0023 x2     = x.^2;
+0024 x3     = x.^3;
+0025 x5     = x.^5;
+0026 x32    = x.^(3/2);
+0027 x52    = x.^(5/2);
+0028 x72    = x.^(7/2);
+0029 
+0030 
+0031 <span class="comment">% d\Phi/dt</span>
+0032 dydt(2,:) = x32;
+0033 
+0034 
+0035 <span class="comment">% dx/dt</span>
+0036 dydt(1,:)  = 64/5*nu*x5.*(1 - (743/336+11/4*nu).*x + 4*pi*x32 <span class="keyword">...</span>
+0037         + (34103/18144 + 13661/2016*nu + 59/18*nu2).*x2<span class="keyword">...</span>
+0038         -(4159/672 + 189/8*nu)*pi.*x52<span class="keyword">...</span>
+0039         +( 16447322263/139708800 -1712/105*gamma -56198689/217728*nu<span class="keyword">...</span>
+0040          +541/896*nu2 -5605/2592*nu3 + pi2/48*(256+451*nu)<span class="keyword">...</span>
+0041          -856/105*log(16*x)).*x3<span class="keyword">...</span>
+0042         +(-4415/4032 + 358675/6048*nu + 91495/1512*nu2)*pi*x72);
+0043    
+0044 
+0045 
+0046 
+0047</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

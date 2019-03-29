@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBIdPostAdiab_mod</title>
+  <meta name="keywords" content="EOBIdPostAdiab_mod">
+  <meta name="description" content="EOBIdPostAdiab Provides initial data in post-post-circular approximation for">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBIdPostAdiab_mod.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBIdPostAdiab_mod
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBIdPostAdiab Provides initial data in post-post-circular approximation for</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function y0 = EOBIdPostAdiab_mod( nu, r0, EOBopt ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBIdPostAdiab Provides initial data in post-post-circular approximation for
+   EOB dynamics (generic nu).     
+
+   Three steps procedure:
+    1. Compute j                      =&gt; circular ID, j!=0, pr =0
+    2. From j, compute pr*            =&gt; post circular ID, j!=0, pr!=0  
+    3. From pr* and j, re-compute pph =&gt; post-post-circular ID,
+    pph0!=j!=0, pr!=0 
+
+   Y0 = EOBIdPostAdiab( nu, r0, EOBopt ) given the radius, return the
+   initial data vector Y0 = [0,r0,pph,prstar,pr,j] 
+
+   Reference(s)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBFluxDIN_mod.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN_mod(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN_mod</a>	EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</li><li><a href="EOBFluxHorizon.html" class="code" title="function [hatFH FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt)">EOBFluxHorizon</a>	EOBFluxHorizon Compute horizon-absorbed fluxes.</li><li><a href="EOBFluxTaylor.html" class="code" title="function hatF = EOBFluxTaylor(nu,v)">EOBFluxTaylor</a>	EOBFluxTaylor.m Compute the Taylor expanded GW flux at 3.5PN order for</li><li><a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>	EOBMetric Computes the EOB metric potentials and derivatives.</li><li><a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>	FDdrvt Compute finite differences of the function f(t).</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y0 = EOBIdPostAdiab_mod( nu, r0, EOBopt )</a>
+0002 
+0003 <span class="comment">%EOBIdPostAdiab Provides initial data in post-post-circular approximation for</span>
+0004 <span class="comment">%   EOB dynamics (generic nu).</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   Three steps procedure:</span>
+0007 <span class="comment">%    1. Compute j                      =&gt; circular ID, j!=0, pr =0</span>
+0008 <span class="comment">%    2. From j, compute pr*            =&gt; post circular ID, j!=0, pr!=0</span>
+0009 <span class="comment">%    3. From pr* and j, re-compute pph =&gt; post-post-circular ID,</span>
+0010 <span class="comment">%    pph0!=j!=0, pr!=0</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Y0 = EOBIdPostAdiab( nu, r0, EOBopt ) given the radius, return the</span>
+0013 <span class="comment">%   initial data vector Y0 = [0,r0,pph,prstar,pr,j]</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Reference(s)</span>
+0016 <span class="comment">%</span>
+0017 
+0018 
+0019 use_DIN_RR_mod = strcmp(EOBopt.RadReac,<span class="string">'din_mod'</span>);
+0020 PNorder    = EOBopt.PNorder;
+0021 
+0022 
+0023 <span class="comment">% Compute everything in a neighbourhood of r0</span>
+0024 <span class="comment">% (take a finite diff drvt later, quick way)</span>
+0025 N  = 6;
+0026 dr = 1e-8;
+0027 r  = r0-(N-1)*dr:dr:r0+N*dr;
+0028 r2 = r.^2;
+0029 r3 = r.^3;
+0030 z3 = 2.0*nu*(4.0-3.0*nu);
+0031 u  = 1./r;
+0032 
+0033 
+0034 <span class="comment">% Compute metric</span>
+0035 [A dA d2A B dB] = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>( nu, r, EOBopt );
+0036 
+0037 
+0038 <span class="comment">% Angular momentum for circular orbit: circular ID</span>
+0039 j2   =  r3.*dA./(2*A-r.*dA);
+0040 j    =  sqrt(j2);
+0041 j3   =  j.^3;
+0042 djdr = -j3./r3.*( 2.0 - 3.0*A./(r.*dA) - A.*d2A./(dA.^2) );
+0043 
+0044 
+0045 <span class="comment">% For circular orbit at r0=r(N)</span>
+0046 H0eff    = sqrt(A.*(1.d0 + j2./r2));            <span class="comment">% effective Hamiltonian H_0^eff</span>
+0047 E0       = sqrt(1.0 + 2.0*nu*(H0eff - 1.0) );  <span class="comment">% real Hamiltonian      H_0</span>
+0048 H0       = E0/nu;                               <span class="comment">% H_0/nu</span>
+0049 Omega_j  = A.*j./(nu*r2.*H0.*H0eff);            <span class="comment">% Orbital frequency (from Hamilton's equation)</span>
+0050 psi      = 2*(1.0 + 2.0*nu*(H0eff - 1.0))./(r2.*dA); <span class="comment">% correction factor to the radius</span>
+0051 r_omega  = r.*psi.^(1.0/3.0);                         <span class="comment">% EOB-corrected radius</span>
+0052 v_phi    = Omega_j.*r_omega;                          <span class="comment">% &quot;corrected&quot; azimuthal velocity such that</span>
+0053                                                       <span class="comment">% Kepler's law is satisfied, r_omg^3 Omg_i^2 = 1</span>
+0054 
+0055 
+0056 <span class="keyword">if</span> use_DIN_RR_mod
+0057         
+0058     <span class="comment">% DIN resummmation of radiation reaction</span>
+0059     <span class="comment">% NOTE: the flux here has pr_star=ddot(r)=0 for simplicity.</span>
+0060     x    = v_phi.^2;
+0061     jhat = j./(r_omega.*v_phi); <span class="comment">% Newton-normalized angular momentum</span>
+0062     hatF = <a href="EOBFluxDIN_mod.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN_mod(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN_mod</a>(x,Omega_j,E0,H0eff,jhat,nu,r, 0,0, EOBopt);
+0063     
+0064     <span class="keyword">if</span> strcmp(lower(EOBopt.HorizonFlux),<span class="string">'yes'</span>) 
+0065     
+0066         <span class="comment">% Add horizon absorbed contribute</span>
+0067         hatFH = <a href="EOBFluxHorizon.html" class="code" title="function [hatFH FlmH] = EOBFluxHorizon(x,Heff,jhat,nu, EOBopt)">EOBFluxHorizon</a>(x,H0eff,jhat,nu, EOBopt);
+0068         hatF  = hatF + hatFH;
+0069 
+0070     <span class="keyword">end</span>    
+0071     
+0072     Fphi = -32.0/5.0*nu * Omega_j.^5 .*  r_omega.^4 .*hatF;
+0073 
+0074 <span class="keyword">else</span> 
+0075         
+0076     <span class="comment">% Taylor form</span>
+0077     hatF = <a href="EOBFluxTaylor.html" class="code" title="function hatF = EOBFluxTaylor(nu,v)">EOBFluxTaylor</a>(v_phi,nu);    
+0078     Fphi = -32.0/5.0*nu * Omega_j.^(7/3) .* hatF;
+0079     
+0080 <span class="keyword">end</span>
+0081 
+0082 
+0083 <span class="comment">% Radial momentum conjugate to r*: post-circular ID</span>
+0084 Ctmp     =  sqrt(B./A)*nu.*H0.*H0eff;
+0085 prstar   =  Ctmp.*Fphi./djdr;
+0086 
+0087 
+0088 <span class="comment">% Angular momentum again: post-post-circular ID</span>
+0089 rhs       = prstar;;
+0090 c1        = (-227/140*nu + 1957/1680);
+0091 c2        = (753/560*nu^2 + 165703/70560*nu - 25672541/5080320);
+0092 Frhat     = 1 + c1.*u + c2.*u.^2;  
+0093 Frstar    = -5/3.*Fphi.*prstar./j .*Frhat;
+0094 dprstardt = Fphi./djdr.*<a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(rhs,r,4) - Frstar;  <span class="comment">% NOTE: Fr* here</span>
+0095 
+0096 
+0097 <span class="keyword">if</span> strcmp(PNorder,<span class="string">'1pn'</span>) || strcmp(PNorder,<span class="string">'2pn'</span>)
+0098     pph = j.*sqrt(1 + 2.*Ctmp./dA.*dprstardt);
+0099 <span class="keyword">else</span>
+0100     pph = j.*sqrt(1 + 2.*Ctmp./dA.*dprstardt - z3.*prstar.^4./j2);
+0101 <span class="keyword">end</span>
+0102 
+0103 
+0104 <span class="comment">% Radial momentum conjugate to r</span>
+0105 pr = prstar.*sqrt(B./A);
+0106 
+0107 
+0108 <span class="comment">% Compute the variables at r0=r(N)</span>
+0109 pr     = pr(N);
+0110 prstar = prstar(N);
+0111 pph    = pph(N);
+0112 j      = j(N);
+0113 
+0114 y0     = [0,r0,pph,prstar,pr,j]; 
+0115 
+0116 
+0117 
+0118</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

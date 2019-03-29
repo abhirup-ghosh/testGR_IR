@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBNQCabFind</title>
+  <meta name="keywords" content="EOBNQCabFind">
+  <meta name="description" content="EOBNQCabFind Compute a's and b's">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBNQCabFind.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBNQCabFind
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBNQCabFind Compute a's and b's</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [a,b] = EOBNQCabFind( t,Omega,n,Alm,omglm,domglm,d2omglm, NRPTS ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBNQCabFind Compute a's and b's
+
+   [a,b] = EOBNQCabFind( t,Omega,n,  Alm,omglm,domglm,d2omglm, NRPTS )</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>	FDdrvt Compute finite differences of the function f(t).</li><li><a href="FindMax.html" class="code" title="function [xm,fm,dfm] = FindMax(x,f,n)">FindMax</a>	FindMax Compute extremum of f(x)</li><li><a href="LagInt1d.html" class="code" title="">LagInt1d</a>	LAGINT1D Lagrangian interpolation routine of 1d data</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [a,b] = EOBNQCabFind( t,Omega,n, </a><span class="keyword">...</span>
+0002     Alm,omglm,domglm,d2omglm, NRPTS )
+0003 
+0004 <span class="comment">%EOBNQCabFind Compute a's and b's</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   [a,b] = EOBNQCabFind( t,Omega,n,  Alm,omglm,domglm,d2omglm, NRPTS )</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%</span>
+0009 
+0010 
+0011 
+0012 warning(<span class="string">'this routine must be tested'</span>);
+0013 
+0014 
+0015 Omegamax_interpolate = 0; <span class="comment">% hardcoded option FIXME</span>
+0016 
+0017 
+0018 <span class="comment">% Allocate memory</span>
+0019 [kmax nt] = size(Alm);
+0020 a{1} = zeros(kmax,1);
+0021 a{2} = a{1};
+0022 a{3} = a{1};
+0023 b{1} = a{1};
+0024 b{2} = a{1};
+0025 b{3} = a{1};
+0026 
+0027 
+0028 <span class="comment">% Numerical derivatives of the phase n_i's</span>
+0029 <span class="comment">% Drvts calculation requires optimization (TODO)</span>
+0030 <span class="comment">% TODO: there're 3 drvts: use 6th order ?</span>
+0031 
+0032 dn  = n; <span class="comment">% dn's are defined of size(n) for simplicity</span>
+0033 d2n = n; <span class="comment">% so to use indexes dn{4}</span>
+0034 d3n = n; <span class="comment">% however dn's{1...3} not needed</span>
+0035 
+0036 <span class="comment">%tic</span>
+0037 [dn{4}, d2n{4}] = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(n{4},t,4);
+0038 [dn{5}, d2n{5}] = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(n{5},t,4);
+0039 [dn{6}, d2n{6}] = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(n{6},t,4);
+0040 d3n{4}          = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(d2n{4},t,4);
+0041 d3n{5}          = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(d2n{5},t,4);
+0042 d3n{6}          = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(d2n{6},t,4);
+0043 <span class="comment">%toc</span>
+0044 
+0045 
+0046 <span class="comment">% Determine the maximum of the orbital frequency</span>
+0047 <span class="comment">% and compute dn's at the maximum (overwrite)</span>
+0048 <span class="comment">% do not overwrite n : needed below !</span>
+0049 [Omegamax,jmax]  = max(Omega);
+0050 
+0051 <span class="keyword">if</span> Omegamax_interpolate
+0052     
+0053     jIdx = jmax-3:jmax+3;
+0054     [tmax,Omegamax] = <a href="FindMax.html" class="code" title="function [xm,fm,dfm] = FindMax(x,f,n)">FindMax</a>( t(jIdx), Omega(jIdx), 2 );
+0055     
+0056     <span class="comment">%maxn   = cellfun(@(x) LagInt1d( 6, t, x, tmax ),n);</span>
+0057     dn  = cellfun(@(x) <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, x, tmax ),dn);
+0058     d2n = cellfun(@(x) <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, x, tmax ),d2n);
+0059     d3n = cellfun(@(x) <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, x, tmax ),d3n);
+0060     
+0061 <span class="keyword">else</span>
+0062     
+0063     tmax = t(jmax);
+0064     
+0065     <span class="comment">%maxn   = cellfun(@(x) x(jmax),n);</span>
+0066     dn  = cellfun(@(x) x(jmax),dn);
+0067     d2n = cellfun(@(x) x(jmax),d2n);
+0068     d3n = cellfun(@(x) x(jmax),d3n);
+0069     
+0070 <span class="keyword">end</span>
+0071 
+0072 
+0073 <span class="comment">% Matrix N is independent on multipolar index =&gt; pre-compute it</span>
+0074 NN = [dn(4) dn(5) dn(6); d2n(4) d2n(5) d2n(6); d3n(4) d3n(5) d3n(6)];
+0075 
+0076 
+0077 <span class="comment">% Compute a's and b's for each multipole</span>
+0078 ktmp = 1:kmax;
+0079 knnz = intersect( ktmp(all(Alm~=0,2)) , ktmp(all(NRPTS~=0,2)) );
+0080 <span class="keyword">for</span> k=knnz
+0081     
+0082     <span class="comment">% NR pts for kth multipole</span>
+0083     NRAk     = NRPTS(k,3);
+0084     NRdAk    = NRPTS(k,4);
+0085     NRd2Ak   = NRPTS(k,5);    
+0086     NRomgk   = NRPTS(k,6);
+0087     NRdomgk  = NRPTS(k,7);
+0088     NRd2omgk = NRPTS(k,8);    
+0089         
+0090     <span class="comment">% Solve linear systems</span>
+0091 
+0092     <span class="comment">% Matrix M</span>
+0093     m11 = n{1}.'.*Alm(k,:);
+0094     m12 = n{2}.'.*Alm(k,:);
+0095     m13 = n{3}.'.*Alm(k,:);    
+0096     
+0097     m21 = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(m11,t,4);
+0098     m22 = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(m12,t,4);
+0099     m23 = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(m13,t,4);    
+0100     
+0101     m31 = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(m21,t,4);
+0102     m32 = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(m22,t,4);
+0103     m33 = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(m23,t,4);    
+0104     
+0105     <span class="comment">% Vectors</span>
+0106     p1tmp = Alm(k,:);
+0107     p2tmp = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(p1tmp,t,4);
+0108     p3tmp = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(p2tmp,t,4);    
+0109     
+0110     q1tmp = omglm(k,:);
+0111     q2tmp = domglm(k,:);
+0112     q3tmp = d2omglm(k,:);
+0113         
+0114     <span class="comment">% Compute at max(Omega)</span>
+0115     <span class="comment">% overwrite tmp vars</span>
+0116     <span class="keyword">if</span> Omegamax_interpolate
+0117         
+0118         m11 = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, m11, tmax );
+0119         m12 = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, m12, tmax );
+0120         m13 = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, m13, tmax );        
+0121         
+0122         m21 = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, m21, tmax );
+0123         m22 = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, m22, tmax );
+0124         m23 = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, m23, tmax );        
+0125         
+0126         m31 = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, m31, tmax );
+0127         m32 = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, m32, tmax );
+0128         m33 = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, m33, tmax );        
+0129         
+0130         p1tmp = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, p1tmp, tmax );
+0131         p2tmp = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, p2tmp, tmax );
+0132         p3tmp = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, p3tmp, tmax );
+0133         
+0134         q1tmp = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, q1tmp, tmax );
+0135         q2tmp = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, q2tmp, tmax );
+0136         q3tmp = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( 6, t, q3tmp, tmax );
+0137         
+0138     <span class="keyword">else</span>
+0139         
+0140         m11 = m11(jmax);
+0141         m12 = m12(jmax);
+0142         m13 = m13(jmax);        
+0143         
+0144         m21 = m21(jmax);
+0145         m22 = m22(jmax);
+0146         m23 = m23(jmax);        
+0147 
+0148         m31 = m31(jmax);
+0149         m32 = m32(jmax);
+0150         m33 = m33(jmax);        
+0151         
+0152         p1tmp = p1tmp(jmax);
+0153         p2tmp = p2tmp(jmax);
+0154         p3tmp = p3tmp(jmax);
+0155         
+0156         q1tmp = q1tmp(jmax);
+0157         q2tmp = q2tmp(jmax);
+0158         q3tmp = q3tmp(jmax);
+0159         
+0160     <span class="keyword">end</span>
+0161         
+0162     <span class="comment">% Computation of ai's</span>
+0163     P   = [NRAk - p1tmp; NRdAk - p2tmp; NRd2Ak - p3tmp];
+0164     MM  = [m11 m12 m13; m21 m22 m23;  m31 m32 m33];   
+0165     ak  = MM\P;
+0166         
+0167     a{1}(k) = ak(1);
+0168     a{2}(k) = ak(2);
+0169     a{3}(k) = ak(3);
+0170     
+0171     <span class="comment">% Computation of bi's</span>
+0172     Q  = [q1tmp - NRomgk; q2tmp  - NRdomgk; q3tmp - NRd2omgk];
+0173     bk = NN\Q;            
+0174         
+0175     b{1}(k) = bk(1);
+0176     b{2}(k) = bk(2);
+0177     b{3}(k) = bk(3);
+0178     
+0179 <span class="keyword">end</span>
+0180 
+0181 
+0182 a{4} = 0*a{1};
+0183 b{4} =   a{4};
+0184 
+0185 
+0186 
+0187 
+0188 
+0189 
+0190 
+0191     
+0192</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

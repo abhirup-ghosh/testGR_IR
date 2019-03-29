@@ -1,0 +1,593 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBnlinfit</title>
+  <meta name="keywords" content="EOBnlinfit">
+  <meta name="description" content="NLINFIT Nonlinear least-squares regression.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBnlinfit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBnlinfit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>NLINFIT Nonlinear least-squares regression.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [beta,r,J,Sigma,mse] = EOBnlinfit(X,y,model,beta,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">NLINFIT Nonlinear least-squares regression.
+   BETA = NLINFIT(X,Y,MODELFUN,BETA0) estimates the coefficients of a
+   nonlinear regression function, using least squares estimation.  Y is a
+   vector of response (dependent variable) values.  Typically, X is a
+   design matrix of predictor (independent variable) values, with one row
+   for each value in Y and one column for each coefficient.  However, X
+   may be any array that MODELFUN is prepared to accept.  MODELFUN is a
+   function, specified using @, that accepts two arguments, a coefficient
+   vector and the array X, and returns a vector of fitted Y values.  BETA0
+   is a vector containing initial values for the coefficients.
+
+   [BETA,R,J,COVB,MSE] = NLINFIT(X,Y,MODELFUN,BETA0) returns the fitted
+   coefficients BETA, the residuals R, the Jacobian J of MODELFUN, the
+   estimated covariance matrix COVB for the fitted coefficients, and an
+   estimate MSE of the variance of the error term.  You can use these
+   outputs with NLPREDCI to produce confidence intervals for predictions,
+   and with NLPARCI to produce confidence intervals for the estimated
+   coefficients.  If you use a robust option (see below), you must use
+   COVB and may need MSE as input to NLPREDCI or NLPARCI to insure that
+   the confidence intervals take the robust fit properly into account.
+
+   [...] = NLINFIT(X,Y,MODELFUN,BETA0,OPTIONS) specifies control parameters
+   for the algorithm used in NLINFIT.  OPTIONS is a structure that can be
+   created by a call to STATSET.  Applicable STATSET parameters are:
+
+      'MaxIter'     - Maximum number of iterations allowed.  Defaults to 100.
+      'TolFun'      - Termination tolerance on the residual sum of squares.
+                      Defaults to 1e-8.
+      'TolX'        - Termination tolerance on the estimated coefficients
+                      BETA.  Defaults to 1e-8.
+      'Display'     - Level of display output during estimation.  Choices
+                      are 'off' (the default), 'iter', or 'final'.
+      'DerivStep'   - Relative difference used in finite difference gradient
+                      calculation.  May be a scalar, or the same size as
+                      the parameter vector BETA.  Defaults to EPS^(1/3).
+      'FunValCheck' - Check for invalid values, such as NaN or Inf, from
+                      the objective function.  'off' or 'on' (default).
+      'Robust'      - Flag to invoke the robust fitting option.  'off' (the default)
+                      or 'on'.
+      'WgtFun'      - A weight function for robust fitting.  Valid only when Robust
+                      is 'on'.  'bisquare' (the default), 'andrews', 'cauchy',
+                      'fair', 'huber', 'logistic', 'talwar', or 'welsch'.  Can
+                      also be a function handle that accepts a normalized residual
+                      as input and returns the robust weights as output.
+      'Tune'        - The tuning constant used in robust fitting to normalize the
+                      residuals before applying the weight function.  A positive
+                      scalar.  The default value depends upon the weight function.
+                      This parameter is required if the weight function is
+                      specified as a function handle.
+
+   NLINFIT treats NaNs in Y or MODELFUN(BETA0,X) as missing data, and
+   ignores the corresponding observations.
+
+   Examples:
+
+      Use @ to specify MODELFUN:
+         load reaction;
+         beta = nlinfit(reactants,rate,@mymodel,beta);
+
+      where MYMODEL is a MATLAB function such as:
+         function yhat = mymodel(beta, x)
+         yhat = (beta(1)*x(:,2) - x(:,3)/beta(5)) ./ ...
+                        (1+beta(2)*x(:,1)+beta(3)*x(:,2)+beta(4)*x(:,3));
+   
+      For an example of weighted fitting, see the Statistics Toolbox demo
+      &quot;Weighted Nonlinear Regression&quot;.
+
+   See also NLPARCI, NLPREDCI, NLMEFIT, NLINTOOL, STATSET.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBhlmQNMMatch.html" class="code" title="function varargout = EOBhlmQNMMatch(Omega,t, sigma, nqnm, dt, wav )">EOBhlmQNMMatch</a>	EOBhlmQNMMatch Perform the matching to QNM multipolar wave.</li><li><a href="EOBhlmQNMMatch_no_dpsilm.html" class="code" title="function varargout = EOBhlmQNMMatch_no_dpsilm(Omega,t, sigma, nqnm, dt, wav )">EOBhlmQNMMatch_no_dpsilm</a>	EOBhlmQNMMatch Perform the matching to QNM multipolar wave.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function  [beta,J,iter,cause] = LMfit(X,y, model,beta,options,verbose,maxiter)</a></li><li><a href="#_sub2" class="code">function checkFunVals(v)</a></li><li><a href="#_sub3" class="code">function [beta,J,sig,cause]=nlrobustfit(x,y,beta,model,J,ols_s,options,verbose,maxiter)</a></li><li><a href="#_sub4" class="code">function s = madsigma(r,p)</a></li><li><a href="#_sub5" class="code">function J = getjacobian(beta,fdiffstep,model,X,yfit,nans)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [beta,r,J,Sigma,mse] = EOBnlinfit(X,y,model,beta,options)</a>
+0002 <span class="comment">%NLINFIT Nonlinear least-squares regression.</span>
+0003 <span class="comment">%   BETA = NLINFIT(X,Y,MODELFUN,BETA0) estimates the coefficients of a</span>
+0004 <span class="comment">%   nonlinear regression function, using least squares estimation.  Y is a</span>
+0005 <span class="comment">%   vector of response (dependent variable) values.  Typically, X is a</span>
+0006 <span class="comment">%   design matrix of predictor (independent variable) values, with one row</span>
+0007 <span class="comment">%   for each value in Y and one column for each coefficient.  However, X</span>
+0008 <span class="comment">%   may be any array that MODELFUN is prepared to accept.  MODELFUN is a</span>
+0009 <span class="comment">%   function, specified using @, that accepts two arguments, a coefficient</span>
+0010 <span class="comment">%   vector and the array X, and returns a vector of fitted Y values.  BETA0</span>
+0011 <span class="comment">%   is a vector containing initial values for the coefficients.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   [BETA,R,J,COVB,MSE] = NLINFIT(X,Y,MODELFUN,BETA0) returns the fitted</span>
+0014 <span class="comment">%   coefficients BETA, the residuals R, the Jacobian J of MODELFUN, the</span>
+0015 <span class="comment">%   estimated covariance matrix COVB for the fitted coefficients, and an</span>
+0016 <span class="comment">%   estimate MSE of the variance of the error term.  You can use these</span>
+0017 <span class="comment">%   outputs with NLPREDCI to produce confidence intervals for predictions,</span>
+0018 <span class="comment">%   and with NLPARCI to produce confidence intervals for the estimated</span>
+0019 <span class="comment">%   coefficients.  If you use a robust option (see below), you must use</span>
+0020 <span class="comment">%   COVB and may need MSE as input to NLPREDCI or NLPARCI to insure that</span>
+0021 <span class="comment">%   the confidence intervals take the robust fit properly into account.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   [...] = NLINFIT(X,Y,MODELFUN,BETA0,OPTIONS) specifies control parameters</span>
+0024 <span class="comment">%   for the algorithm used in NLINFIT.  OPTIONS is a structure that can be</span>
+0025 <span class="comment">%   created by a call to STATSET.  Applicable STATSET parameters are:</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%      'MaxIter'     - Maximum number of iterations allowed.  Defaults to 100.</span>
+0028 <span class="comment">%      'TolFun'      - Termination tolerance on the residual sum of squares.</span>
+0029 <span class="comment">%                      Defaults to 1e-8.</span>
+0030 <span class="comment">%      'TolX'        - Termination tolerance on the estimated coefficients</span>
+0031 <span class="comment">%                      BETA.  Defaults to 1e-8.</span>
+0032 <span class="comment">%      'Display'     - Level of display output during estimation.  Choices</span>
+0033 <span class="comment">%                      are 'off' (the default), 'iter', or 'final'.</span>
+0034 <span class="comment">%      'DerivStep'   - Relative difference used in finite difference gradient</span>
+0035 <span class="comment">%                      calculation.  May be a scalar, or the same size as</span>
+0036 <span class="comment">%                      the parameter vector BETA.  Defaults to EPS^(1/3).</span>
+0037 <span class="comment">%      'FunValCheck' - Check for invalid values, such as NaN or Inf, from</span>
+0038 <span class="comment">%                      the objective function.  'off' or 'on' (default).</span>
+0039 <span class="comment">%      'Robust'      - Flag to invoke the robust fitting option.  'off' (the default)</span>
+0040 <span class="comment">%                      or 'on'.</span>
+0041 <span class="comment">%      'WgtFun'      - A weight function for robust fitting.  Valid only when Robust</span>
+0042 <span class="comment">%                      is 'on'.  'bisquare' (the default), 'andrews', 'cauchy',</span>
+0043 <span class="comment">%                      'fair', 'huber', 'logistic', 'talwar', or 'welsch'.  Can</span>
+0044 <span class="comment">%                      also be a function handle that accepts a normalized residual</span>
+0045 <span class="comment">%                      as input and returns the robust weights as output.</span>
+0046 <span class="comment">%      'Tune'        - The tuning constant used in robust fitting to normalize the</span>
+0047 <span class="comment">%                      residuals before applying the weight function.  A positive</span>
+0048 <span class="comment">%                      scalar.  The default value depends upon the weight function.</span>
+0049 <span class="comment">%                      This parameter is required if the weight function is</span>
+0050 <span class="comment">%                      specified as a function handle.</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">%   NLINFIT treats NaNs in Y or MODELFUN(BETA0,X) as missing data, and</span>
+0053 <span class="comment">%   ignores the corresponding observations.</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">%   Examples:</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">%      Use @ to specify MODELFUN:</span>
+0058 <span class="comment">%         load reaction;</span>
+0059 <span class="comment">%         beta = nlinfit(reactants,rate,@mymodel,beta);</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">%      where MYMODEL is a MATLAB function such as:</span>
+0062 <span class="comment">%         function yhat = mymodel(beta, x)</span>
+0063 <span class="comment">%         yhat = (beta(1)*x(:,2) - x(:,3)/beta(5)) ./ ...</span>
+0064 <span class="comment">%                        (1+beta(2)*x(:,1)+beta(3)*x(:,2)+beta(4)*x(:,3));</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">%      For an example of weighted fitting, see the Statistics Toolbox demo</span>
+0067 <span class="comment">%      &quot;Weighted Nonlinear Regression&quot;.</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">%   See also NLPARCI, NLPREDCI, NLMEFIT, NLINTOOL, STATSET.</span>
+0070 
+0071 <span class="comment">%   References:</span>
+0072 <span class="comment">%      [1] Seber, G.A.F, and Wild, C.J. (1989) Nonlinear Regression, Wiley.</span>
+0073 
+0074 <span class="comment">%   NLINFIT can be used to make a weighted fit with known weights:</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">%      load reaction;</span>
+0077 <span class="comment">%      w = [8 2 1 6 12 9 12 10 10 12 2 10 8]'; % some example known weights</span>
+0078 <span class="comment">%      ratew = sqrt(w).*rate;</span>
+0079 <span class="comment">%      mymodelw = @(beta,X) sqrt(w).*mymodel(beta,X);</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">%      [betaw,residw,Jw] = nlinfit(reactants,ratew,mymodelw,beta);</span>
+0082 <span class="comment">%      betaciw = nlparci(betaw,residw,Jw);</span>
+0083 <span class="comment">%      [ratefitw, deltafitw] = nlpredci(@mymodel,reactants,betaw,residw,Jw);</span>
+0084 <span class="comment">%      rmse = norm(residw) / (length(w)-length(rate))</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">%   Predict at the observed x values.  However, the prediction band</span>
+0087 <span class="comment">%   assumes a weight (measurement precision) of 1 at these points.</span>
+0088 <span class="comment">%</span>
+0089 <span class="comment">%      [ratepredw, deltapredw] = ...</span>
+0090 <span class="comment">%            nlpredci(@mymodel,reactants,betaw,residw,Jw,[],[],'observation');</span>
+0091 
+0092 <span class="comment">%   Copyright 1993-2008 The MathWorks, Inc.</span>
+0093 <span class="comment">%   $Revision: 2.22.2.16 $  $Date: 2008/12/01 08:09:22 $</span>
+0094 
+0095 <span class="keyword">if</span> nargin &lt; 4
+0096     error(<span class="string">'stats:nlinfit:TooFewInputs'</span>,<span class="string">'NLINFIT requires four input arguments.'</span>);
+0097 <span class="keyword">elseif</span> ~isvector(y)
+0098     error(<span class="string">'stats:nlinfit:NonVectorY'</span>,<span class="string">'Requires a vector second input argument.'</span>);
+0099 <span class="keyword">end</span>
+0100 <span class="keyword">if</span> nargin &lt; 5
+0101     options = statset(<span class="string">'nlinfit'</span>);
+0102 <span class="keyword">else</span>
+0103     options = statset(statset(<span class="string">'nlinfit'</span>), options);
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="comment">% Check sizes of the model function's outputs while initializing the fitted</span>
+0107 <span class="comment">% values, residuals, and SSE at the given starting coefficient values.</span>
+0108 model = fcnchk(model);
+0109 <span class="keyword">try</span>
+0110     yfit = model(beta,X);
+0111 <span class="keyword">catch</span> ME
+0112     <span class="keyword">if</span> isa(model, <span class="string">'inline'</span>)
+0113         throw(addCause(MException(<span class="string">'stats:nlinfit:ModelFunctionError'</span>,<span class="keyword">...</span>
+0114                           <span class="string">'Error evaluating inline model function.'</span>),ME));
+0115     <span class="keyword">elseif</span> strcmp(<span class="string">'MATLAB:UndefinedFunction'</span>, ME.identifier) <span class="keyword">...</span>
+0116                 &amp;&amp; ~isempty(strfind(ME.message, func2str(model)))
+0117         error(<span class="string">'stats:nlinfit:ModelFunctionNotFound'</span>,<span class="keyword">...</span>
+0118               <span class="string">'The model function ''%s'' was not found.'</span>, func2str(model));
+0119     <span class="keyword">else</span>
+0120         throw(addCause(MException(<span class="string">'stats:nlinfit:ModelFunctionError'</span>,<span class="keyword">...</span>
+0121                           <span class="string">'Error evaluating model function ''%s''.'</span>,<span class="keyword">...</span>
+0122                           func2str(model)),<span class="keyword">...</span>
+0123                        ME));
+0124     <span class="keyword">end</span>
+0125 <span class="keyword">end</span>
+0126 <span class="keyword">if</span> ~isequal(size(yfit), size(y))
+0127     error(<span class="string">'stats:nlinfit:WrongSizeFunOutput'</span>, <span class="keyword">...</span>
+0128           <span class="string">'MODELFUN should return a vector of fitted values the same length as Y.'</span>);
+0129 <span class="keyword">end</span>
+0130 
+0131 
+0132 
+0133 <span class="comment">% Find NaNs in either the responses or in the fitted values at the starting</span>
+0134 <span class="comment">% point.  Since X is allowed to be anything, we can't just check for rows</span>
+0135 <span class="comment">% with NaNs, so checking yhat is the appropriate thing.  Those positions in</span>
+0136 <span class="comment">% the fit will be ignored as missing values.  NaNs that show up anywhere</span>
+0137 <span class="comment">% else during iteration will be treated as bad values.</span>
+0138 nans = (isnan(y(:)) | isnan(yfit(:))); <span class="comment">% a col vector</span>
+0139 r = y(:) - yfit(:);
+0140 r(nans) = [];
+0141 n = numel(r);
+0142 p = numel(beta);
+0143 sse = r'*r;
+0144 
+0145 funValCheck = strcmp(options.FunValCheck, <span class="string">'on'</span>);
+0146 <span class="keyword">if</span> funValCheck &amp;&amp; ~isfinite(sse), <a href="#_sub2" class="code" title="subfunction checkFunVals(v)">checkFunVals</a>(r); <span class="keyword">end</span>
+0147 
+0148 <span class="comment">% Set the level of display</span>
+0149 <span class="keyword">switch</span> options.Display
+0150     <span class="keyword">case</span> <span class="string">'off'</span>,    verbose = 0;
+0151     <span class="keyword">case</span> <span class="string">'notify'</span>, verbose = 1;
+0152     <span class="keyword">case</span> <span class="string">'final'</span>,  verbose = 2;
+0153     <span class="keyword">case</span> <span class="string">'iter'</span>,   verbose = 3;
+0154 <span class="keyword">end</span>
+0155 maxiter = options.MaxIter;
+0156 
+0157 <span class="keyword">if</span> strcmp(options.Robust,<span class="string">'off'</span>)
+0158     <span class="comment">% display format for non-robust fit</span>
+0159     <span class="keyword">if</span> verbose &gt; 2 <span class="comment">% iter</span>
+0160         disp(<span class="string">' '</span>);
+0161         disp(<span class="string">'                                     Norm of         Norm of'</span>);
+0162         disp(<span class="string">'   Iteration             SSE        Gradient           Step '</span>);
+0163         disp(<span class="string">'  -----------------------------------------------------------'</span>);
+0164         disp(sprintf(<span class="string">'      %6d    %12g'</span>,0,sse));
+0165     <span class="keyword">end</span>
+0166     [beta,J,lsiter,cause] = <a href="#_sub1" class="code" title="subfunction  [beta,J,iter,cause] = LMfit(X,y, model,beta,options,verbose,maxiter)">LMfit</a>(X,y, model,beta,options,verbose,maxiter);
+0167 <span class="keyword">else</span>
+0168     <span class="comment">% Do a preliminary fit just to get residuals and leverage from the</span>
+0169     <span class="comment">% least squares coefficient.  We won't count this against the iteration</span>
+0170     <span class="comment">% limit.</span>
+0171     [beta_ls,J] = <a href="#_sub1" class="code" title="subfunction  [beta,J,iter,cause] = LMfit(X,y, model,beta,options,verbose,maxiter)">LMfit</a>(X,y, model,beta,options,0,maxiter);
+0172     res = y - model(beta_ls,X);
+0173     res(isnan(res)) = [];
+0174     ols_s = norm(res) / sqrt(max(1,length(res)-numel(beta)));
+0175 
+0176     <span class="comment">% display format for robust fit</span>
+0177     <span class="comment">% Please note there are two loops for robust fit. It would be very</span>
+0178     <span class="comment">% confusing if we display all iteration results. Instead, only the last</span>
+0179     <span class="comment">% step of each inner loop (LM fit) will be output.</span>
+0180     <span class="keyword">if</span> verbose &gt; 2 <span class="comment">% iter</span>
+0181         disp(<span class="string">' '</span>);
+0182         disp(<span class="string">'Displaying iterations that re-calculate the robust weights'</span>);
+0183         disp(<span class="string">' '</span>);
+0184         disp(<span class="string">'   Iteration             SSE '</span>);
+0185         disp(<span class="string">'  -----------------------------'</span>);
+0186         disp(sprintf(<span class="string">'      %6d    %12g'</span>,0,sse));
+0187     <span class="keyword">end</span>
+0188     [beta,J,sig,cause] = <a href="#_sub3" class="code" title="subfunction [beta,J,sig,cause]=nlrobustfit(x,y,beta,model,J,ols_s,options,verbose,maxiter)">nlrobustfit</a>(X,y,beta,model,J,ols_s,options,verbose,maxiter);  
+0189 <span class="keyword">end</span>;
+0190 
+0191 <span class="keyword">switch</span>(cause)
+0192     <span class="keyword">case</span> <span class="string">'maxiter'</span>
+0193         warning(<span class="string">'stats:nlinfit:IterationLimitExceeded'</span>, <span class="keyword">...</span>
+0194                 <span class="string">'Iteration limit exceeded.  Returning results from final iteration.'</span>);
+0195     <span class="keyword">case</span> <span class="string">'tolx'</span>
+0196         <span class="keyword">if</span> verbose &gt; 1 <span class="comment">% 'final' or 'iter'</span>
+0197             disp(<span class="string">'Iterations terminated: relative norm of the current step is less than OPTIONS.TolX'</span>);
+0198         <span class="keyword">end</span>
+0199     <span class="keyword">case</span> <span class="string">'tolfun'</span>
+0200         <span class="keyword">if</span> verbose &gt; 1 <span class="comment">% 'final' or 'iter'</span>
+0201             disp(<span class="string">'Iterations terminated: relative change in SSE less than OPTIONS.TolFun'</span>);
+0202         <span class="keyword">end</span>
+0203     <span class="keyword">case</span> <span class="string">'stall'</span>
+0204         warning(<span class="string">'stats:nlinfit:UnableToDecreaseSSE'</span>, <span class="keyword">...</span>
+0205                 <span class="string">'Unable to find a step that will decrease SSE.  Returning results from last iteration.'</span>);
+0206 <span class="keyword">end</span>
+0207 
+0208 <span class="comment">% If the Jacobian is ill-conditioned, then two parameters are probably</span>
+0209 <span class="comment">% aliased and the estimates will be highly correlated.  Prediction at new x</span>
+0210 <span class="comment">% values not in the same column space is dubious.  NLPARCI will have</span>
+0211 <span class="comment">% trouble computing CIs because the inverse of J'*J is difficult to get</span>
+0212 <span class="comment">% accurately.  NLPREDCI will have the same difficulty, and in addition,</span>
+0213 <span class="comment">% will in effect end up taking the difference of two very large, but nearly</span>
+0214 <span class="comment">% equal, variance and covariance terms, lose precision, and so the</span>
+0215 <span class="comment">% prediction bands will be erratic.</span>
+0216 [Q,R] = qr(J,0);
+0217 <span class="keyword">if</span> n &lt;= p
+0218     warning(<span class="string">'stats:nlinfit:Overparameterized'</span>, <span class="keyword">...</span>
+0219             [<span class="string">'The model is overparameterized, and model parameters are not\n'</span> <span class="keyword">...</span>
+0220              <span class="string">'identifiable.  You will not be able to compute confidence or '</span> <span class="keyword">...</span>
+0221              <span class="string">'prediction\nintervals, and you should use caution in making predictions.'</span>]);
+0222 <span class="keyword">elseif</span> condest(R) &gt; 1/(eps(class(beta)))^(1/2)
+0223     warning(<span class="string">'stats:nlinfit:IllConditionedJacobian'</span>, <span class="keyword">...</span>
+0224             [<span class="string">'The Jacobian at the solution is ill-conditioned, and some\n'</span> <span class="keyword">...</span>
+0225              <span class="string">'model parameters may not be estimated well (they are not '</span> <span class="keyword">...</span>
+0226              <span class="string">'identifiable).\nUse caution in making predictions.'</span>]);
+0227 <span class="keyword">end</span>
+0228 
+0229 <span class="keyword">if</span> nargout &gt; 1
+0230     <span class="comment">% Return residuals and Jacobian that have missing values where needed.</span>
+0231     yfit = model(beta,X);
+0232     r = y - yfit;
+0233     JJ(~nans,:) = J;
+0234     JJ(nans,:) = NaN;
+0235     J = JJ;  
+0236 <span class="keyword">end</span>
+0237 <span class="keyword">if</span> nargout &gt; 3
+0238     <span class="keyword">if</span> strcmp(options.Robust,<span class="string">'off'</span>)
+0239         <span class="comment">% We could estimate the population variance and the covariance matrix</span>
+0240         <span class="comment">% for beta here as</span>
+0241         mse = sum(abs(r(~nans)).^2)/(n-p);
+0242     <span class="keyword">else</span>
+0243         mse = sig.^2;
+0244     <span class="keyword">end</span>
+0245     Rinv = inv(R);
+0246     Sigma = Rinv*Rinv'*mse;
+0247 <span class="keyword">end</span>
+0248 
+0249 
+0250 <span class="comment">%----------------------------------------------------------------------</span>
+0251 <a name="_sub1" href="#_subfunctions" class="code">function  [beta,J,iter,cause] = LMfit(X,y, model,beta,options,verbose,maxiter) </a>
+0252 <span class="comment">% Levenberg-Marquardt algorithm for nonlinear regression</span>
+0253 
+0254 <span class="comment">% Set up convergence tolerances from options.</span>
+0255 betatol = options.TolX;
+0256 rtol = options.TolFun;
+0257 fdiffstep = options.DerivStep;
+0258 funValCheck = strcmp(options.FunValCheck, <span class="string">'on'</span>);
+0259 
+0260 <span class="comment">% Set initial weight for LM algorithm.</span>
+0261 lambda = .01;
+0262 
+0263 <span class="comment">% Set the iteration step</span>
+0264 sqrteps = sqrt(eps(class(beta)));
+0265 
+0266 p = numel(beta);
+0267 
+0268 <span class="comment">% treatment for nans</span>
+0269 yfit = model(beta,X);
+0270 r = y(:) - yfit(:);
+0271 nans = (isnan(y(:)) | isnan(yfit(:))); <span class="comment">% a col vector</span>
+0272 r(nans) = [];
+0273 
+0274 sse = r'*r;
+0275 
+0276 zerosp = zeros(p,1,class(r));
+0277 iter = 0;
+0278 breakOut = false;
+0279 cause = <span class="string">''</span>;
+0280 
+0281 <span class="keyword">while</span> iter &lt; maxiter
+0282     iter = iter + 1;
+0283     betaold = beta;
+0284     sseold = sse;
+0285 
+0286     <span class="comment">% Compute a finite difference approximation to the Jacobian</span>
+0287     J = <a href="#_sub5" class="code" title="subfunction J = getjacobian(beta,fdiffstep,model,X,yfit,nans)">getjacobian</a>(beta,fdiffstep,model,X,yfit,nans);
+0288 
+0289     <span class="comment">% Levenberg-Marquardt step: inv(J'*J+lambda*D)*J'*r</span>
+0290     diagJtJ = sum(abs(J).^2, 1);
+0291     <span class="keyword">if</span> funValCheck &amp;&amp; ~all(isfinite(diagJtJ)), <a href="#_sub2" class="code" title="subfunction checkFunVals(v)">checkFunVals</a>(J(:)); <span class="keyword">end</span>
+0292     Jplus = [J; diag(sqrt(lambda*diagJtJ))];
+0293     rplus = [r; zerosp];
+0294     step = Jplus \ rplus;
+0295     beta(:) = beta(:) + step;
+0296 
+0297     <span class="comment">% Evaluate the fitted values at the new coefficients and</span>
+0298     <span class="comment">% compute the residuals and the SSE.</span>
+0299     yfit = model(beta,X);
+0300     r = y(:) - yfit(:);
+0301     r(nans) = [];
+0302     sse = r'*r;
+0303     <span class="keyword">if</span> funValCheck &amp;&amp; ~isfinite(sse), <a href="#_sub2" class="code" title="subfunction checkFunVals(v)">checkFunVals</a>(r); <span class="keyword">end</span>
+0304     <span class="comment">% If the LM step decreased the SSE, decrease lambda to downweight the</span>
+0305     <span class="comment">% steepest descent direction.  Prevent underflowing to zero after many</span>
+0306     <span class="comment">% successful steps; smaller than eps is effectively zero anyway.</span>
+0307     <span class="keyword">if</span> sse &lt; sseold
+0308         lambda = max(0.1*lambda,eps);
+0309         
+0310     <span class="comment">% If the LM step increased the SSE, repeatedly increase lambda to</span>
+0311     <span class="comment">% upweight the steepest descent direction and decrease the step size</span>
+0312     <span class="comment">% until we get a step that does decrease SSE.</span>
+0313     <span class="keyword">else</span>
+0314         <span class="keyword">while</span> sse &gt; sseold
+0315             lambda = 10*lambda;
+0316             <span class="keyword">if</span> lambda &gt; 1e16
+0317                 breakOut = true;
+0318                 <span class="keyword">break</span>
+0319             <span class="keyword">end</span>
+0320             Jplus = [J; diag(sqrt(lambda*sum(J.^2,1)))];
+0321             step = Jplus \ rplus;
+0322             beta(:) = betaold(:) + step;
+0323             yfit = model(beta,X);
+0324             r = y(:) - yfit(:);
+0325             r(nans) = [];
+0326             sse = r'*r;
+0327             <span class="keyword">if</span> funValCheck &amp;&amp; ~isfinite(sse), <a href="#_sub2" class="code" title="subfunction checkFunVals(v)">checkFunVals</a>(r); <span class="keyword">end</span>
+0328         <span class="keyword">end</span>
+0329     <span class="keyword">end</span> 
+0330     <span class="keyword">if</span> verbose &gt; 2 <span class="comment">% iter</span>
+0331         disp(sprintf(<span class="string">'      %6d    %12g    %12g    %12g'</span>, <span class="keyword">...</span>
+0332                      iter,sse,norm(2*r'*J),norm(step)));
+0333     <span class="keyword">end</span>
+0334 
+0335     <span class="comment">% Check step size and change in SSE for convergence.</span>
+0336     <span class="keyword">if</span> norm(step) &lt; betatol*(sqrteps+norm(beta))
+0337         cause = <span class="string">'tolx'</span>;
+0338         <span class="keyword">break</span>
+0339     <span class="keyword">elseif</span> abs(sse-sseold) &lt;= rtol*sse
+0340         cause = <span class="string">'tolfun'</span>;
+0341         <span class="keyword">break</span>
+0342     <span class="keyword">elseif</span> breakOut
+0343         cause = <span class="string">'stall'</span>;
+0344         <span class="keyword">break</span>
+0345     <span class="keyword">end</span>
+0346 <span class="keyword">end</span>
+0347 <span class="keyword">if</span> (iter &gt;= maxiter)
+0348     cause = <span class="string">'maxiter'</span>;
+0349 <span class="keyword">end</span>
+0350 
+0351 
+0352 <span class="comment">%--------------------------------------------------------------------------</span>
+0353 <a name="_sub2" href="#_subfunctions" class="code">function checkFunVals(v)</a>
+0354 <span class="comment">% check if the functin has the finite output</span>
+0355 <span class="keyword">if</span> any(~isfinite(v))
+0356     error(<span class="string">'stats:nlinfit:NonFiniteFunOutput'</span>, <span class="keyword">...</span>
+0357           <span class="string">'MODELFUN has returned Inf or NaN values.'</span>);
+0358 <span class="keyword">end</span>
+0359 
+0360 <span class="comment">%--------------------------------------------------------------------------</span>
+0361 <a name="_sub3" href="#_subfunctions" class="code">function [beta,J,sig,cause]=nlrobustfit(x,y,beta,model,J,ols_s,options,verbose,maxiter)</a>
+0362 <span class="comment">% nonlinear robust fit</span>
+0363 
+0364 tune = options.Tune;
+0365 WgtFun = options.WgtFun;
+0366 [eid,emsg,WgtFun,tune] = statrobustwfun(WgtFun,tune);
+0367 <span class="keyword">if</span> ~isempty(eid)
+0368     error(sprintf(<span class="string">'stats:nlinfit:%s'</span>,eid), emsg);
+0369 <span class="keyword">end</span>
+0370 
+0371 yfit = model(beta,x);
+0372 fullr = y(:) - yfit(:);
+0373 ok = ~isnan(fullr);
+0374 r = fullr(ok);
+0375 Delta = sqrt(eps(class(x)));
+0376 
+0377 <span class="comment">% Adjust residuals using leverage, as advised by DuMouchel &amp; O'Brien</span>
+0378 <span class="comment">% Compute leverage based on X, the Jacobian</span>
+0379 [Q,ignore]=qr(J,0);
+0380 h = min(.9999, sum(Q.*Q,2));
+0381 
+0382 <span class="comment">% Compute adjustment factor</span>
+0383 adjfactor = 1 ./ sqrt(1-h);
+0384 
+0385 radj = r .* adjfactor;
+0386 
+0387 <span class="comment">% If we get a perfect or near perfect fit, the whole idea of finding</span>
+0388 <span class="comment">% outliers by comparing them to the residual standard deviation becomes</span>
+0389 <span class="comment">% difficult.  We'll deal with that by never allowing our estimate of the</span>
+0390 <span class="comment">% standard deviation of the error term to get below a value that is a small</span>
+0391 <span class="comment">% fraction of the standard deviation of the raw response values.</span>
+0392 tiny_s = 1e-6 * std(y);
+0393 <span class="keyword">if</span> tiny_s==0
+0394     tiny_s = 1;
+0395 <span class="keyword">end</span>
+0396 
+0397 <span class="comment">% Main loop of repeated nonlinear fits, adjust weights each time</span>
+0398 totiter = 0;
+0399 w = NaN(size(y));
+0400 <span class="keyword">while</span> maxiter&gt;0
+0401     beta0=beta;
+0402     s = <a href="#_sub4" class="code" title="subfunction s = madsigma(r,p)">madsigma</a>(radj, numel(beta)); <span class="comment">% robust estimate of sigma for residual</span>
+0403 
+0404     <span class="comment">% Compute robust weights based on current residuals</span>
+0405     w(ok) = feval(WgtFun, radj/(max(s,tiny_s)*tune));
+0406 
+0407     <span class="comment">% this is the weighted nlinfit</span>
+0408     sw = sqrt(w);
+0409     yw = y .* sw;
+0410     modelw = @(b,x) sqrt(w).*model(b,x);
+0411     [beta,J1,lsiter,cause] = <a href="#_sub1" class="code" title="subfunction  [beta,J,iter,cause] = LMfit(X,y, model,beta,options,verbose,maxiter)">LMfit</a>(x,yw,modelw,beta0,options,0,maxiter); <span class="comment">% 6th arg always silences display</span>
+0412     totiter = totiter + lsiter;
+0413     maxiter = maxiter - lsiter;
+0414     yfit = model(beta,x);
+0415     fullr = y - yfit;
+0416     r = fullr(ok);
+0417     radj = r .* adjfactor;
+0418     
+0419     <span class="comment">% if there is no change in any coeffcienct, the iterations stop.</span>
+0420     <span class="keyword">if</span>  all(abs(beta-beta0) &lt; Delta*max(abs(beta),abs(beta0)))
+0421         <span class="keyword">break</span>;
+0422     <span class="keyword">end</span>
+0423     
+0424     <span class="keyword">if</span> verbose &gt; 2 <span class="comment">% iter</span>
+0425         disp(sprintf(<span class="string">'      %6d    %12g'</span>, <span class="keyword">...</span>
+0426                      totiter, r'*r));
+0427     <span class="keyword">end</span>
+0428 <span class="keyword">end</span>
+0429 
+0430 <span class="comment">% this is a warning about the non-convergence</span>
+0431 <span class="keyword">if</span> maxiter&lt;=0
+0432     cause = <span class="string">'maxiter'</span>;
+0433 <span class="keyword">end</span>
+0434 
+0435 <span class="comment">% We need the Jacobian at the final coefficient estimates, but not the J1</span>
+0436 <span class="comment">% version returned by LMfit because it has robust weights included</span>
+0437 fdiffstep = options.DerivStep;
+0438 J = <a href="#_sub5" class="code" title="subfunction J = getjacobian(beta,fdiffstep,model,X,yfit,nans)">getjacobian</a>(beta,fdiffstep,model,x,yfit,~ok);
+0439 
+0440 <span class="comment">% Compute MAD of adjusted residuals after dropping p-1 closest to 0</span>
+0441 p = numel(beta);
+0442 n = length(radj);
+0443 mad_s = <a href="#_sub4" class="code" title="subfunction s = madsigma(r,p)">madsigma</a>(radj, p);   
+0444 
+0445 <span class="comment">% Compute a robust scale estimate for the covariance matrix</span>
+0446 sig = statrobustsigma(WgtFun,radj,p,mad_s,tune,h);
+0447 
+0448 <span class="comment">% Be conservative by not allowing this to be much bigger than the ols value</span>
+0449 <span class="comment">% if the sample size is not large compared to p^2</span>
+0450 sig = max(sig, <span class="keyword">...</span>
+0451           sqrt((ols_s^2 * p^2 + sig^2 * n) / (p^2 + n)));
+0452 
+0453 
+0454 <span class="comment">%----------------------- Robust estimate of sigma</span>
+0455 <a name="_sub4" href="#_subfunctions" class="code">function s = madsigma(r,p)</a>
+0456 <span class="comment">%MADSIGMA    Compute sigma estimate using MAD of residuals from 0</span>
+0457 n = length(r);
+0458 rs = sort(abs(r));
+0459 s = median(rs(max(1,min(n,p)):end)) / 0.6745;
+0460 
+0461 <span class="comment">% ---------------------- Jacobian</span>
+0462 <a name="_sub5" href="#_subfunctions" class="code">function J = getjacobian(beta,fdiffstep,model,X,yfit,nans)</a>
+0463 p = numel(beta);
+0464 delta = zeros(size(beta));
+0465 <span class="keyword">for</span> k = 1:p
+0466     <span class="keyword">if</span> (beta(k) == 0)
+0467         nb = sqrt(norm(beta));
+0468         delta(k) = fdiffstep * (nb + (nb==0));
+0469     <span class="keyword">else</span>
+0470         delta(k) = fdiffstep*beta(k);
+0471     <span class="keyword">end</span>
+0472     yplus = model(beta+delta,X);
+0473     dy = yplus(:) - yfit(:);
+0474     dy(nans) = [];
+0475     J(:,k) = dy/delta(k);
+0476     delta(k) = 0;
+0477 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBRhsCons</title>
+  <meta name="keywords" content="EOBRhsCons">
+  <meta name="description" content="EOBRhs Compute conservative r.h.s. of the full EOB equations.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBRhsCons.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBRhsCons
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBRhs Compute conservative r.h.s. of the full EOB equations.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function dydt = EOBRhsCons(t,y, nu, EOBopt, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBRhs Compute conservative r.h.s. of the full EOB equations.
+
+   This function is not to be used for the ODE solver.
+   Assume size(y) = nvars x length(t).
+
+   dydt = EOBRhsCons(t,y, nu, EOBopt) return the r.h.s. of EOB equations
+   written using prstar, i.e. the conjugate momentum to the generalized
+   tortoise coordinate. 
+
+   dydt = EOBRhsCons(t,y, nu, EOBopt, EOBmet) pass the structure output by
+   EOBMetric.m, and do not call the routine. 
+
+   dydt = EOBRhsCons(t,y, nu, EOBopt, EOBmet, EOBHam) pass the structure
+   output by EOBHam.m (or EOBHam0.m), and do not call the routine.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>	EOBMetric Computes the EOB metric potentials and derivatives.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function dydt = EOBRhsCons(t,y, nu, EOBopt, varargin)</a>
+0002 
+0003 <span class="comment">%EOBRhs Compute conservative r.h.s. of the full EOB equations.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   This function is not to be used for the ODE solver.</span>
+0006 <span class="comment">%   Assume size(y) = nvars x length(t).</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   dydt = EOBRhsCons(t,y, nu, EOBopt) return the r.h.s. of EOB equations</span>
+0009 <span class="comment">%   written using prstar, i.e. the conjugate momentum to the generalized</span>
+0010 <span class="comment">%   tortoise coordinate.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   dydt = EOBRhsCons(t,y, nu, EOBopt, EOBmet) pass the structure output by</span>
+0013 <span class="comment">%   EOBMetric.m, and do not call the routine.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   dydt = EOBRhsCons(t,y, nu, EOBopt, EOBmet, EOBHam) pass the structure</span>
+0016 <span class="comment">%   output by EOBHam.m (or EOBHam0.m), and do not call the routine.</span>
+0017 <span class="comment">%</span>
+0018 
+0019 
+0020 <span class="comment">% Manage args in</span>
+0021 na = length(varargin);
+0022 <span class="keyword">if</span> (na&gt;2)
+0023     error(<span class="string">'too many input args'</span>)
+0024 <span class="keyword">elseif</span> na==1 &amp;&amp; ~isempty(varargin{1})
+0025     Metric = varargin{1};    
+0026     <span class="comment">% Compute the EOB Hamiltonian</span>
+0027     Ham = EOBopt.ComputeEOBHam(nu, y(2,:),y(3,:),y(4,:), EOBopt, Metric);    
+0028 <span class="keyword">elseif</span> na==2 &amp;&amp; ~isempty(varargin{1}) &amp;&amp; ~isempty(varargin{2})
+0029     Metric = varargin{1};    
+0030     Ham    = varargin{2};    
+0031 <span class="keyword">else</span>
+0032     <span class="comment">% Compute the EOB metric (do not compute 2nd drvts of A)</span>
+0033     Metric = <a href="EOBMetric.html" class="code" title="function varargout = EOBMetric( nu, r, EOBopt, varargin )">EOBMetric</a>(nu, y(2,:), EOBopt, 0);
+0034     <span class="comment">% Compute the EOB Hamiltonian</span>
+0035     Ham = EOBopt.ComputeEOBHam(nu, y(2,:),y(3,:),y(4,:), EOBopt, Metric);    
+0036 <span class="keyword">end</span>
+0037 
+0038 
+0039 <span class="comment">% Other options</span>
+0040 particle_dynamics = strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>);
+0041 PNorder = EOBopt.PNorder;
+0042 
+0043 
+0044 <span class="comment">% Allocate memory</span>
+0045 [nv,nx] = size(y);
+0046 dydt = zeros(nv,nx);
+0047 
+0048 <span class="comment">% unpack y</span>
+0049 phi    = y(1,:);
+0050 r      = y(2,:);
+0051 pph    = y(3,:);
+0052 prstar = y(4,:);
+0053 
+0054 
+0055 <span class="comment">% Metric (reshape)</span>
+0056 A      = reshape(Metric.A,1,nx);
+0057 B      = reshape(Metric.B,1,nx);
+0058 dA     = reshape(Metric.dA,1,nx);
+0059 
+0060 
+0061 <span class="comment">% Energy (reshape)</span>
+0062 <span class="comment">% H      = \hat{H}       = H/mu</span>
+0063 <span class="comment">% Heff   = \hat{H}_{eff} = H_{eff}/\mu</span>
+0064 
+0065 H    = reshape(Ham.H,1,nx);
+0066 Heff = reshape(Ham.Heff,1,nx);
+0067 E    = nu*H;
+0068 
+0069 <span class="comment">% Shorthands</span>
+0070 u        = 1./r;
+0071 u2       = u.^2;
+0072 u3       = u.^3;
+0073 pph2     = pph.^2;
+0074 prstar3  = prstar.^3;
+0075 prstar4  = prstar.^4;
+0076 sqrtAbyB = sqrt(A./B);
+0077 z3       = 2.0*nu*(4.0-3.0*nu);
+0078 denE     = E.*Heff;
+0079 one_denE = 1./denE;
+0080 
+0081 
+0082 <span class="keyword">if</span> particle_dynamics
+0083 
+0084     <span class="comment">% d\phi/dt</span>
+0085     dydt(1,:) = A.*pph./( r.^2.*Heff );
+0086     
+0087     <span class="comment">% dr/dt</span>
+0088     dydt(2,:) = A.*prstar./Heff;
+0089 
+0090     <span class="comment">% dp_{r*}/dt (conservative)</span>
+0091     dydt(4,:) = -A.*( pph2.*u2.*(dA-2d0*A.*u) + dA )./(2.d0*Heff);    
+0092     
+0093     <span class="keyword">return</span>
+0094     
+0095 <span class="keyword">end</span>
+0096 
+0097     
+0098 <span class="comment">% d\phi/dt</span>
+0099 dydt(1,:) = A.*pph./(r.^2.*E.*Heff );
+0100 
+0101 <span class="comment">% dr/dt and (conservative part of) dp_{r*}/dt</span>
+0102 <span class="keyword">if</span> strcmp(PNorder,<span class="string">'1pn'</span>) || strcmp(PNorder,<span class="string">'2pn'</span>)
+0103     
+0104     dydt(2,:) = sqrtAbyB.*prstar.*one_denE;
+0105     dydt(4,:) = -0.5*sqrtAbyB.*( pph2.*u2.*(dA-2d0*A.*u) + dA).*one_denE;
+0106     
+0107 <span class="keyword">else</span>
+0108             
+0109     dydt(2,:) = sqrtAbyB.*(prstar + z3*2*A.*u2.*prstar3).*one_denE;
+0110     
+0111     dydt(4,:) = - 0.5d0*sqrtAbyB.*( pph2.*u2.*(dA-2*A.*u) + dA <span class="keyword">...</span>
+0112               + z3*(dA.*u2 - 2.0*A.*u3).*prstar4 ).*one_denE;
+0113     
+0114 <span class="keyword">end</span>
+0115 
+0116 
+0117 
+0118 
+0119 
+0120 
+0121 
+0122 
+0123 
+0124 
+0125 
+0126</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

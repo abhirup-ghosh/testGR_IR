@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBddotrNoFlux</title>
+  <meta name="keywords" content="EOBddotrNoFlux">
+  <meta name="description" content="EOBddotrBoot2.m Computes an approximate value for \ddot{r}.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBddotrNoFlux.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBddotrNoFlux
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBddotrBoot2.m Computes an approximate value for \ddot{r}.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ddotr dr_dt dprstar_dt] = EOBddotrNoFlux(nu,y,dydt,EOBopt,EOBmet,EOBHam) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBddotrBoot2.m Computes an approximate value for \ddot{r}.
+
+   The second-order time derivative of the EOB radius r is computed using
+   the Poisson's bracket:
+
+    \ddot{r} = -\left\{H,\dot{r}\right\} + \dfrac{\partial\dot{r}}{\partial t}
+
+   (where H is the EOB (normalized) Hamiltonian) 
+   A direct calculation without the flux is employed.
+
+   [ddotr dr_dt] = EOBddotrNoFlux(nu,y,dydt,EOBopt,EOBmet,EOBHam)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ddotr dr_dt dprstar_dt] = EOBddotrNoFlux(nu,y,dydt,EOBopt,EOBmet,EOBHam)</a>
+0002 
+0003 <span class="comment">%EOBddotrBoot2.m Computes an approximate value for \ddot{r}.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   The second-order time derivative of the EOB radius r is computed using</span>
+0006 <span class="comment">%   the Poisson's bracket:</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%    \ddot{r} = -\left\{H,\dot{r}\right\} + \dfrac{\partial\dot{r}}{\partial t}</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   (where H is the EOB (normalized) Hamiltonian)</span>
+0011 <span class="comment">%   A direct calculation without the flux is employed.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   [ddotr dr_dt] = EOBddotrNoFlux(nu,y,dydt,EOBopt,EOBmet,EOBHam)</span>
+0014 <span class="comment">%</span>
+0015 
+0016 
+0017 <span class="comment">% Unpack y</span>
+0018 r      = y(2,:);
+0019 pph    = y(3,:);
+0020 prstar = y(4,:);
+0021 
+0022 sz     = size(r);
+0023 
+0024 <span class="comment">% r.h.s. of the conservative part of two EoM</span>
+0025 dprstar_dt = dydt(4,:); 
+0026 dr_dt      = dydt(2,:);
+0027 
+0028 <span class="comment">% Metric</span>
+0029 A  = reshape(EOBmet.A,sz);
+0030 dA = reshape(EOBmet.dA,sz);
+0031 B  = reshape(EOBmet.B,sz);
+0032 dB = reshape(EOBmet.dB,sz);
+0033 
+0034 <span class="comment">% Hamiltonian</span>
+0035 Heff          = reshape(EOBHam.Heff,sz);
+0036 H             = reshape(EOBHam.H,sz);
+0037 dHeff_dr      = reshape(EOBHam.dHeff_dr,sz);
+0038 dHeff_dprstar = reshape(EOBHam.dHeff_dprstar,sz);
+0039 
+0040 <span class="comment">% Shorthands</span>
+0041 sqrtAbyB = sqrt(A./B); 
+0042 one_A    = 1.d0./A;
+0043 one_B    = 1.d0./B;
+0044 
+0045 E        = nu.*H;
+0046 E2       = E.*E;
+0047 tmpE     = 1./Heff+nu./E2;
+0048 denE     = E.*Heff;
+0049 one_denE = 1./denE;
+0050 
+0051 z3       = 2.0*nu*(4.0-3.0*nu);
+0052 u        = 1./r;
+0053 u2       = u.^2;
+0054 u3       = u.^3;
+0055 prstar2 = prstar.^2;
+0056 prstar3 = prstar.^3;
+0057 prstar4 = prstar.^4;
+0058 
+0059 <span class="comment">% Computing dpr*_dt, Not necessary: given by dydt. DELME.</span>
+0060 <span class="comment">%dprstar_dt  = -0.5d0*sqrtAbyB.*( pph.^2.*u2.*(dA-2d0*A.*u) + dA ...</span>
+0061 <span class="comment">%              + z3*(dA.*u2 - 2.0*A.*u3).*prstar4 ).*one_denE;</span>
+0062 
+0063 <span class="comment">% Derivatives of \dot{r} wrt to r, prstar and p_phi</span>
+0064 ddotr_dr      = sqrtAbyB.*( (prstar + z3.*2.*A.*u2.*prstar3)<span class="keyword">...</span>
+0065                 .*(0.5.*(dA.*one_A-dB.*one_B)-dHeff_dr.*tmpE)<span class="keyword">...</span>
+0066                 + 2.0*z3*(dA.*u2 - 2*A.*u3).*prstar3).*one_denE;
+0067             
+0068 ddotr_dprstar = sqrtAbyB.*( 1+z3*6.d0*A.*u2.*prstar2<span class="keyword">...</span>
+0069                  -(prstar + z3.*2*A.*u2.*prstar3).*dHeff_dprstar.*tmpE).*one_denE;
+0070             
+0071 
+0072 <span class="comment">% Approximate ddot(r) without Flux</span>
+0073 ddotr = dprstar_dt.*ddotr_dprstar + dr_dt.*ddotr_dr;
+0074 
+0075</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

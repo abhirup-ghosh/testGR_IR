@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of T4Run</title>
+  <meta name="keywords" content="T4Run">
+  <meta name="description" content="T4Run Taylor-T4 approximant.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; T4Run.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>T4Run
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>T4Run Taylor-T4 approximant.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = T4Run(q,r0,Phi0,dt,tmax, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">T4Run Taylor-T4 approximant.
+
+   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax)
+
+   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, ODEoptions) specify ODExx optional
+   structure (see odeset.m)
+
+   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],pnorder) specify PN order
+   ('2.5PN' or '3PN')  
+
+   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[], addelta) re-define waveform
+   phase to absorb the log(x/x0) (if addelta='yes') 
+
+   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[],[],computeAPO) compute
+   modulus, phase, frequency and curvature waveform (if computeAPO='yes')
+
+   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[],[],[], verbose) screen info
+   level  
+             0 = minimum text (default)
+             1 = text
+             2 = text + figures 
+
+   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[],[],[],[], saveme) save data, 
+   0 = no 1 = yes (default) 
+
+   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[],[],[],[],[], basedir ) specify
+   output directory, default = 'mydata'.
+ 
+   DATA = T4Run(q,r0,Phi0,dt,tmax,..) return structure output
+
+   Reference(s)
+    Boyle et al, XXX YYY (ZZZ)
+    Kidder, PRD 77, 044016 (2008).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>	FDdrvt Compute finite differences of the function f(t).</li><li><a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>	SetVOutput Manage variables in output.</li><li><a href="T4Rhs.html" class="code" title="function dydt = T4Rhs(t,y, nu)">T4Rhs</a>	T4Rhs Compute r.h.s. of the Taylor T4 approximation</li><li><a href="T4Wav.html" class="code" title="function varargout = T4Wav(nu,t,x,phi, varargin)">T4Wav</a>	T4Wav Taylor-T4 waveform at 2.5 or 3.0 PN accuracy.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="Example_T4.html" class="code" title="">Example_T4</a>	Example of T4 run</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = T4Run(q,r0,Phi0,dt,tmax, varargin)</a>
+0002 
+0003 <span class="comment">%T4Run Taylor-T4 approximant.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, ODEoptions) specify ODExx optional</span>
+0008 <span class="comment">%   structure (see odeset.m)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],pnorder) specify PN order</span>
+0011 <span class="comment">%   ('2.5PN' or '3PN')</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[], addelta) re-define waveform</span>
+0014 <span class="comment">%   phase to absorb the log(x/x0) (if addelta='yes')</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[],[],computeAPO) compute</span>
+0017 <span class="comment">%   modulus, phase, frequency and curvature waveform (if computeAPO='yes')</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[],[],[], verbose) screen info</span>
+0020 <span class="comment">%   level</span>
+0021 <span class="comment">%             0 = minimum text (default)</span>
+0022 <span class="comment">%             1 = text</span>
+0023 <span class="comment">%             2 = text + figures</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[],[],[],[], saveme) save data,</span>
+0026 <span class="comment">%   0 = no 1 = yes (default)</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%   [dyn,wav] = T4Run(q,r0,Phi0,dt,tmax, [],[],[],[],[],[], basedir ) specify</span>
+0029 <span class="comment">%   output directory, default = 'mydata'.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%   DATA = T4Run(q,r0,Phi0,dt,tmax,..) return structure output</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%   Reference(s)</span>
+0034 <span class="comment">%    Boyle et al, XXX YYY (ZZZ)</span>
+0035 <span class="comment">%    Kidder, PRD 77, 044016 (2008).</span>
+0036 <span class="comment">%</span>
+0037 
+0038 
+0039 fprintf(<span class="string">'===&gt; T4 run\n'</span>);
+0040 tottime = tic;
+0041 
+0042 
+0043 <span class="comment">% Manage args in</span>
+0044 options = odeset(<span class="string">'RelTol'</span>,1e-9,<span class="string">'AbsTol'</span>,1e-12,<span class="string">'Refine'</span>,1);
+0045 pnorder = <span class="string">'3pn'</span>;
+0046 addelta = <span class="string">'no'</span>;
+0047 compAPO = <span class="string">'no'</span>;
+0048 verbose = 0;   <span class="comment">% do not print info</span>
+0049 saveme  = 1;   <span class="comment">% do save results</span>
+0050 basedir = <span class="string">'mydata/'</span>;
+0051 
+0052 optargs = {options pnorder addelta compAPO verbose saveme basedir};
+0053 na = length(varargin);
+0054 <span class="keyword">if</span> (na&gt;7)
+0055     error(<span class="string">'too many input args'</span>)
+0056 <span class="keyword">end</span>
+0057 newvals = cellfun(@(x) ~isempty(x), varargin);
+0058 optargs(newvals) = varargin(newvals);
+0059 [options, pnorder, addelta, compAPO, verbose, saveme, basedir] = optargs{:};
+0060 
+0061 
+0062 <span class="comment">% Init run</span>
+0063 fprintf(<span class="string">' ===&gt; Init run\n'</span>);
+0064 tstart = tic;
+0065 
+0066 <span class="keyword">if</span> verbose&lt;0 | verbose &gt;2
+0067     error(<span class="string">'unknown value for ''verbose'' par, {0,1,2} =&gt; no, screen info, screen info and fig'</span>);
+0068 <span class="keyword">end</span>
+0069 fhIdx = 0; <span class="comment">% figures index</span>
+0070 
+0071 
+0072 <span class="comment">% Create output dirs (if necessary)</span>
+0073 <span class="keyword">if</span> saveme
+0074     
+0075     basedir = strcat(basedir,<span class="string">'/'</span>);
+0076     [ok,mess,messid] = mkdir(basedir);       <span class="keyword">if</span> ~ok, error(mess); <span class="keyword">end</span>;
+0077     
+0078     fid = fopen(strcat(basedir,<span class="string">'log.txt'</span>),<span class="string">'w'</span>);
+0079     fprintf(fid,<span class="string">'%s\n Notes:\n'</span>,datestr(now, <span class="string">'mm/dd/yyyy HH:MM:SS'</span>));
+0080     fclose(fid);
+0081     
+0082     <span class="keyword">if</span> verbose==2
+0083         [ok,mess,messid] = mkdir(basedir,<span class="string">'Fig'</span>); <span class="keyword">if</span> ~ok, error(mess); <span class="keyword">end</span>;
+0084     <span class="keyword">end</span>
+0085     
+0086 <span class="keyword">end</span>
+0087 
+0088 
+0089 <span class="comment">% Initial data</span>
+0090 x0  = 1/r0; 
+0091 nu  = q/(1+q)^2; 
+0092 tspan = [0:dt:tmax];
+0093 y0 = [x0; Phi0];
+0094 
+0095 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0096 
+0097 <span class="keyword">if</span> verbose
+0098           
+0099     fprintf(<span class="string">' nu           = %g\n'</span>,nu);
+0100     fprintf(<span class="string">' q            = %g\n'</span>,q);
+0101     fprintf(<span class="string">' PNorder      = %s\n'</span>,pnorder);
+0102     
+0103     fprintf(<span class="string">' dt           = %+.12e\n'</span>,dt);
+0104     fprintf(<span class="string">' tmax         = %+.12e\n'</span>,tmax);    
+0105     fprintf(<span class="string">' ODESolRelTol = %+.12e\n'</span>,options.RelTol);
+0106     fprintf(<span class="string">' ODESolAbsTol = %+.12e\n'</span>,options.AbsTol);
+0107     fprintf(<span class="string">' ODESolRefine = %d\n'</span>,options.Refine);
+0108       
+0109     fprintf(<span class="string">' r            = %+.12e\n'</span>,y0(1));    
+0110     
+0111 <span class="keyword">end</span>
+0112 
+0113 
+0114 <span class="comment">% Dynamics</span>
+0115 fprintf(<span class="string">' ===&gt; Dynamics ...\n'</span>);
+0116 tstart = tic;
+0117 [t,y]  = ode45(@(t,y) <a href="T4Rhs.html" class="code" title="function dydt = T4Rhs(t,y, nu)">T4Rhs</a>(t,y,nu),tspan,y0,options);
+0118 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0119 
+0120 y = y.';
+0121 t = t.';
+0122 
+0123 
+0124 <span class="comment">% Compute Omega</span>
+0125 fprintf(<span class="string">' ===&gt; Compute orbital frequency ...\n'</span>);
+0126 tstart = tic;
+0127 dydt  = <a href="T4Rhs.html" class="code" title="function dydt = T4Rhs(t,y, nu)">T4Rhs</a>(t,y,nu);
+0128 Omega = dydt(2,:); 
+0129 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0130 
+0131 <span class="comment">% Pack dynamics</span>
+0132 dyn.t     = t;
+0133 dyn.y     = y;
+0134 dyn.dydt  = dydt;
+0135 dyn.Omega = Omega;
+0136 
+0137 
+0138 <span class="comment">% Wave</span>
+0139 fprintf(<span class="string">' ===&gt; Waveform ...\n'</span>);
+0140 tstart = tic;
+0141 wav = <a href="T4Wav.html" class="code" title="function varargout = T4Wav(nu,t,x,phi, varargin)">T4Wav</a>(nu,t,y(1,:),y(2,:), pnorder, addelta);
+0142 fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0143 
+0144 wav.t = t;
+0145 
+0146 <span class="keyword">if</span> verbose
+0147     
+0148     <span class="comment">% todo</span>
+0149     fprintf(<span class="string">' # of orbits     = %g\n'</span>,y(2,end)/(2*pi));
+0150 <span class="keyword">end</span>
+0151 
+0152 
+0153 <span class="comment">% Compute modulus, phase, frequency and curvature wave (if required)</span>
+0154 <span class="keyword">if</span> strcmp(lower(compAPO),<span class="string">'yes'</span>)
+0155             
+0156     coeff      =  12/5*2^(1/3)*nu;
+0157             
+0158     <span class="comment">% Metric waveform</span>
+0159     wav.phi22  = - unwrap(angle(wav.psi22));
+0160     wav.omg22  = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(wav.phi22,t,4); 
+0161     wav.domg22 = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(wav.omg22,t,4);
+0162     wav.A_omg  = wav.domg22./( coeff*wav.omg22.^(11/3) );
+0163     wav.Q_omg  = wav.omg22.^2./( wav.domg22 );
+0164     
+0165     <span class="comment">% curvature waveform</span>
+0166     [tmp,Psi4_22] = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(wav.h22,t,4);    
+0167     ModPsi4_22    = abs(Psi4_22);
+0168             
+0169     phi    = -unwrap(angle(Psi4_22));
+0170     omg22  = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(phi,t,4);
+0171     domg22 = <a href="FDdrvt.html" class="code" title="function [d1f, d2f] = FDdrvt(f,t, varargin)">FDdrvt</a>(omg22,t,4);        
+0172     
+0173     curv.Psi4_22 = Psi4_22;
+0174     curv.ModPsi4_22 = ModPsi4_22;
+0175     curv.omega22 = omg22;
+0176     curv.A_omega = domg22./(coeff*omg22.^(11/3));    
+0177     curv.Q_omega = omg22.^2./domg22;
+0178 
+0179     wav.curv = curv;
+0180     
+0181 <span class="keyword">end</span>
+0182 
+0183 
+0184 <span class="keyword">if</span> saveme
+0185     
+0186     fprintf(<span class="string">' ===&gt; Save *.mat files ...\n'</span>);
+0187     tstart = tic;        
+0188         
+0189     filename  = strcat(basedir,<span class="string">'Dynamics'</span>);
+0190     save(filename,<span class="string">'dyn'</span>);
+0191     [err mess] = system(sprintf(<span class="string">'du -h %s.mat '</span>,filename));
+0192     <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0193     fprintf(<span class="string">' %s'</span>,mess);    
+0194 
+0195     filename  = strcat(basedir,<span class="string">'Waveform'</span>);
+0196     save(filename,<span class="string">'wav'</span>);
+0197     [err mess] = system(sprintf(<span class="string">'du -h %s.mat '</span>,filename));
+0198     <span class="keyword">if</span> err, error(mess); <span class="keyword">end</span>;
+0199     fprintf(<span class="string">' %s'</span>,mess);    
+0200     
+0201     fprintf(<span class="string">' Done %4.3f sec\n'</span>,toc(tstart));
+0202     
+0203 <span class="keyword">end</span>
+0204 
+0205 
+0206 <span class="comment">% Output</span>
+0207 varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, dyn,wav );
+0208 fprintf(<span class="string">'End %4.3f sec\n'</span>,toc(tottime));
+0209</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

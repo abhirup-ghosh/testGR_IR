@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of GammaComplex</title>
+  <meta name="keywords" content="GammaComplex">
+  <meta name="description" content="GammaComplex Gamma function valid in the entire complex plane.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; GammaComplex.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>GammaComplex
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>GammaComplex Gamma function valid in the entire complex plane.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function f = GammaComplex(z) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">GammaComplex Gamma function valid in the entire complex plane.
+
+   f = GammaComplex(z)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBhhatlmTail.html" class="code" title="function tlm = EOBhhatlmTail( L,M, w,e, bphys)">EOBhhatlmTail</a>	EOBhhatlmTail Computes the tail contribution to the resummed wave.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f = GammaComplex(z)</a>
+0002 
+0003 <span class="comment">%GammaComplex Gamma function valid in the entire complex plane.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   f = GammaComplex(z)</span>
+0006 <span class="comment">%</span>
+0007 
+0008 <span class="comment">% TODO: this routine requires optimization</span>
+0009 
+0010 <span class="comment">%   Paul Godfrey</span>
+0011 <span class="comment">%   pgodfrey@intersil.com</span>
+0012 <span class="comment">%   http://winnie.fit.edu/~gabdo/gamma.txt</span>
+0013 <span class="comment">%   Sept 11, 2001</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%   Accuracy is 15 significant digits along the real axis and 13</span>
+0016 <span class="comment">%   significant digits elsewhere. This routine uses a superb Lanczos</span>
+0017 <span class="comment">%   series approximation for the complex Gamma function.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   z may be complex and of any size.</span>
+0020 <span class="comment">%   Also  n! = prod(1:n) = gamma(n+1)</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%   References:</span>
+0024 <span class="comment">%            C. Lanczos, SIAM JNA  1, 1964. pp. 86-96</span>
+0025 <span class="comment">%            Y. Luke, &quot;The Special ... approximations&quot;, 1969 pp. 29-31</span>
+0026 <span class="comment">%            Y. Luke, &quot;Algorithms ... functions&quot;, 1977</span>
+0027 <span class="comment">%            J. Spouge,  SIAM JNA 31, 1994. pp. 931-944</span>
+0028 <span class="comment">%            W. Press,  &quot;Numerical Recipes&quot;</span>
+0029 <span class="comment">%            S. Chang, &quot;Computation of special functions&quot;, 1996</span>
+0030 <span class="comment">%            W. J. Cody &quot;An Overview of Software Development for Special</span>
+0031 <span class="comment">%            Functions&quot;, 1975</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%   See also:   GAMMA GAMMALN GAMMAINC PSI</span>
+0034 <span class="comment">%   See also:   mhelp GAMMA</span>
+0035 <span class="comment">%</span>
+0036 
+0037 siz = size(z);
+0038 z=z(:);
+0039 zz=z;
+0040 
+0041 f = 0.*z; <span class="comment">% reserve space in advance</span>
+0042 
+0043 p=find(real(z)&lt;0);
+0044 <span class="keyword">if</span> ~isempty(p)
+0045     z(p)=-z(p);
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="comment">% Lanczos approximation for the complex plane calculated using vpa</span>
+0049 <span class="comment">% digits(256) the best set of coeffs was selected from a solution space of</span>
+0050 <span class="comment">% g=0 to 32 with 1 to 32 terms these coeffs really give superb performance</span>
+0051 <span class="comment">% of 15 sig. digits for 0&lt;=real(z)&lt;=171 coeffs should sum to about</span>
+0052 <span class="comment">% g*g/2+23/24</span>
+0053 
+0054 g=607/128; <span class="comment">% best results when 4&lt;=g&lt;=5</span>
+0055 
+0056 c = [  0.99999999999999709182;
+0057     57.156235665862923517;
+0058     -59.597960355475491248;
+0059     14.136097974741747174;
+0060     -0.49191381609762019978;
+0061     .33994649984811888699e-4;
+0062     .46523628927048575665e-4;
+0063     -.98374475304879564677e-4;
+0064     .15808870322491248884e-3;
+0065     -.21026444172410488319e-3;
+0066     .21743961811521264320e-3;
+0067     -.16431810653676389022e-3;
+0068     .84418223983852743293e-4;
+0069     -.26190838401581408670e-4;
+0070     .36899182659531622704e-5];
+0071 
+0072 <span class="comment">%Num Recipes used g=5 with 7 terms</span>
+0073 <span class="comment">%for a less effective approximation</span>
+0074 
+0075 z=z-1;
+0076 zh =z+0.5;
+0077 zgh=zh+g;
+0078 <span class="comment">%trick for avoiding FP overflow above z=141</span>
+0079 zp=zgh.^(zh*0.5);
+0080 
+0081 ss=0.0;
+0082 <span class="keyword">for</span> pp=size(c,1)-1:-1:1
+0083     ss=ss+c(pp+1)./(z+pp);
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="comment">%sqrt(2Pi)</span>
+0087 sq2pi=  2.5066282746310005024157652848110;
+0088 f=(sq2pi*(c(1)+ss)).*((zp.*exp(-zgh)).*zp);
+0089 
+0090 f(z==0 | z==1) = 1.0;
+0091 
+0092 <span class="comment">%adjust for negative real parts</span>
+0093 <span class="keyword">if</span> ~isempty(p)
+0094     f(p)=-pi./(zz(p).*f(p).*sin(pi*zz(p)));
+0095 <span class="keyword">end</span>
+0096 
+0097 <span class="comment">%adjust for negative poles</span>
+0098 p=find(round(zz)==zz &amp; imag(zz)==0 &amp; real(zz)&lt;=0);
+0099 <span class="keyword">if</span> ~isempty(p)
+0100     f(p)=Inf;
+0101 <span class="keyword">end</span>
+0102 
+0103 f=reshape(f,siz);
+0104 
+0105 <span class="keyword">return</span></pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

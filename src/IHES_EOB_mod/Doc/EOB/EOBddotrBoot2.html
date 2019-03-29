@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBddotrBoot2</title>
+  <meta name="keywords" content="EOBddotrBoot2">
+  <meta name="description" content="EOBddotrBoot2.m Computes an approximate value for \ddot{r}.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBddotrBoot2.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBddotrBoot2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBddotrBoot2.m Computes an approximate value for \ddot{r}.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ddotr dr_dt] = EOBddotrBoot2(nu,y,dydt,EOBopt,EOBmet,EOBHam) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBddotrBoot2.m Computes an approximate value for \ddot{r}.
+
+   The second-order time derivative of the EOB radius r is computed using
+   the Poisson's bracket:
+
+    \ddot{r} = -\left\{H,\dot{r}\right\} + \dfrac{\partial\dot{r}}{\partial t}
+
+   (where H is the EOB (normalized) Hamiltonian) 
+   A two steps bootstrap procedure which calls the flux is employed. 
+
+   [ddotr dr_dt] = EOBddotrBoot2(nu,y,dydt,EOBopt,EOBmet,EOBHam)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBHam.html" class="code" title="function varargout = EOBHam(nu, r,pph,prstar, EOBopt, varargin)">EOBHam</a>	EOBHam Computes the EOB real and effective Hamiltonian for EOB dynamics</li><li><a href="EOBRRDINddotr.html" class="code" title="function [Fphi, Frstar] = EOBRRDINddotr(nu, Omega, y, EOBopt, EOBmet, EOBHam, ddotr)">EOBRRDINddotr</a>	EOBRRDINddotr Compute radiation reaction with resummed flux for a given ddotr.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ddotr dr_dt] = EOBddotrBoot2(nu,y,dydt,EOBopt,EOBmet,EOBHam)</a>
+0002 
+0003 <span class="comment">%EOBddotrBoot2.m Computes an approximate value for \ddot{r}.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   The second-order time derivative of the EOB radius r is computed using</span>
+0006 <span class="comment">%   the Poisson's bracket:</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%    \ddot{r} = -\left\{H,\dot{r}\right\} + \dfrac{\partial\dot{r}}{\partial t}</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   (where H is the EOB (normalized) Hamiltonian)</span>
+0011 <span class="comment">%   A two steps bootstrap procedure which calls the flux is employed.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   [ddotr dr_dt] = EOBddotrBoot2(nu,y,dydt,EOBopt,EOBmet,EOBHam)</span>
+0014 <span class="comment">%</span>
+0015 
+0016 
+0017 <span class="comment">% Unpack y</span>
+0018 [nv,nx] = size(y);
+0019 phi    = y(1,:);
+0020 r      = y(2,:);
+0021 pph    = y(3,:);
+0022 prstar = y(4,:);
+0023 
+0024 sz    = size(r);
+0025 
+0026 <span class="comment">% r.h.s. of the conservative part of two EoM</span>
+0027 dprstar_dt_0 = dydt(4,:);
+0028 dr_dt        = dydt(2,:);
+0029 
+0030 
+0031 <span class="comment">% Metric</span>
+0032 A  = reshape(EOBmet.A,sz);
+0033 dA = reshape(EOBmet.dA,sz);
+0034 B  = reshape(EOBmet.B,sz);
+0035 dB = reshape(EOBmet.dB,sz);
+0036 
+0037 
+0038 <span class="comment">% Hamiltonian</span>
+0039 Heff          = reshape(EOBHam.Heff,sz);
+0040 H             = reshape(EOBHam.H,sz);
+0041 dHeff_dr      = reshape(EOBHam.dHeff_dr,sz);
+0042 dHeff_dprstar = reshape(EOBHam.dHeff_dprstar,sz);
+0043 dHeff_dpphi   = reshape(EOBHam.dHeff_dpphi,sz);
+0044 
+0045 
+0046 <span class="comment">% Shorhands</span>
+0047 sqrtAbyB  = sqrt(A./B); 
+0048 one_A    = 1.d0./A;
+0049 one_dA   = 1.d0./dA;
+0050 one_B    = 1.d0./B;
+0051 
+0052 E        = nu.*H;
+0053 E2       = E.*E;
+0054 tmpE     = 1./Heff+nu./E2;
+0055 denE     = E.*Heff;
+0056 one_denE = 1./denE;
+0057 
+0058 z3       = 2.0*nu*(4.0-3.0*nu);
+0059 pph2     = pph.^2;
+0060 u        = 1./r;
+0061 u2       = u.^2;
+0062 u3       = u.^3;
+0063 prstar2 = prstar.^2;
+0064 prstar3 = prstar.^3;
+0065 
+0066 
+0067 <span class="comment">% Derivatives of \dot{r} wrt to r, prstar and p_phi</span>
+0068 ddotr_dr      = sqrtAbyB.*( (prstar + z3.*2.*A.*u2.*prstar3)<span class="keyword">...</span>
+0069                 .*(0.5.*(dA.*one_A-dB.*one_B)-dHeff_dr.*tmpE)<span class="keyword">...</span>
+0070                 + 2.0*z3*(dA.*u2 - 2*A.*u3).*prstar3).*one_denE;
+0071             
+0072 ddotr_dprstar = sqrtAbyB.*( 1+z3*6.d0*A.*u2.*prstar2<span class="keyword">...</span>
+0073                  -(prstar + z3.*2*A.*u2.*prstar3).*dHeff_dprstar.*tmpE).*one_denE;
+0074             
+0075 ddotr_dpphi   = -dr_dt.*tmpE.*dHeff_dpphi;            
+0076 
+0077 
+0078 <span class="comment">%  Bootstrap two-step procedure to approximately compute ddotr</span>
+0079 
+0080 <span class="comment">% 0. Approximate ddot(r) without Fphi</span>
+0081 ddotr = dprstar_dt_0.*ddotr_dprstar + dr_dt.*ddotr_dr;
+0082 
+0083 <span class="comment">% Compute RR force with 1.</span>
+0084 Omega          = A.*pph.*u2.*one_denE;
+0085 [Fphi, Frstar] = <a href="EOBRRDINddotr.html" class="code" title="function [Fphi, Frstar] = EOBRRDINddotr(nu, Omega, y, EOBopt, EOBmet, EOBHam, ddotr)">EOBRRDINddotr</a>(nu, Omega, y, EOBopt, EOBmet, <a href="EOBHam.html" class="code" title="function varargout = EOBHam(nu, r,pph,prstar, EOBopt, varargin)">EOBHam</a>, ddotr);
+0086 
+0087 <span class="comment">% 1. Approximate ddot(r) with all three terms</span>
+0088 dprstar_dt = dprstar_dt_0 + Frstar;
+0089 ddotr      = dprstar_dt.*ddotr_dprstar + dr_dt.*ddotr_dr + ddotr_dpphi.*Fphi;
+0090 
+0091 <span class="comment">% Recompute the RR force</span>
+0092 [Fphi, Frstar] = <a href="EOBRRDINddotr.html" class="code" title="function [Fphi, Frstar] = EOBRRDINddotr(nu, Omega, y, EOBopt, EOBmet, EOBHam, ddotr)">EOBRRDINddotr</a>(nu, Omega, y, EOBopt, EOBmet, <a href="EOBHam.html" class="code" title="function varargout = EOBHam(nu, r,pph,prstar, EOBopt, varargin)">EOBHam</a>, ddotr);
+0093 
+0094 <span class="comment">% 2. Compute \ddot{r} from the three separate contribution</span>
+0095 dprstar_dt = dprstar_dt_0 + Frstar; 
+0096 ddotr      = dprstar_dt.*ddotr_dprstar + dr_dt.*ddotr_dr + ddotr_dpphi.*Fphi;
+0097 
+0098 
+0099 
+0100 
+0101 
+0102 
+0103 
+0104 
+0105</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

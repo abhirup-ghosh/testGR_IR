@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBf22Pade</title>
+  <meta name="keywords" content="EOBf22Pade">
+  <meta name="description" content="EOBf22Pade Computes the f22(x,nu) correction factor.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBf22Pade.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBf22Pade
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBf22Pade Computes the f22(x,nu) correction factor.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function f22 = EOBf22Pade(x,nu) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBf22Pade Computes the f22(x,nu) correction factor.
+   f_22(x,nu) is computed up to 5PN, although the nu-dependent terms are
+   included only up to 3PN 
+
+   f22 = EOBf22Pade(x,nu)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBFluxDIN.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN</a>	EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</li><li><a href="EOBFluxDIN_mod.html" class="code" title="function [hatF Flm FNewtlm flm] =EOBFluxDIN_mod(x,Omega,E,Heff,jhat,nu,r,prstar,ddotr, EOBopt)">EOBFluxDIN_mod</a>	EOBFluxDIN Computes the resummed Newton-normalized GW energy flux.</li><li><a href="EOBhlm.html" class="code" title="function varargout = EOBhlm(nu, t,phi,r,pph,prstar, Omega,E,Heff, EOBopt, EOBmet)">EOBhlm</a>	EOBhlm Compute the multipolar resummed waveform.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function f22 = EOBf22Pade(x,nu)</a>
+0002 
+0003 <span class="comment">%EOBf22Pade Computes the f22(x,nu) correction factor.</span>
+0004 <span class="comment">%   f_22(x,nu) is computed up to 5PN, although the nu-dependent terms are</span>
+0005 <span class="comment">%   included only up to 3PN</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   f22 = EOBf22Pade(x,nu)</span>
+0008 <span class="comment">%</span>
+0009 
+0010 EulerGamma =  0.577215664901533;
+0011 
+0012 f22 =  (1 + x.*(-2.0476190476190474 + (55*nu)/42. + (16*(22823192996333290672 + 4438814994971806750*nu - 6823403945816406550*nu^2 + <span class="keyword">...</span>
+0013                 648967245910163250*nu^3 + 241275871566870525*nu*pi^2 - 16202595734063101440*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span>
+0014                  1108298510258940000*nu*(EulerGamma + 2*log(2) + log(x)/2.) + 3031782946628436000*nu^2*(EulerGamma + 2*log(2) + log(x)/2.) - <span class="keyword">...</span>
+0015                  399140081400060000*nu^3*(EulerGamma + 2*log(2) + log(x)/2.) - 148394039335542000*nu*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span>
+0016                 2832619878382694400*(EulerGamma + 2*log(2) + log(x)/2.).^2))./ <span class="keyword">...</span>
+0017                 (21.*(12532505384160238848 - 10670479012368624000*nu - 4424104031641493100*nu^2 + 3108518854182651000*nu^3 + 402909426379687500*nu^4 - <span class="keyword">...</span>
+0018                  249600015721875000*nu^5 + 20927334285812500*nu^6 + 398914528155343200*nu*pi^2 - 126902837624062500*nu^2*pi^2 - <span class="keyword">...</span>
+0019                  92797381864687500*nu^3*pi^2 + 15560911128262500*nu^4*pi^2 + 2892651685048125*nu^2*pi^4 - <span class="keyword">...</span>
+0020                  6863909635248906240*(EulerGamma + 2*log(2) + log(x)/2.) + 3603343665841920000*nu*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span>
+0021                  1412960863362048000*nu^2*(EulerGamma + 2*log(2) + log(x)/2.) - 297034479181440000*nu^3*(EulerGamma + 2*log(2) + log(x)/2.) - <span class="keyword">...</span>
+0022                  110432773459008000*nu*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) + 1053998094281932800*(EulerGamma + 2*log(2) + log(x)/2.).^2))) + <span class="keyword">...</span>
+0023                  x.^3.*(29.448714354428642 - (34625*nu)/3696. - (227875*nu^2)/33264. + (114635*nu^3)/99792. + (41*nu*pi^2)/96. - <span class="keyword">...</span>
+0024                 ((2.0476190476190474 - (55*nu)/42.)*((27.14132609139412 - (36808*(EulerGamma + 2*log(2) + log(x)/2.))/2205.).* <span class="keyword">...</span>
+0025                 (-27.14132609139412 + (36808*(EulerGamma + 2*log(2) + log(x)/2.))/2205.) - <span class="keyword">...</span>
+0026                 (-29.448714354428642 + (34625*nu)/3696. + (227875*nu^2)/33264. - (114635*nu^3)/99792. - (41*nu*pi^2)/96. + <span class="keyword">...</span>
+0027                 (856*(EulerGamma + 2*log(2) + log(x)/2.))/105.).*(-104.80215051710138 + (458816*(EulerGamma + 2*log(2) + log(x)/2.))/19845.)))./ <span class="keyword">...</span>
+0028                 ((2.835978835978836 + (6745*nu)/1512. - (2047*nu^2)/1512.)*(27.14132609139412 - (36808*(EulerGamma + 2*log(2) + log(x)/2.))/2205.) - <span class="keyword">...</span>
+0029                 (-29.448714354428642 + (34625*nu)/3696. + (227875*nu^2)/33264. - (114635*nu^3)/99792. - (41*nu*pi^2)/96. + <span class="keyword">...</span>
+0030                 (856*(EulerGamma + 2*log(2) + log(x)/2.))/105.).^2) - <span class="keyword">...</span>
+0031                 (16*(2.835978835978836 + (6745*nu)/1512. - (2047*nu^2)/1512.)* <span class="keyword">...</span>
+0032                 (22823192996333290672 + 4438814994971806750*nu - 6823403945816406550*nu^2 + 648967245910163250*nu^3 + 241275871566870525*nu*pi^2 - <span class="keyword">...</span>
+0033                 16202595734063101440*(EulerGamma + 2*log(2) + log(x)/2.) + 1108298510258940000*nu*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span>
+0034                 3031782946628436000*nu^2*(EulerGamma + 2*log(2) + log(x)/2.) - 399140081400060000*nu^3*(EulerGamma + 2*log(2) + log(x)/2.) - <span class="keyword">...</span>
+0035                 148394039335542000*nu*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) + 2832619878382694400*(EulerGamma + 2*log(2) + log(x)/2.).^2))./ <span class="keyword">...</span>
+0036                (21.*(12532505384160238848 - 10670479012368624000*nu - 4424104031641493100*nu^2 + 3108518854182651000*nu^3 + 402909426379687500*nu^4 - <span class="keyword">...</span>
+0037                 249600015721875000*nu^5 + 20927334285812500*nu^6 + 398914528155343200*nu*pi^2 - 126902837624062500*nu^2*pi^2 - <span class="keyword">...</span>
+0038                 92797381864687500*nu^3*pi^2 + 15560911128262500*nu^4*pi^2 + 2892651685048125*nu^2*pi^4 - <span class="keyword">...</span>
+0039                 6863909635248906240*(EulerGamma + 2*log(2) + log(x)/2.) + 3603343665841920000*nu*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span><span class="comment"> </span>
+0040                 1412960863362048000*nu^2*(EulerGamma + 2*log(2) + log(x)/2.) - 297034479181440000*nu^3*(EulerGamma + 2*log(2) + log(x)/2.) - <span class="keyword">...</span>
+0041                 110432773459008000*nu*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) + 1053998094281932800*(EulerGamma + 2*log(2) + log(x)/2.).^2)) - <span class="keyword">...</span>
+0042                (856*(EulerGamma + 2*log(2) + log(x)/2.))/105.) + (x.^2.* <span class="keyword">...</span>
+0043                (-1447584473561717268037632 - 3490691432750957078592000*nu + 11117775993495292068170496*nu^2 - 1298465012873268136669500*nu^3 - <span class="keyword">...</span>
+0044                2800230414735340569773700*nu^4 + 429137698170662791264500*nu^5 + 220089987610738990062500*nu^6 - 59339835276583992812500*nu^7 + <span class="keyword">...</span>
+0045                3898281048758295062500*nu^8 - 109784167761318216566400*nu*pi^2 - 162210888696798713772000*nu^2*pi^2 + <span class="keyword">...</span>
+0046                188411209563310287453900*nu^3*pi^2 + 27247497108001320150000*nu^4*pi^2 - 26837227347580274625000*nu^5*pi^2 + <span class="keyword">...</span><span class="comment"> </span>
+0047                2898639842239353712500*nu^6*pi^2 - 1128735828719258760000*nu^2*pi^4 - 1775495141024113884375*nu^3*pi^4 + <span class="keyword">...</span>
+0048                538834477935709580625*nu^4*pi^4 + 829132415453875222609920*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span>
+0049                817401632289328383897600*nu*(EulerGamma + 2*log(2) + log(x)/2.) - 4194694629872685326868480*nu^2*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span>
+0050                363785326167105722880000*nu^3*(EulerGamma + 2*log(2) + log(x)/2.) + 390726438519063943296000*nu^4*(EulerGamma + 2*log(2) + log(x)/2.) - <span class="keyword">...</span>
+0051                55330691678481098880000*nu^5*(EulerGamma + 2*log(2) + log(x)/2.) + 53399546740556400384000*nu*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span>
+0052                47411550465288609600000*nu^2*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) - <span class="keyword">...</span>
+0053                20571085741623633216000*nu^3*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) - 258076703375402655744000*nu*(EulerGamma + 2*log(2) + log(x)/2.).^2 + <span class="keyword">...</span>
+0054                196335603008555596185600*nu^2*(EulerGamma + 2*log(2) + log(x)/2.).^2))./ <span class="keyword">...</span>
+0055               (137592.*(12532505384160238848 - 10670479012368624000*nu - 4424104031641493100*nu^2 + 3108518854182651000*nu^3 + 402909426379687500*nu^4 - <span class="keyword">...</span>
+0056                249600015721875000*nu^5 + 20927334285812500*nu^6 + 398914528155343200*nu*pi^2 - 126902837624062500*nu^2*pi^2 - <span class="keyword">...</span>
+0057                92797381864687500*nu^3*pi^2 + 15560911128262500*nu^4*pi^2 + 2892651685048125*nu^2*pi^4 - <span class="keyword">...</span>
+0058                6863909635248906240*(EulerGamma + 2*log(2) + log(x)/2.) + 3603343665841920000*nu*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span>
+0059                1412960863362048000*nu^2*(EulerGamma + 2*log(2) + log(x)/2.) - 297034479181440000*nu^3*(EulerGamma + 2*log(2) + log(x)/2.) - <span class="keyword">...</span>
+0060                110432773459008000*nu*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) + 1053998094281932800*(EulerGamma + 2*log(2) + log(x)/2.).^2)))./ <span class="keyword">...</span>
+0061                (1 + (x.^2.*((27.14132609139412 - (36808*(EulerGamma + 2*log(2) + log(x)/2.))/2205.).* <span class="keyword">...</span>
+0062                 (-27.14132609139412 + (36808*(EulerGamma + 2*log(2) + log(x)/2.))/2205.) - <span class="keyword">...</span>
+0063                (-29.448714354428642 + (34625*nu)/3696. + (227875*nu^2)/33264. - (114635*nu^3)/99792. - (41*nu*pi^2)/96. + <span class="keyword">...</span>
+0064                (856*(EulerGamma + 2*log(2) + log(x)/2.))/105.).*(-104.80215051710138 + (458816*(EulerGamma + 2*log(2) + log(x)/2.))/19845.)))./ <span class="keyword">...</span>
+0065                ((2.835978835978836 + (6745*nu)/1512. - (2047*nu^2)/1512.)*(27.14132609139412 - (36808*(EulerGamma + 2*log(2) + log(x)/2.))/2205.) - <span class="keyword">...</span>
+0066                (-29.448714354428642 + (34625*nu)/3696. + (227875*nu^2)/33264. - (114635*nu^3)/99792. - (41*nu*pi^2)/96. + <span class="keyword">...</span>
+0067                (856*(EulerGamma + 2*log(2) + log(x)/2.))/105.).^2) + <span class="keyword">...</span>
+0068                (16*x.*(22823192996333290672 + 4438814994971806750*nu - 6823403945816406550*nu^2 + 648967245910163250*nu^3 + 241275871566870525*nu*pi^2 - <span class="keyword">...</span>
+0069                16202595734063101440*(EulerGamma + 2*log(2) + log(x)/2.) + 1108298510258940000*nu*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span>
+0070                3031782946628436000*nu^2*(EulerGamma + 2*log(2) + log(x)/2.) - 399140081400060000*nu^3*(EulerGamma + 2*log(2) + log(x)/2.) - <span class="keyword">...</span><span class="comment"> </span>
+0071                148394039335542000*nu*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) + 2832619878382694400*(EulerGamma + 2*log(2) + log(x)/2.).^2))./ <span class="keyword">...</span>
+0072                (21.*(12532505384160238848 - 10670479012368624000*nu - 4424104031641493100*nu^2 + 3108518854182651000*nu^3 + 402909426379687500*nu^4 - <span class="keyword">...</span>
+0073                249600015721875000*nu^5 + 20927334285812500*nu^6 + 398914528155343200*nu*pi^2 - 126902837624062500*nu^2*pi^2 - <span class="keyword">...</span>
+0074                92797381864687500*nu^3*pi^2 + 15560911128262500*nu^4*pi^2 + 2892651685048125*nu^2*pi^4 - <span class="keyword">...</span>
+0075                6863909635248906240*(EulerGamma + 2*log(2) + log(x)/2.) + 3603343665841920000*nu*(EulerGamma + 2*log(2) + log(x)/2.) + <span class="keyword">...</span><span class="comment"> </span>
+0076                1412960863362048000*nu^2*(EulerGamma + 2*log(2) + log(x)/2.) - 297034479181440000*nu^3*(EulerGamma + 2*log(2) + log(x)/2.) - <span class="keyword">...</span><span class="comment"> </span>
+0077                110432773459008000*nu*pi^2*(EulerGamma + 2*log(2) + log(x)/2.) + 1053998094281932800*(EulerGamma + 2*log(2) + log(x)/2.).^2)));
+0078</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Example_Profile</title>
+  <meta name="keywords" content="Example_Profile">
+  <meta name="description" content="Example of EOB run: run the Matlab profiler">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; Example_Profile.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>Example_Profile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Example of EOB run: run the Matlab profiler</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example of EOB run: run the Matlab profiler</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example of EOB run: run the Matlab profiler</span>
+0002 
+0003 
+0004 <span class="comment">% 1. Choose input parameters (these are needed!)</span>
+0005 
+0006 <span class="comment">% Sym mass ratio</span>
+0007 nu  = 1/4;
+0008 nu2 = nu.^2;
+0009 
+0010 <span class="comment">% EOB free pars</span>
+0011 a1 =  2.160054e+00*nu2 - 1.093667e+00*nu + 7.926107e-02;
+0012 a2 = -1.080736e+01*nu2 + 7.141956e+00*nu + 7.034821e-01;
+0013 a3 = -2.766573e+00*nu2 - 1.768795e-01*nu + 1.012170e-01;
+0014 a4 = 0;
+0015 a5 = +23.5;
+0016 a6 = (-110.5 + 129*(1-4*nu)).*sqrt(1 - 1.5e-5/((nu-0.26).^2));
+0017 ainput{1} = a1;
+0018 ainput{2} = a2;
+0019 ainput{3} = a3;
+0020 ainput{4} = a4;
+0021 ainput{5} = a5; 
+0022 ainput{6} = a6; 
+0023 
+0024 r0 = 16; <span class="comment">% Initial radius</span>
+0025 tmax = 5000; <span class="comment">% Final time</span>
+0026 dt = 0.5; <span class="comment">% spacing time vector</span>
+0027 
+0028 nQNM = [5 0]; <span class="comment">% no QNM [ positive negative ]</span>
+0029 lmaxQNM = 2; <span class="comment">% lmax for QNM matching</span>
+0030 
+0031 
+0032 <span class="comment">% 2. Choose optional input</span>
+0033 
+0034 options = []; <span class="comment">% Set options in this struct (see EOBSet.m)</span>
+0035 modus   = 3; 
+0036 verbose = 0; <span class="comment">% 0 = minimum, 1 = text ,2 = text+figs</span>
+0037 saveme  = 0; <span class="comment">% save data ?</span>
+0038 outputdir = <span class="string">'./tmp'</span>;
+0039 
+0040 
+0041 <span class="comment">% 3. Get down to work</span>
+0042 profile on
+0043 
+0044 [options,dyn,wav] = <a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>(nu, ainput, r0,tmax,dt, nQNM,lmaxQNM, <span class="keyword">...</span>
+0045     <span class="keyword">...</span><span class="comment"> the following pars are optional </span>
+0046     options,<span class="keyword">...</span><span class="comment"> </span>
+0047     modus,<span class="keyword">...</span>
+0048     verbose, <span class="keyword">...</span>
+0049     saveme, <span class="keyword">...</span>
+0050     <span class="string">'tmp'</span>)
+0051 
+0052 profile off
+0053 
+0054 
+0055 <span class="comment">% 4. Check what to improve</span>
+0056 profile viewer
+0057 <span class="comment">%profsave(profile('info'),strcat(datestr(now, 'yyyymmdd'),'_myprofile_results'))</span></pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

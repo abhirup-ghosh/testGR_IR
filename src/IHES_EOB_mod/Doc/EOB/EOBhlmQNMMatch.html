@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBhlmQNMMatch</title>
+  <meta name="keywords" content="EOBhlmQNMMatch">
+  <meta name="description" content="EOBhlmQNMMatch Perform the matching to QNM multipolar wave.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBhlmQNMMatch.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBhlmQNMMatch
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBhlmQNMMatch Perform the matching to QNM multipolar wave.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = EOBhlmQNMMatch(Omega,t, sigma, nqnm, dt, wav ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBhlmQNMMatch Perform the matching to QNM multipolar wave.
+   Uses a nonlinear fit
+
+   [psilm,dpsilm,omglm] = EOBhlmQNMMatch(Omega,t, sigma, nqnm, dt, wav )
+
+   WAVE = EOBhlm( .... ) return a structure with the wave</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBQNMTemplate.html" class="code" title="function [y dy]=EOBQNMTemplate(ck,t, sigmak)">EOBQNMTemplate</a>	EOBTemplateQNM Compute QNM waveform.</li><li><a href="EOBnlinfit.html" class="code" title="function [beta,r,J,Sigma,mse] = EOBnlinfit(X,y,model,beta,options)">EOBnlinfit</a>	NLINFIT Nonlinear least-squares regression.</li><li><a href="FindMax.html" class="code" title="function [xm,fm,dfm] = FindMax(x,f,n)">FindMax</a>	FindMax Compute extremum of f(x)</li><li><a href="LagInt1d.html" class="code" title="">LagInt1d</a>	LAGINT1D Lagrangian interpolation routine of 1d data</li><li><a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>	SetVOutput Manage variables in output.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = EOBhlmQNMMatch(Omega,t, sigma, nqnm, dt, wav )</a>
+0002 
+0003 <span class="comment">%EOBhlmQNMMatch Perform the matching to QNM multipolar wave.</span>
+0004 <span class="comment">%   Uses a nonlinear fit</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   [psilm,dpsilm,omglm] = EOBhlmQNMMatch(Omega,t, sigma, nqnm, dt, wav )</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   WAVE = EOBhlm( .... ) return a structure with the wave</span>
+0009 <span class="comment">%</span>
+0010 
+0011 
+0012 Omegamax_interpolate = 1; <span class="comment">% hardcoded option FIXME</span>
+0013 
+0014 <span class="comment">% Unpack wav</span>
+0015 psilm  = wav.psilm;
+0016 dpsilm = wav.dlm;
+0017 omglm  = wav.omglm;
+0018 
+0019 psiqnm  = 0*psilm;
+0020 dpsiqnm = psiqnm;
+0021 omgqnm  = psiqnm;
+0022 
+0023 
+0024 <span class="comment">% Compute max(Omega)</span>
+0025 [Omgmax,jmax]  = max(Omega);
+0026 tmax = t(jmax);
+0027 <span class="keyword">if</span> Omegamax_interpolate    
+0028     jIdx = jmax-3:jmax+3;
+0029     [tmax,Omgmax] = <a href="FindMax.html" class="code" title="function [xm,fm,dfm] = FindMax(x,f,n)">FindMax</a>( t(jIdx), Omega(jIdx), 2 );
+0030 <span class="keyword">end</span>
+0031 tmatch = tmax;
+0032 
+0033 
+0034 <span class="comment">% Grid around t=0 (tmatch)</span>
+0035 <span class="comment">%{</span>
+0036 <span class="comment">% matching grid with #pts &gt; #QNMs</span>
+0037 n = 2*sum(nqnm);      <span class="comment">% no of real QNM coefficients (incl. pos and neg QNM)</span>
+0038 n = n + 2 + mod(n,2); <span class="comment">% add some degree of freedom, n is even</span>
+0039 tgrid = [-n/2:1:n/2]*dt;
+0040 <span class="comment">%}</span>
+0041 <span class="comment">% #pts = #QNMs</span>
+0042 n=sum(nqnm);
+0043 <span class="keyword">if</span> mod(n,2)==0
+0044     <span class="comment">% even number of QNMs</span>
+0045     tgrid = (-n:1:n-1)*dt;
+0046 <span class="keyword">else</span>
+0047     <span class="comment">% odd number of QNMs</span>
+0048     tgrid = (-(round(n/2)-1):1:round(n/2)-1)*dt;
+0049 <span class="keyword">end</span>
+0050 
+0051 
+0052 <span class="comment">% Interpolate psi on new grid, shift tmatch to t=0</span>
+0053 <span class="keyword">if</span> n&gt;6
+0054     order=6;
+0055 <span class="keyword">elseif</span> n&gt;4
+0056     order=4;
+0057     warning(<span class="string">'reducing intepolation order to %d'</span>,order)
+0058 <span class="keyword">else</span>
+0059     order=2;
+0060     warning(<span class="string">'reducing intepolation order to %d'</span>,order)
+0061 <span class="keyword">end</span>
+0062 
+0063 
+0064     
+0065 
+0066 <span class="comment">% Fit multipoles</span>
+0067 [kmax nnn] = size(sigma);
+0068 <span class="keyword">if</span> nnn~=sum(nqnm)
+0069     error(<span class="string">'dimension problem'</span>)
+0070 <span class="keyword">end</span>
+0071 knnz = 1:kmax;
+0072 knnz = knnz(all(sigma~=0,2)); <span class="comment">% index of nnz multipoles</span>
+0073 
+0074 <span class="keyword">for</span> k=knnz
+0075     
+0076     <span class="comment">% Interpolate</span>
+0077     tmpr = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( order, t-tmatch, real(psilm(k,:)), tgrid );
+0078     tmpi = <a href="LagInt1d.html" class="code" title="">LagInt1d</a>( order, t-tmatch, imag(psilm(k,:)), tgrid );        
+0079     
+0080     psigrid = tmpr + 1i*tmpi;          
+0081         
+0082     <span class="comment">% Fit with complex coefficients</span>
+0083     Ck = ones(nnn,1) + 1i*ones(nnn,1);               
+0084     Ck = <a href="EOBnlinfit.html" class="code" title="function [beta,r,J,Sigma,mse] = EOBnlinfit(X,y,model,beta,options)">EOBnlinfit</a>(tgrid,psigrid, @(b,x) <a href="EOBQNMTemplate.html" class="code" title="function [y dy]=EOBQNMTemplate(ck,t, sigmak)">EOBQNMTemplate</a>(b,x, sigma(k,:)), Ck); 
+0085     
+0086     <span class="comment">% Calculate the QNM wave on t-tmatch</span>
+0087     [psi dpsi] = <a href="EOBQNMTemplate.html" class="code" title="function [y dy]=EOBQNMTemplate(ck,t, sigmak)">EOBQNMTemplate</a>(Ck,t-tmatch, sigma(k,:));    
+0088     
+0089     psiqnm(k,:)  = psi;
+0090     dpsiqnm(k,:) = dpsi;
+0091     omgqnm(k,:)  = -imag(dpsi./psi);          
+0092 
+0093 <span class="keyword">end</span>
+0094 
+0095 
+0096 <span class="comment">% Do the matching at t=tmatch</span>
+0097 tIdx = (t&lt;=tmatch); 
+0098 psiqnm(:,tIdx)  = 0;
+0099 dpsiqnm(:,tIdx) = 0;
+0100 omgqnm(:,tIdx)  = 0;            
+0101          
+0102 tIdx = (t&gt;tmatch); 
+0103 psilm(:,tIdx)  = 0;
+0104 dpsilm(:,tIdx) = 0;
+0105 omglm(:,tIdx)  = 0;
+0106 
+0107 psilm  = psilm  + psiqnm;
+0108 dpsilm = dpsilm + dpsiqnm;
+0109 omglm  = omglm  + omgqnm;
+0110 
+0111 
+0112 <span class="comment">% Finalize</span>
+0113 varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, psilm,dpsilm,omglm );
+0114 
+0115 
+0116 
+0117 
+0118 
+0119 
+0120</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

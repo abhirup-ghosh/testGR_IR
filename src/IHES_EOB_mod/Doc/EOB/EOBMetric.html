@@ -1,0 +1,482 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EOBMetric</title>
+  <meta name="keywords" content="EOBMetric">
+  <meta name="description" content="EOBMetric Computes the EOB metric potentials and derivatives.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">EOB</a> &gt; EOBMetric.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EOB&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>EOBMetric
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>EOBMetric Computes the EOB metric potentials and derivatives.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = EOBMetric( nu, r, EOBopt, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EOBMetric Computes the EOB metric potentials and derivatives.
+
+   [A dA d2A B dB dA_u d2A_u] = EOBMetric( nu, r, EOBopt ) 
+   return metric potentials A(r), B(r) together with first and second
+   derivatives. First and second derivatives of A(u) are also returned.
+
+   EOBMETRIC = EOBMetric( nu, r, EOBopt ) 
+   return a structure with the metric potentials and derivatives.
+
+   EOBMETRIC = EOBMetric( nu, r, EOBopt, computed2A ) 
+   if computed2A then compute second derivatives of A (1, yes)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>	SetVOutput Manage variables in output.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="EOBAdiabLSO.html" class="code" title="function LSO = EOBAdiabLSO(nu, EOBopt)">EOBAdiabLSO</a>	EOBAdiabLSO Compute Last-Stable-Orbit (LSO) in the EOB formalism.</li><li><a href="EOBHam.html" class="code" title="function varargout = EOBHam(nu, r,pph,prstar, EOBopt, varargin)">EOBHam</a>	EOBHam Computes the EOB real and effective Hamiltonian for EOB dynamics</li><li><a href="EOBHam0.html" class="code" title="function varargout = EOBHam0(nu, r,pph,prstar, EOBopt, varargin)">EOBHam0</a>	EOBHam0 Computes the EOB real and effective Hamiltonian for particle</li><li><a href="EOBIdPostAdiab.html" class="code" title="function y0 = EOBIdPostAdiab( nu, r0, EOBopt )">EOBIdPostAdiab</a>	EOBIdPostAdiab Provides initial data in post-post-circular approximation for</li><li><a href="EOBIdPostAdiab0.html" class="code" title="function y0 = EOBIdPostAdiab0( nu, r0, EOBopt )">EOBIdPostAdiab0</a>	EOBIdPostAdiab0 Provides initial data in post-circular (or post-adiabatic)</li><li><a href="EOBIdPostAdiab_mod.html" class="code" title="function y0 = EOBIdPostAdiab_mod( nu, r0, EOBopt )">EOBIdPostAdiab_mod</a>	EOBIdPostAdiab Provides initial data in post-post-circular approximation for</li><li><a href="EOBOmgE.html" class="code" title="function [Omega E pr Heff] = EOBOmgE(nu, r,pph,prstar, EOBopt, varargin)">EOBOmgE</a>	EOBOmgE Computes Energy and orbital frequency along dynamics.</li><li><a href="EOBPotential.html" class="code" title="function W = EOBPotential(nu, r, j, EOBopt, varargin)">EOBPotential</a>	EOBPotential Compute the adiabatic EOB effective potential.</li><li><a href="EOBRhs.html" class="code" title="function dydt = EOBRhs(t,y, nu, EOBopt)">EOBRhs</a>	EOBRhs Compute r.h.s. of the full EOB equations.</li><li><a href="EOBRhsCons.html" class="code" title="function dydt = EOBRhsCons(t,y, nu, EOBopt, varargin)">EOBRhsCons</a>	EOBRhs Compute conservative r.h.s. of the full EOB equations.</li><li><a href="EOBRun.html" class="code" title="function varargout = EOBRun( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun</a>	</li><li><a href="EOBRun_DIN_mod.html" class="code" title="function varargout = EOBRun_DIN_mod( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_DIN_mod</a>	</li><li><a href="EOBRun_insplunge_ringdown.html" class="code" title="function varargout = EOBRun_insplunge_ringdown( nu,ainput, ... % a1,a2,a3,a4,a5,a6 (rem: a1...a4 multipolar!)">EOBRun_insplunge_ringdown</a>	</li><li><a href="EOBfLSO.html" class="code" title="function f = EOBfLSO(u, nu, EOBopt)">EOBfLSO</a>	EOBfLSO Compute function for adiabatic LSO determination.</li><li><a href="EOBlogo.html" class="code" title="function EOBlogo()">EOBlogo</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = EOBMetric( nu, r, EOBopt, varargin )</a>
+0002 
+0003 <span class="comment">%EOBMetric Computes the EOB metric potentials and derivatives.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   [A dA d2A B dB dA_u d2A_u] = EOBMetric( nu, r, EOBopt )</span>
+0006 <span class="comment">%   return metric potentials A(r), B(r) together with first and second</span>
+0007 <span class="comment">%   derivatives. First and second derivatives of A(u) are also returned.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   EOBMETRIC = EOBMetric( nu, r, EOBopt )</span>
+0010 <span class="comment">%   return a structure with the metric potentials and derivatives.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   EOBMETRIC = EOBMetric( nu, r, EOBopt, computed2A )</span>
+0013 <span class="comment">%   if computed2A then compute second derivatives of A (1, yes)</span>
+0014 <span class="comment">%</span>
+0015 
+0016 
+0017 <span class="comment">% Default options</span>
+0018 comp2nder = 1; <span class="comment">% yes</span>
+0019 
+0020 
+0021 <span class="comment">% Manage args in</span>
+0022 na = length(varargin);
+0023 <span class="keyword">if</span> (na&gt;1)
+0024     error(<span class="string">'too many input args'</span>)
+0025 <span class="keyword">end</span>
+0026 optargs = {comp2nder};
+0027 newvals = cellfun(@(x) ~isempty(x), varargin);
+0028 optargs(newvals) = varargin(newvals);
+0029 [comp2nder] = optargs{:};
+0030 
+0031 
+0032 <span class="comment">% Other options</span>
+0033 particle_dynamics = strcmp(EOBopt.Dynamics,<span class="string">'particle'</span>);
+0034 
+0035 PNorder = EOBopt.PNorder;
+0036 
+0037 a5 = EOBopt.a5;
+0038 a6 = EOBopt.a6;
+0039 
+0040 
+0041 <span class="comment">% Shorthands &amp; constants</span>
+0042 nu2 = nu^2;
+0043 nu3 = nu^3;
+0044 nu4 = nu^4;
+0045 nu5 = nu^5;
+0046 pi2 = pi^2;
+0047 pi4 = pi^4;
+0048 pi6 = pi^6;
+0049 
+0050 u   = 1./r;
+0051 u2  = u.^2;
+0052 u3  = u.^3;
+0053 u4  = u.^4;
+0054 u5  = u.^5;
+0055 u6  = u.^6;
+0056 u7  = u.^7;
+0057 u8  = u.^8;
+0058 u9  = u.^9;
+0059 u10 = u.^10;
+0060 u11 = u.^11;
+0061 u12 = u.^12;
+0062 u13 = u.^13;
+0063 u14 = u.^14;
+0064 
+0065 
+0066 <span class="comment">% Init with zeros and ones</span>
+0067 zzz = zeros(size(u));
+0068 ooo = ones(size(u));
+0069 
+0070 A     = ooo;
+0071 B     = ooo;
+0072 D     = ooo;
+0073 
+0074 dA    = zzz;
+0075 dB    = zzz;
+0076 d2A   = zzz;
+0077 dA_u  = zzz;
+0078 d2A_u = zzz;
+0079 
+0080 
+0081 <span class="keyword">if</span> particle_dynamics
+0082     
+0083     <span class="comment">% Set Schwarzschild background</span>
+0084     <span class="comment">% and exit</span>
+0085     A   = 1. - 2.*u;
+0086     B   = 1./A;
+0087     
+0088     dA  =  2.*u2;
+0089     d2A = -4.*u3;
+0090     
+0091     dA_u = - 2*ooo;
+0092 
+0093     dB = - dA./A.^2;
+0094     
+0095     varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, A,dA,d2A, B,dB, dA_u,d2A_u );
+0096     <span class="keyword">return</span>
+0097     
+0098 <span class="keyword">end</span>
+0099 
+0100 
+0101 <span class="comment">% EOB dynamics n~=0</span>
+0102 
+0103 <span class="comment">% Compute A function and its derivatives at various PN (resummed) orders</span>
+0104 <span class="comment">% A'(r) and A''(r) are computed from A'(u) and A''(u)</span>
+0105 <span class="keyword">switch</span> PNorder
+0106     
+0107     <span class="keyword">case</span> <span class="string">'1pn'</span>
+0108         
+0109         <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0110         
+0111         A    = 1. - 2.*u;        
+0112         dA   = 2.*u2;        
+0113         dA_u = -2.0;        
+0114 
+0115         <span class="keyword">if</span> (comp2nder)
+0116             
+0117             <span class="comment">%d2A_u = ...</span>
+0118             d2A   = -4.*u3;            
+0119             
+0120         <span class="keyword">end</span>
+0121                 
+0122     <span class="keyword">case</span> <span class="string">'2pn'</span>
+0123         
+0124         <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0125         
+0126         A     =  1d0 - 2d0.*u + 2.d0*nu.*u3;
+0127         dA    =  2.d0.*u2 - 6d0*nu.*u4;                
+0128         dA_u  =  -2.0 + 6*nu.*u2;        
+0129         
+0130         <span class="keyword">if</span> (comp2nder)
+0131             
+0132             d2A_u =  12*nu*u;
+0133             d2A   = -4d0.*u3  + 24*nu.*u5;
+0134                         
+0135         <span class="keyword">end</span>        
+0136         
+0137         
+0138     <span class="keyword">case</span> <span class="string">'3pn'</span>
+0139         
+0140         <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0141         
+0142         a4 = (94.0/3.0 - 41.0/32.0*pi2)*nu;
+0143         
+0144         A    = (2*(4.0-nu)+(a4-16.0+8.0*nu)*u)<span class="keyword">...</span>
+0145             ./( 2*(4-nu)+(a4+4*nu)*u + 2*(a4+4*nu)*u2 + 4*(a4+nu^2)*u3);
+0146         
+0147         dA_u = (-((8 + u*(a4 + 8*(-2 + nu)) - 2*nu).*(a4 + 4*nu + 4*u*(a4 + 4*nu) + 12*u2*(a4 + nu^2)))<span class="keyword">...</span>
+0148             + (a4 + 8*(-2 + nu))*(8 - 2*nu + u*(a4 + 4*nu) + 2*u2*(a4 + 4*nu) + 4*u3*(a4 + nu^2)))<span class="keyword">...</span>
+0149             ./(8 - 2*nu + u*(a4 + 4*nu) + 2*u2*(a4 + 4*nu) + 4*u3*(a4 + nu^2)).^2;
+0150         
+0151         dA  = -u2.*dA_u;
+0152         
+0153         <span class="comment">%{</span>
+0154         dA   = -u2.*(-((8 + u*(a4 + 8*(-2 + nu)) - 2*nu).*(a4 + 4*nu + 4*u*(a4 + 4*nu) + 12*u2*(a4 + nu^2)))<span class="keyword">...</span>
+0155         + (a4 + 8*(-2 + nu))*(8 - 2*nu + u*(a4 + 4*nu) + 2*u2*(a4 + 4*nu) + 4*u3*(a4 + nu^2)))<span class="keyword">...</span>
+0156         ./(8 - 2*nu + u*(a4 + 4*nu) + 2*u2*(a4 + 4*nu) + 4*u3*(a4 + nu^2)).^2;
+0157         <span class="comment">%}</span>
+0158         
+0159         <span class="keyword">if</span> (comp2nder)
+0160                         
+0161             d2A_u = (-48*nu*u.*(18432*nu^4*u3.*(384 + (-3776 + 123*pi2)*u) + 1179648*(-96 + (-3008 + 123*pi2)*u)<span class="keyword">...</span>
+0162                 + 512*nu*(165888 - 35424*(-64 + 3*pi2)*u - 4*(10040320 - 781296*pi2 + 15129*pi2^2)*u2 - 123*(192512 - 16896*pi2 + 369*pi2^2)*u3 + 6*(3008 - 123*pi2)^2*u4)<span class="keyword">...</span>
+0163                 - 16*nu^3*(-110592 - 576*(-4160 + 123*pi2)*u + (-23228416 + 1259520*pi2 - 15129*pi2^2)*u2 + 6*(8482816 - 692736*pi2 + 15129*pi2^2).*u3 <span class="keyword">...</span>
+0164                 + 24*(11284480 - 834432*pi2 + 15129*pi2^2)*u4) + nu^2*(-21233664 + 84934656*u + 64*(57094144 - 4990848*pi2 + 105903*pi2^2)*u2 <span class="keyword">...</span>
+0165                 + (-32852148224 + 3713568768*pi2 - 142333632*pi2^2 + 1860867*pi2^3)*u3 + (-66556788736 + 7741513728*pi2 - 296286336*pi4 + 3721734*pi6)*u4)))<span class="keyword">...</span>
+0166                 ./(768 + 384*nu^2*u3 + nu*(-192 + (3392 - 123*pi2)*u + (6784 - 246*pi2)*u2 + (12032 - 492*pi2).*u3)).^3;
+0167             
+0168             d2A = -2./r.*dA + u4.*d2A_u;
+0169             
+0170         <span class="keyword">end</span>        
+0171         
+0172         
+0173     <span class="keyword">case</span> <span class="string">'4pn'</span>
+0174         
+0175         <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0176         
+0177         A   = (1 - (4*(768 - 3584*nu - 24*a5*nu + 123*nu*pi2)*u)/(1536 - 3776*nu + 123*nu*pi2))./ <span class="keyword">...</span>
+0178             (1 - (2*(-3392*nu - 48*a5*nu + 123*nu*pi2)*u)./(1536 - 3776*nu + 123*nu*pi2) - <span class="keyword">...</span>
+0179             (4*(-3392*nu - 48*a5*nu + 123*nu*pi2)*u2)./(1536 - 3776*nu + 123*nu*pi2) - <span class="keyword">...</span>
+0180             (2*(-12032*nu - 192*a5*nu - 3776*nu2 + 492*nu*pi2 + 123*nu2*pi2)*u3)/(1536 - 3776*nu + 123*nu*pi2) + <span class="keyword">...</span>
+0181             ((73728*a5*nu + 11505664*nu2 - 18432*a5*nu2 - 834432*nu2*pi2 + 15129*nu2*pi4)*u4)/(96.*(1536 - 3776*nu + 123*nu*pi2)));
+0182         
+0183         
+0184         dA_u  = (384*(-113246208 + nu^3*u2.*(1860867*pi6*u.*(-1 + 3*u) - 363096*pi4*(-6 - 424*u + 3*(432 + a5)*u2) + <span class="keyword">...</span>
+0185             377856*pi2*(-354 + (-11164 + 9*a5)*u + 3*(11660 + 47*a5)*u2) + 16384*(125316 - 236*(-9892 + 27*a5)*u + (-7550592 - 38466*a5 + 81*a5^2)*u2)) - <span class="keyword">...</span>
+0186             147456*nu*(123*pi2*(1 - 2*u).^2.*(1 + 2*u) - 32*(118 - (212 + 3*a5)*u - 2*(176 + 3*a5)*u2 + (752 - 12*a5)*u3 + 36*a5*u4)) + <span class="keyword">...</span>
+0187             48*nu2*(15129*pi4*(-1 + 4*u + 4*u2 - 64*u3 + 48*u4) + <span class="keyword">...</span>
+0188             7872*pi2*(118 - (448 + 3*a5)*u - 328*u2 + 4*(1648 + 3*a5)*u3 + 24*(-212 + 3*a5)*u4) - <span class="keyword">...</span>
+0189             1024*(13924 - 236*(212 + 3*a5)*u + (-21136 - 144*a5 + 9*a5^2)*u2 + 4*(168448 + 348*a5 + 9*a5^2)*u3 + 12*(-44944 + 1416*a5 + 9*a5^2)*u4))))./ <span class="keyword">...</span>
+0190             (147456 + nu2*u3.*(15129*pi4*u - 7872*pi2*(3 + 106*u) - 2048*(-354 - 5618*u + 9*a5*u)) - <span class="keyword">...</span>
+0191             96*nu*(123*pi2*(-1 + 2*u + 4*u2 + 8*u3) - 32*(-118 + (212 + 3*a5)*u + (424 + 6*a5)*u2 + 4*(188 + 3*a5)*u3 + 24*a5*u4))).^2;
+0192         
+0193         dA  = -u2.*dA_u;
+0194         
+0195         <span class="comment">%{</span>
+0196     dA  = -u2.*(384*(-113246208 + nu^3*u2.*(1860867*pi6*u.*(-1 + 3*u) - 363096*pi4*(-6 - 424*u + 3*(432 + a5)*u2) + <span class="keyword">...</span>
+0197         377856*pi2*(-354 + (-11164 + 9*a5)*u + 3*(11660 + 47*a5)*u2) + 16384*(125316 - 236*(-9892 + 27*a5)*u + (-7550592 - 38466*a5 + 81*a5^2)*u2)) - <span class="keyword">...</span>
+0198         147456*nu*(123*pi2*(1 - 2*u).^2.*(1 + 2*u) - 32*(118 - (212 + 3*a5)*u - 2*(176 + 3*a5)*u2 + (752 - 12*a5)*u3 + 36*a5*u4)) + <span class="keyword">...</span>
+0199         48*nu2*(15129*pi4*(-1 + 4*u + 4*u2 - 64*u3 + 48*u4) + <span class="keyword">...</span>
+0200         7872*pi2*(118 - (448 + 3*a5)*u - 328*u2 + 4*(1648 + 3*a5)*u3 + 24*(-212 + 3*a5)*u4) - <span class="keyword">...</span>
+0201         1024*(13924 - 236*(212 + 3*a5)*u + (-21136 - 144*a5 + 9*a5^2)*u2 + 4*(168448 + 348*a5 + 9*a5^2)*u3 + 12*(-44944 + 1416*a5 + 9*a5^2)*u4))))./ <span class="keyword">...</span>
+0202         (147456 + nu2*u3.*(15129*pi4*u - 7872*pi2*(3 + 106*u) - 2048*(-354 - 5618*u + 9*a5*u)) - <span class="keyword">...</span>
+0203         96*nu*(123*pi2*(-1 + 2*u + 4*u2 + 8*u3) - 32*(-118 + (212 + 3*a5)*u + (424 + 6*a5)*u2 + 4*(188 + 3*a5)*u3 + 24*a5*u4))).^2;
+0204         <span class="comment">%}</span>
+0205         
+0206         <span class="comment">%D = ...</span>
+0207         <span class="comment">%B = ...</span>
+0208         <span class="comment">%dB = ...</span>
+0209                
+0210         <span class="keyword">if</span> (comp2nder)                        
+0211             
+0212             d2A_u = (384*(3*nu*(1860867*nu2*pi^6*u2.*(-1 + 4*u) + 294912*a5^2*nu*u.*(-1 - 6*u + 6*(-4 + nu)*u2) - <span class="keyword">...</span>
+0213                 131072*(2544 - 6254*nu + (8448 - 5284*nu - 10443*nu2)*u + (-27072 + 252672*nu - 291814*nu2)*u2 + 89888*nu*(-3 + 14*nu)*u3) - <span class="keyword">...</span>
+0214                 484128*nu*pi4*(-2 - (4 + 3*nu)*u + (96 - 318*nu)*u2 + 48*(-2 + 27*nu)*u3) + <span class="keyword">...</span>
+0215                 503808*pi2*(24 - 112*nu + (96 - 164*nu - 177*nu2)*u - 3*(96 - 1648*nu + 2791*nu2)*u2 + 636*nu*(-8 + 55*nu)*u3) - <span class="keyword">...</span>
+0216                 96*a5*(32*(1536 + nu*(-3776 + 123*pi2)) - 49152*(-4 + nu)*u - 96*(-6144 + 3*nu2*(-3776 + 123*pi2) + nu*(-7424 + 492*pi2))*u2 + <span class="keyword">...</span>
+0217                 (-2359296 - 3072*nu*(-3776 + 123*pi2) + nu2*(8753152 - 739968*pi2 + 15129*pi4))*u3)).* <span class="keyword">...</span>
+0218                 (147456 + nu2*u3.*(15129*pi4*u - 7872*pi2*(3 + 106*u) - 2048*(-354 - 5618*u + 9*a5*u)) - <span class="keyword">...</span>
+0219                 96*nu*(123*pi2*(-1 + 2*u + 4*u2 + 8*u3) - 32*(-118 + (212 + 3*a5)*u + (424 + 6*a5)*u2 + 4*(188 + 3*a5)*u3 + 24*a5*u4))) - <span class="keyword">...</span>
+0220                 8*nu*(15129*nu*pi4*u3 - 2304*a5*(-1 - 4*u - 12*u2 + 8*(-4 + nu)*u3) - 1968*pi2*(3 + 12*u + 9*(4 + nu)*u2 + 424*nu*u3) + <span class="keyword">...</span>
+0221                 1024*(159 + 636*u + 9*(188 + 59*nu)*u2 + 11236*nu*u3)).* <span class="keyword">...</span>
+0222                 (-113246208 + nu3*u2.*(1860867*pi6*u.*(-1 + 3*u) - 363096*pi4*(-6 - 424*u + 3*(432 + a5)*u2) + <span class="keyword">...</span>
+0223                 377856*pi2*(-354 + (-11164 + 9*a5)*u + 3*(11660 + 47*a5)*u2) + 16384*(125316 - 236*(-9892 + 27*a5)*u + (-7550592 - 38466*a5 + 81*a5^2)*u2)) <span class="keyword">...</span>
+0224                 - 147456*nu*(123*pi2*(1 - 2*u).^2.*(1 + 2*u) - 32*(118 - (212 + 3*a5)*u - 2*(176 + 3*a5)*u2 + (752 - 12*a5)*u3 + 36*a5*u4)) + <span class="keyword">...</span>
+0225                 48*nu2*(15129*pi4*(-1 + 4*u + 4*u2 - 64*u3 + 48*u4) + <span class="keyword">...</span>
+0226                 7872*pi2*(118 - (448 + 3*a5)*u - 328*u2 + 4*(1648 + 3*a5)*u3 + 24*(-212 + 3*a5)*u4) - <span class="keyword">...</span>
+0227                 1024*(13924 - 236*(212 + 3*a5)*u + (-21136 - 144*a5 + 9*a5^2)*u2 + 4*(168448 + 348*a5 + 9*a5^2)*u3 + 12*(-44944 + 1416*a5 + 9*a5^2)*u4))) <span class="keyword">...</span>
+0228                 ))./(147456 + nu2*u3.*(15129*pi4*u - 7872*pi2*(3 + 106*u) - 2048*(-354 - 5618*u + 9*a5*u)) - <span class="keyword">...</span>
+0229                 96*nu*(123*pi2*(-1 + 2*u + 4*u2 + 8*u3) - 32*(-118 + (212 + 3*a5)*u + (424 + 6*a5)*u2 + 4*(188 + 3*a5)*u3 + 24*a5*u4))).^3;
+0230                         
+0231             d2A = -2./r.*dA + u4.*d2A_u;
+0232             
+0233         <span class="keyword">end</span>
+0234                         
+0235     <span class="keyword">case</span> <span class="string">'5pn'</span>
+0236         
+0237         <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0238         
+0239         c0 = (-3*(512 - 3520*nu - 32*a5*nu - 8*a6*nu + 32*nu^2 + 123*nu*pi^2))/(768 - 3584*nu - 24*a5*nu + 123*nu*pi^2);
+0240         c1 = (3392*nu + 48*a5*nu + 24*a6*nu - 96*nu^2 - 123*nu*pi^2)/(768 - 3584*nu - 24*a5*nu + 123*nu*pi^2);
+0241         c2 = (-2*(-3392*nu - 48*a5*nu - 24*a6*nu + 96*nu^2 + 123*nu*pi^2))/(768 - 3584*nu - 24*a5*nu + 123*nu*pi^2);
+0242         c3 = (-2*(-6016*nu - 96*a5*nu - 48*a6*nu - 3392*nu^2 - 24*a5*nu^2 + 246*nu*pi^2 + 123*nu^2*pi^2))/(768 - 3584*nu - 24*a5*nu + 123*nu*pi^2);
+0243         c4 = (36864*a5*nu + 18432*a6*nu + 11431936*nu^2 + 72192*a5*nu^2 - 4608*a6*nu^2 + 18432*nu^3 - 834432*nu^2*pi^2 - 2952*a5*nu^2*pi^2 + 15129*nu^2*pi^4)<span class="keyword">...</span>
+0244             /(96.*(768 - 3584*nu - 24*a5*nu + 123*nu*pi^2));
+0245         c5 = (36864*a6*nu + 11358208*nu^2 + 325632*a5*nu^2 + 2304*a5^2*nu^2 - 90624*a6*nu^2 + 362496*nu^3 <span class="keyword">...</span>
+0246             - 834432*nu^2*pi^2 - 11808*a5*nu^2*pi^2 + 2952*a6*nu^2*pi^2 - 11808*nu^3*pi^2 + 15129*nu^2*pi^4)<span class="keyword">...</span>
+0247             /(96.*(768 - 3584*nu - 24*a5*nu + 123*nu*pi^2));
+0248         
+0249         NA   = 1 + c0*u;
+0250         dNA  = c0;
+0251         
+0252         DA   = 1 + c1*u + c2*u2 + c3*u3 + c4*u4 + c5*u5;
+0253         dDA  = c1 + 2*c2*u + 3*c3*u2 + 4*c4*u3 + 5*c5*u4;                
+0254         DA2  = DA.^2;
+0255                 
+0256         A     = NA./DA;
+0257         dA_u  = dNA./DA - NA.*dDA./DA2;                
+0258         dA    = -u2.*dA_u;
+0259         
+0260         <span class="keyword">if</span> (comp2nder)
+0261             
+0262             DA3  = DA2.*DA;                
+0263             d2DA = 2*c2 + 6*c3*u + 12*c4*u2 + 20*c5*u3;          
+0264             
+0265             d2A_u = -2*dNA.*dDA./DA2 - NA.*d2DA./DA2 + 2*NA.*dDA.^2./DA3;    
+0266             d2A   = u4.*d2A_u + 2*u3.*dA_u;
+0267                                                 
+0268         <span class="keyword">end</span>
+0269 
+0270         
+0271         
+0272     <span class="keyword">case</span> <span class="string">'5pnlog'</span>
+0273         
+0274         <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0275                 
+0276         logu = log(u);
+0277         
+0278         <span class="comment">% 4PN and 5PN coefficients including all known log terms</span>
+0279         a5tot  = a5  + 64/5*logu;
+0280         a6tot  = a6  + (-7004/105 - 144/5*nu).*logu;
+0281         a5tot2 = a5tot.^2;      
+0282         
+0283         <span class="comment">% Coefficients of the Padeed function</span>
+0284         N1 = (-3*(-512 - 32*nu2 + nu*(3520 + 32*a5tot + 8*a6tot - 123*pi2)))<span class="keyword">...</span>
+0285              ./(-768 + nu*(3584 + 24*a5tot - 123*pi2));
+0286         D1 = (nu*(-3392 - 48*a5tot - 24*a6tot + 96*nu + 123*pi2))<span class="keyword">...</span>
+0287              ./(-768 + nu*(3584 + 24*a5tot - 123*pi2));
+0288         D2 = (2*nu*(-3392 - 48*a5tot - 24*a6tot + 96*nu + 123*pi2))<span class="keyword">...</span>
+0289              ./(-768 + nu*(3584 + 24*a5tot - 123*pi2));
+0290         D3 = (-2*nu*(6016 + 48*a6tot + 3392*nu + 24*a5tot*(4 + nu) - 246*pi2 - 123*nu*pi2))<span class="keyword">...</span>
+0291              ./(-768 + nu*(3584 + 24*a5tot - 123*pi2));
+0292         D4 = -(nu*(-4608*a6tot*(-4 + nu) + a5tot*(36864 + nu*(72192 - 2952*pi2)) + nu*(2048*(5582 + 9*nu) - 834432*pi2 + 15129*pi4)))<span class="keyword">...</span>
+0293              ./(96.*(-768 + nu*(3584 + 24*a5tot - 123*pi2)));
+0294         D5 = (nu*(-24*a6tot*(1536 + nu*(-3776 + 123*pi2)) + nu*(-2304*a5tot2 + 96*a5tot*(-3392 + 123*pi2) - (-3776 + 123*pi2)*(-3008 - 96*nu + 123*pi2))))<span class="keyword">...</span>
+0295             ./(96.*(-768 + nu*(3584 + 24*a5tot - 123*pi2)));
+0296         
+0297         <span class="comment">% First derivatives</span>
+0298         dN1 = (160*nu*(-828672 - 32256*nu2 + 756*nu*(-768 + nu*(3584 + 24*a5 - 123*pi2)) + nu*(5006848 + 42024*a5 + 8064*a6 - 174045*pi2)))<span class="keyword">...</span>
+0299             ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),2).*u);
+0300         dD1 = (160*nu*(-828672 - 32256*nu2 + 756*nu*(-768 + nu*(3584 + 24*a5 - 123*pi2)) + nu*(5006848 + 42024*a5 + 8064*a6 - 174045*pi2)))<span class="keyword">...</span>
+0301             ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),2).*u);
+0302         dD2 = (320*nu*(-828672 - 32256*nu2 + 756*nu*(-768 + nu*(3584 + 24*a5 - 123*pi2)) + nu*(5006848 + 42024*a5 + 8064*a6 - 174045*pi2)))<span class="keyword">...</span>
+0303             ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),2).*u);
+0304         dD3 = (640*nu*(-828672 - 32256*nu2 + 756*nu*(-768 + nu*(3584 + 24*a5 - 123*pi2)) + nu*(5006848 + 42024*a5 + 8064*a6 - 174045*pi2)))<span class="keyword">...</span>
+0305             ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),2).*u);
+0306         dD4 = (-320*(-4 + nu)*nu*(-828672 - 32256*nu2 + 756*nu*(-768 + nu*(3584 + 24*a5 - 123*pi2)) + nu*(5006848 + 42024*a5 + 8064*a6 - 174045*pi2)))<span class="keyword">...</span>
+0307             ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),2).*u);
+0308         dD5 = (nu*(-8400*nu*(-24*(a6 - (4*logu*(1751 + 756*nu))/105.).*(1536 + nu*(-3776 + 123*pi2)) <span class="keyword">...</span>
+0309             + nu*(-2304*power(a5 + (64*logu)/5.,2) + 96*(a5 + (64*logu)/5.).*(-3392 + 123*pi2) - (-3776 + 123*pi2)*(-32*(94 + 3*nu) + 123*pi2))) <span class="keyword">...</span>
+0310             - (1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2))).*(4128768*logu*nu + 5*(-2689536 + nu*(11170624 + 64512*a5 - 380685*pi2) - 756*nu*(1536 + nu*(-3776 + 123*pi2))))))<span class="keyword">...</span>
+0311             ./(2625.*power(-768 + nu*(3584 + 24*(a5 + (64*logu)/5.) - 123*pi2),2).*u);
+0312         
+0313         <span class="comment">% Numerator and denominato of the Pade</span>
+0314         Num = 1 + N1.*u;
+0315         Den = 1 + D1.*u + D2.*u2 + D3.*u3 + D4.*u4 + D5.*u5;
+0316         A   = Num./Den;
+0317                 
+0318         <span class="comment">% First derivative</span>
+0319         dNum  = dN1.*u + N1;
+0320         dDen  = D1 + u.*(dD1 + 2*D2) + u2.*(dD2 + 3*D3) + u3.*(dD3 + 4*D4) + u4.*(dD4 + 5*D5) + dD5.*u5;
+0321                 
+0322         <span class="comment">% Derivative of A function with respect to u</span>
+0323         prefactor = A./(Num.*Den);
+0324         dA_u     = prefactor.*(dNum.*Den - dDen.*Num);
+0325         
+0326         <span class="comment">% Derivative of A with respect to r</span>
+0327         dA    = -u2.*dA_u;
+0328         
+0329         <span class="keyword">if</span> (comp2nder)
+0330             
+0331             <span class="comment">% Second derivatives of Pade coefficients</span>
+0332             d2N1 = (160*nu*(-3840 + 1536*logu*nu + nu*(20992 + 120*a5 - 615*pi2))*(828672 + nu*(-42024*a5 - 8064*a6 + 3584*(-1397 + 9*nu)<span class="keyword">...</span>
+0333                 + 174045*pi2) + 756*nu*(768 + nu*(-3584 - 24*a5 + 123*pi2))))<span class="keyword">...</span>
+0334                 ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),3).*u2);
+0335             d2D1 = (160*nu*(-3840 + 1536*logu*nu + nu*(20992 + 120*a5 - 615*pi2))*(828672 + nu*(-42024*a5 - 8064*a6 + 3584*(-1397 + 9*nu) <span class="keyword">...</span>
+0336                 + 174045*pi2) + 756*nu*(768 + nu*(-3584 - 24*a5 + 123*pi2))))<span class="keyword">...</span>
+0337                 ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),3).*u2);
+0338             d2D2 = (320*nu*(-3840 + 1536*logu*nu + nu*(20992 + 120*a5 - 615*pi2))*(828672 + nu*(-42024*a5 - 8064*a6 + 3584*(-1397 + 9*nu) <span class="keyword">...</span>
+0339                 + 174045*pi2) + 756*nu*(768 + nu*(-3584 - 24*a5 + 123*pi2))))<span class="keyword">...</span>
+0340                 ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),3).*u2);
+0341             d2D3 = (640*nu*(-3840 + 1536*logu*nu + nu*(20992 + 120*a5 - 615*pi2))*(828672 + nu*(-42024*a5 - 8064*a6 + 3584*(-1397 + 9*nu) <span class="keyword">...</span>
+0342                 + 174045*pi2) + 756*nu*(768 + nu*(-3584 - 24*a5 + 123*pi2))))<span class="keyword">...</span>
+0343                 ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),3).*u2);
+0344             d2D4 = (320*(-4 + nu)*nu*(-828672 + 756*nu*(-768 + nu*(3584 + 24*a5 - 123*pi2)) <span class="keyword">...</span>
+0345                 + nu*(5006848 + 42024*a5 + 8064*a6 - 32256*nu - 174045*pi2)).*(-3840 + 1536*logu*nu + nu*(20992 + 120*a5 - 615*pi2)))<span class="keyword">...</span>
+0346                 ./(7.*power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),3).*u2);
+0347             d2D5 = (nu*(power(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)),2).*(4128768*logu*nu - 7680*(1751 + 756*nu) + nu*(64*(808193 <span class="keyword">...</span>
+0348                 + 5040*a5 + 223020*nu) - 615*(3095 + 756*nu)*pi2)) + 3072*nu*(1536*logu*nu + 5*(-768 + nu*(3584 + 24*a5 - 123*pi2)))<span class="keyword">...</span>
+0349                 .*(4128768*logu*nu - 7680*(1751 + 756*nu) + 5*nu*(64*(174541 + 1008*a5 + 44604*nu) - 123*(3095 + 756*nu)*pi2)) <span class="keyword">...</span>
+0350                 + 25804800*nu2*(-24*(a6 - (4*logu*(1751 + 756*nu))/105.).*(1536 + nu*(-3776 + 123*pi2)) <span class="keyword">...</span>
+0351                 + nu*(-2304*power(a5 + (64*logu)/5.,2) + 96*(a5 + (64*logu)/5.).*(-3392 + 123*pi2) - (-3776 + 123*pi2)*(-32*(94 + 3*nu) + 123*pi2))) <span class="keyword">...</span>
+0352                 + 42000*nu*(-768 + nu*(3584 + 24*(a5 + (64*logu)/5.) - 123*pi2)).*(-24*(a6 - (4*logu*(1751 + 756*nu))/105.)*(1536 + nu*(-3776 + 123*pi2)) <span class="keyword">...</span>
+0353                 + nu*(-2304*power(a5 + (64*logu)/5.,2) + 96*(a5 + (64*logu)/5.).*(-3392 + 123*pi2) - (-3776 + 123*pi2)*(-32*(94 + 3*nu) + 123*pi2)))))<span class="keyword">...</span>
+0354                 ./(13125.*power(-768 + nu*(3584 + 24*(a5 + (64*logu)/5.) - 123*pi2),3).*u2);
+0355             
+0356             <span class="comment">% Second derivative of numerator and denominator</span>
+0357             d2Num = 2*dN1 + d2N1.*u;
+0358             d2Den = 2*(D2 + dD1) + u.*(6*D3 + 4*dD2 + d2D1) + u2.*(12*D4 + 6*dD3 + d2D2) <span class="keyword">...</span>
+0359                 + u3.*(20*D5 + 8*dD4 + d2D3) + u4.*(10.*dD5 + d2D4) + u5.*d2D5;
+0360             
+0361             <span class="comment">% Second derivative with respect of u</span>
+0362             d2A_u    = prefactor.*(2.*dDen.^2.*A - 2.*dNum.*dDen + Den.*d2Num - d2Den.*Num);
+0363             
+0364             <span class="comment">% second derivative with respect of r</span>
+0365             d2A = u4.*d2A_u + 2*u3.*dA_u;
+0366             
+0367         <span class="keyword">end</span>
+0368         
+0369     <span class="keyword">otherwise</span>
+0370         error(<span class="string">'unknown option %s for PNorder'</span>,PNorder);
+0371         
+0372 <span class="keyword">end</span>
+0373 
+0374 
+0375 <span class="comment">% Compute B and D functions</span>
+0376 <span class="keyword">switch</span> PNorder
+0377         
+0378     <span class="keyword">case</span> <span class="string">'1pn'</span>
+0379 
+0380         <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0381 
+0382         <span class="comment">%D  = ooo;</span>
+0383         B   = 1./A;
+0384         
+0385         <span class="comment">%dB = ...</span>
+0386         
+0387     <span class="keyword">case</span> <span class="string">'2pn'</span>
+0388         
+0389         <span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0390         
+0391         <span class="comment">%D  = ooo;</span>
+0392         B   =  1./A.*(1.d0-6.d0*nu.*u2);
+0393         
+0394         <span class="comment">%dB  =  ...</span>
+0395         
+0396     <span class="keyword">otherwise</span>
+0397         
+0398         <span class="keyword">if</span> strcmp(EOBopt.resumD,<span class="string">'pade03'</span>)
+0399             
+0400             <span class="comment">% Resummation of the D function. One uses the Pade P03[Taylor[D]] to</span>
+0401             <span class="comment">% avoid the catastrophic zero of the standard Taylor-expanded</span>
+0402             Dp  = 1.0 + 6*nu*u2 - 2*(3.0*nu-26.0)*nu*u3;
+0403             D   = 1./Dp;
+0404             dD  = 6*u2.*(2*nu*u-(3*nu-26)*nu*u2).*D.^2;
+0405             
+0406         <span class="keyword">else</span>
+0407             
+0408             <span class="comment">% Taylor-expanded D (4PN)</span>
+0409             Dp = 1.0 + 6*nu*u2 - 2*nu*(3.0*nu-26.0)*u3 + nu*(226 + 592/15*log(u)).*u4;
+0410             D  = 1./Dp;
+0411             dD = 2*nu/15*u3.*(90 - 45*u*(3*nu-26) + u2.*(7076+1184*log(u))).*D.^2;
+0412             
+0413             <span class="comment">%D   = 1.0 - 6*nu*u2 + 2*(3.0*nu-26.0)*nu*u3;</span>
+0414             <span class="comment">%dD  = 12*nu*u3 - 6*(3*nu-26)*nu*u4;</span>
+0415             
+0416         <span class="keyword">end</span>
+0417         
+0418         B   = D./A;
+0419         dB  = (dD.*A - D.*dA)./A.^2;
+0420         
+0421 <span class="keyword">end</span>
+0422 
+0423 
+0424 <span class="comment">% Finalize</span>
+0425 varargout = <a href="SetVOutput.html" class="code" title="function vout = SetVOutput( n, varargin )">SetVOutput</a>( nargout, A,dA,d2A, B,dB, dA_u,d2A_u );</pre></div>
+<hr><address>Generated on Fri 25-Sep-2015 16:20:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
