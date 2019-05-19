@@ -10,7 +10,7 @@ for idx in range(len(data)):
 	tag = data[idx]['tag']
 	geocentric_end_time = data[idx]['geocentric_end_time']
 
-	out_dir = '/home/abhirup/Documents/Work/testGR_IR/runs/systematics_error_characterisation/sxs_injection_o1o2_noise/%s'%tag
+	out_dir = '/home/abhirup/Documents/Work/testGR_IR/runs/systematics_error_characterisation/imrppv2_injection_psdmodel_zeronoise/%s'%tag
 	for sub_dir in sub_dir_list:
 
 		# creating output directory and sub-directories: IMR, inspiral, post-inspiral
