@@ -17,10 +17,11 @@ from pycbc import frame as Fr
 import scipy.signal
 import imrtgrutils_final as tgr
 import nr_fits as nr
+import glob
 
 ### Read in details of the LVC-NR catalog, and separate out the waveforms from the SXS catalog
 
-f_lvcnr = open('/home/sebastian.khan/ligo-nr-data/lvcnr-lfs.json', 'r')
+f_lvcnr = open('/home/abhirup/ligo-nr-data/lvcnr-lfs.json', 'r')
 datastore = json.load(f_lvcnr)
 f_lvcnr.close()
 
@@ -37,11 +38,11 @@ o1_L1H1_start_times, o1_L1H1_end_times, o1_L1H1_stretches = np.loadtxt('../data/
 o2_L1H1_start_times, o2_L1H1_end_times, o2_L1H1_stretches = np.loadtxt('../data/systematics_error_characterisation/o2_L1H1_quality_segments.txt', unpack=True)
 o2_L1H1V1_start_times, o2_L1H1V1_end_times, o2_L1H1V1_stretches = np.loadtxt('../data/systematics_error_characterisation/o2_L1H1V1_quality_segments.txt', unpack=True)
 
-N = 50 # number of random injections to be generated from the SXS BHBH catalog
+N = 100 # number of random injections to be generated from the SXS BHBH catalog
 
 counter = 0
-f = open('./SXS_campaign.dat', 'a')
-f.write("#name tag m1 m2 s1x s1y s1z s2x s2y s2z iota pol ra dec gps_start_time gps_end_time geocentric_end_time Mf af f_isco\n")
+f = open('./SXS_campaign.dat', 'w')
+f.write("#name tag det_config m1 m2 s1x s1y s1z s2x s2y s2z iota pol ra dec gps_start_time gps_end_time geocentric_end_time hw_inj_start_time Mf af f_isco snr\n")
 
 ### Specifying the parameters of the binary to be simulated using a specific SXS-NR waveform
 ### The SXS waveform has information about the mass ratio, q or (m1, m2) (normalised to a total mass M = 1 M_sun) and the spins: (s1x, s1y, s1z, s2x, s2y, s2z). We choose the other parameters (iota, pol, ra, dec, snr) and normalise to a total mass M = 100 M_sun.
@@ -90,16 +91,23 @@ while counter <= N:
 
     print '... chose:', det_config, obs_run, gps_start_time, gps_end_time, geocentric_end_time
   
-    tag = name + obs_run + det_config
+    tag = name + '_' + obs_run + '_' + det_config + '_' + str(int(geocentric_end_time))
 
-    pycbc_generate_hwinj_command = "pycbc_generate_hwinj --numrel-data /home/sebastian.khan/ligo-nr-data/lvcnr-lfs/%s --approximant NR_hdf5 --order pseudoFourPN --waveform-low-frequency-cutoff 25 --mass1 %f --mass2 %f --spin1x %f --spin1y %f --spin1z %f --spin2x %f --spin2y %f --spin2z %f --inclination %f --polarization %f --ra %f --dec %f --instruments %s --sample-rate H1:16384 L1:16384 V1:16384 --frame-type H1:H1_CLEANED_HOFT_C02 L1:L1_CLEANED_HOFT_C02 V1:V1O2Repro2A --channel-name H1:DCH-CLEAN_STRAIN_C02 L1:DCH-CLEAN_STRAIN_C02 V1:Hrec_hoft_V1O2Repro2A_16384Hz --taper TAPER_START --network-snr %f --low-frequency-cutoff 25.0 --high-frequency-cutoff 1024.0 --psd-estimation median --psd-segment-length 16 --psd-segment-stride 8 --pad-data 8 --geocentric-end-time %d --gps-start-time %d --gps-end-time %d --strain-high-pass 1 --psd-output H1:%s_%d_H1_psd.txt L1:%s_%d_L1_psd.txt V1:%s_%d_V1_psd.txt --tag %s"%(path, m1, m2, s1x, s1y, s1z, s2x, s2y, s2z, iota, pol, ra, dec, ifo_map[det_config], snr, geocentric_end_time, gps_start_time, gps_end_time, tag, geocentric_end_time-6, tag, geocentric_end_time-6, tag, geocentric_end_time-6, tag)
-
-    pycbc_insert_frame_hwinj_h1 = 'pycbc_insert_frame_hwinj --frame-type H1_CLEANED_HOFT_C02 --channel-name H1:DCH-CLEAN_STRAIN_C02 --gps-start-time %d --gps-end-time %d --pad-data 8 --sample-rate 16384 --hwinj-file %s_%d_H1.txt  --hwinj-start-time %d --ifo H1 --output-file %s_%d_H-H1HWINJ.gwf --strain-high-pass 1'%(gps_start_time,gps_end_time, tag, geocentric_end_time-6, geocentric_end_time-6, tag, geocentric_end_time-6)
-
-    pycbc_insert_frame_hwinj_l1 = 'pycbc_insert_frame_hwinj --frame-type L1_CLEANED_HOFT_C02 --channel-name L1:DCH-CLEAN_STRAIN_C02 --gps-start-time %d --gps-end-time %d --pad-data 8 --sample-rate 16384 --hwinj-file %s_%d_L1.txt  --hwinj-start-time %d --ifo L1 --output-file %s_%d_L-L1HWINJ.gwf --strain-high-pass 1'%(gps_start_time,gps_end_time, tag, geocentric_end_time-6, geocentric_end_time-6, tag, geocentric_end_time-6)
+    pycbc_generate_hwinj_command = "pycbc_generate_hwinj --numrel-data /home/abhirup/ligo-nr-data/lvcnr-lfs/%s --approximant NR_hdf5 --order pseudoFourPN --waveform-low-frequency-cutoff 25 --mass1 %f --mass2 %f --spin1x %f --spin1y %f --spin1z %f --spin2x %f --spin2y %f --spin2z %f --inclination %f --polarization %f --ra %f --dec %f --instruments %s --sample-rate H1:16384 L1:16384 V1:16384 --frame-type H1:H1_CLEANED_HOFT_C02 L1:L1_CLEANED_HOFT_C02 V1:V1O2Repro2A --channel-name H1:DCH-CLEAN_STRAIN_C02 L1:DCH-CLEAN_STRAIN_C02 V1:Hrec_hoft_V1O2Repro2A_16384Hz --taper TAPER_START --network-snr %f --low-frequency-cutoff 25.0 --high-frequency-cutoff 1024.0 --psd-estimation median --psd-segment-length 16 --psd-segment-stride 8 --pad-data 8 --geocentric-end-time %d --gps-start-time %d --gps-end-time %d --strain-high-pass 1 --psd-output H1:%s_H1_psd.txt L1:%s_L1_psd.txt V1:%s_V1_psd.txt --tag %s"%(path, m1, m2, s1x, s1y, s1z, s2x, s2y, s2z, iota, pol, ra, dec, ifo_map[det_config], snr, geocentric_end_time, gps_start_time, gps_end_time, tag, tag, tag, tag)
 
     os.system(pycbc_generate_hwinj_command)
     print '... ran pycbc_generate_hwinj command: ', pycbc_generate_hwinj_command
+
+    if not glob.glob('%s_*.xml.gz'%tag):
+      hw_inj_start_time = 0
+      print '... file does not exist'
+    else:
+      hw_inj_start_time = int(glob.glob('%s_*.xml.gz'%tag)[0][-17:-7])
+      print '... file exists'
+
+    pycbc_insert_frame_hwinj_h1 = 'pycbc_insert_frame_hwinj --frame-type H1_CLEANED_HOFT_C02 --channel-name H1:DCH-CLEAN_STRAIN_C02 --gps-start-time %d --gps-end-time %d --pad-data 8 --sample-rate 16384 --hwinj-file %s_%d_H1.txt  --hwinj-start-time %d --ifo H1 --output-file %s_H-H1HWINJ.gwf --strain-high-pass 1'%(gps_start_time, gps_end_time, tag, hw_inj_start_time,  hw_inj_start_time, tag)
+
+    pycbc_insert_frame_hwinj_l1 = 'pycbc_insert_frame_hwinj --frame-type L1_CLEANED_HOFT_C02 --channel-name L1:DCH-CLEAN_STRAIN_C02 --gps-start-time %d --gps-end-time %d --pad-data 8 --sample-rate 16384 --hwinj-file %s_%d_L1.txt  --hwinj-start-time %d --ifo L1 --output-file %s_L-L1HWINJ.gwf --strain-high-pass 1'%(gps_start_time,gps_end_time, tag, hw_inj_start_time, hw_inj_start_time, tag)
 
     os.system(pycbc_insert_frame_hwinj_h1)
     print '... ran pycbc_insert_frame_hwinj for H1: ', pycbc_insert_frame_hwinj_h1
@@ -109,13 +117,13 @@ while counter <= N:
 
 
     if det_config == 'HLV':
-      pycbc_insert_frame_hwinj_v1 = 'pycbc_insert_frame_hwinj --frame-type V1O2Repro2A --channel-name V1:Hrec_hoft_V1O2Repro2A_16384Hz --gps-start-time %d --gps-end-time %d --pad-data 8 --sample-rate 16384 --hwinj-file %s_%d_V1.txt  --hwinj-start-time %d --ifo V1 --output-file %s_%d_V-V1HWINJ.gwf --strain-high-pass 1'%(gps_start_time,gps_end_time, tag, geocentric_end_time-6, geocentric_end_time-6, tag, geocentric_end_time-6)
+      pycbc_insert_frame_hwinj_v1 = 'pycbc_insert_frame_hwinj --frame-type V1O2Repro2A --channel-name V1:Hrec_hoft_V1O2Repro2A_16384Hz --gps-start-time %d --gps-end-time %d --pad-data 8 --sample-rate 16384 --hwinj-file %s_%d_V1.txt  --hwinj-start-time %d --ifo V1 --output-file %s_V-V1HWINJ.gwf --strain-high-pass 1'%(gps_start_time,gps_end_time, tag, hw_inj_start_time, hw_inj_start_time, tag)
     
       os.system(pycbc_insert_frame_hwinj_v1)
       print '... ran pycbc_insert_frame_hwinj for v1: ', pycbc_insert_frame_hwinj_v1
 		  
 
-    if os.path.isfile("./%s_%d_L-L1HWINJ.gwf"%(tag, geocentric_end_time-6)) and os.path.isfile("./%s_%d_H-H1HWINJ.gwf"%(tag, geocentric_end_time-6)):
+    if os.path.isfile("./%s_L-L1HWINJ.gwf"%(tag)) and os.path.isfile("./%s_H-H1HWINJ.gwf"%(tag)):
       print '... successfully created an injetion. I AM SO HAPPY!!!'
 
       # computing f_isco
@@ -136,8 +144,10 @@ while counter <= N:
       # calculate the Kerr ISCO freq 
       f_isco_Kerr = nr.calc_isco_freq(af)/(Mf*lal.MTSUN_SI)
 
-      f.write("%s %s %f %f %f %f %f %f %f %f %f %f %f %f %d %d %d %f %f %f\n"%(name, tag, m1, m2, s1x, s1y, s1z, s2x, s2y, s2z, iota, pol, ra, dec, gps_start_time, gps_end_time, geocentric_end_time, Mf, af, f_isco_Kerr)) 
+      f.write("%s %s %s %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f\n"%(name, tag, det_config, m1, m2, s1x, s1y, s1z, s2x, s2y, s2z, iota, pol, ra, dec, gps_start_time, gps_end_time, geocentric_end_time, hw_inj_start_time, Mf, af, f_isco_Kerr, snr)) 
       counter += 1
+
+      print '... successfully printed the injetion. I AM SO HAPPY!!!'
 
   else:
     print '... segment less than 128 seconds'
