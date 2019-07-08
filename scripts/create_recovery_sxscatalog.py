@@ -10,7 +10,8 @@ for idx in range(len(data)):
 	tag = data[idx]['tag']
 	geocentric_end_time = data[idx]['geocentric_end_time']
 
-	out_dir = '/home/abhirup/Documents/Work/testGR_IR/runs/systematics_error_characterisation/imrppv2_injection_psdmodel_zeronoise/%s'%tag
+	out_dir_root = '/home/abhirup/Documents/Work/testGR_IR/runs/systematics_error_characterisation/imrppv2_injection_psdmodel_zeronoise'
+	out_dir = out_dir_root + '/%s'%tag
 	for sub_dir in sub_dir_list:
 
 		# creating output directory and sub-directories: IMR, inspiral, post-inspiral
@@ -34,7 +35,7 @@ for idx in range(len(data)):
 		os.system("cp %s/%s/%s_*.xml.gz %s/%s/injection.xml.gz"%(out_dir, sub_dir, tag, out_dir, sub_dir))
 
 		# copying copying example_config.ini to each sub-directory
-		os.system("cp /home/abhirup/Documents/Work/testGR_IR/runs/systematics_error_characterisation/sxs_injection_o1o2_noise/example_config.ini %s/%s"%(out_dir, sub_dir))
+		os.system("cp %s/example_config.ini %s/%s"%(out_dir_root, out_dir, sub_dir))
 
 		# making appropriate changes inside example_config.ini
 		os.system("sed -i 's/SXS_BBH_0150o2HL_1170730903\/IMR/%s\/%s/g' %s/%s/example_config.ini"%(tag, sub_dir, out_dir, sub_dir))
