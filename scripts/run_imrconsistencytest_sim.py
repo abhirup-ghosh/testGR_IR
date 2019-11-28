@@ -13,7 +13,7 @@ noise_data = np.genfromtxt("../notebooks/o2_L1H1V1_512_times.dat", names=True, d
 
 for idx in range(200):
 
-        post_loc = '/home/abhirup/Documents/Work/testGR_IR/runs/systematics_error_characterisation/new_runs/sxs_injection_o1o2_noise/%d'%(noise_data[idx]['o2_L1H1V1_512_geocentric_times'])
+        post_loc = '/home/abhirup/Documents/Work/testGR_IR/runs/systematics_error_characterisation/new_runs/imrppv2_injection_psdmodel_CE_zeronoise/%d'%(noise_data[idx]['o2_L1H1V1_512_geocentric_times'])
 	out_dir = post_loc + '/imrtgr_results'
 
 	m1, m2, s1x, s1y, s1z, s2x, s2y, s2z = signal_data[idx]['m1'],signal_data[idx]['m2'], signal_data[idx]['s1x'], signal_data[idx]['s1y'], signal_data[idx]['s1z'],signal_data[idx]['s2x'], signal_data[idx]['s2y'], signal_data[idx]['s2z']
@@ -30,9 +30,9 @@ for idx in range(200):
 
 
 	try:
-	    post_samples_i = glob.glob(post_loc + '/inspiral/*/*/posterior_samples.dat')[0]
-	    post_samples_r = glob.glob(post_loc + '/post-inspiral/*/*/posterior_samples.dat')[0]
-	    post_samples_imr = glob.glob(post_loc + '/IMR/*/*/posterior_samples.dat')[0]
+	    post_samples_i = glob.glob(post_loc + '/inspiral/*/*/*/*/posterior_samples.dat')[0]
+	    post_samples_r = glob.glob(post_loc + '/post-inspiral/*/*/*/*/posterior_samples.dat')[0]
+	    post_samples_imr = glob.glob(post_loc + '/IMR/*/*/*/*/posterior_samples.dat')[0]
 
 	  
 

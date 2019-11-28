@@ -1,0 +1,11 @@
+universe   = vanilla 
+getenv     = true
+executable = /home/abhirup/Documents/Work/testGR_IR/scripts/condorrun_imrconsistencytest_sim.py
+output     = /home/abhirup/Documents/Work/testGR_IR/scripts/logs/imrtgr_out.$(Process)
+error	   = /home/abhirup/Documents/Work/testGR_IR/scripts/logs/imrtgr_err.$(Process)
+log	   = /home/abhirup/Documents/Work/testGR_IR/scripts/logs/imrtgr_log.$(Process)
+initialdir = /home/abhirup/Documents/Work/testGR_IR/scripts/
+notification = Never
+arguments  =  $(Process)
+on_exit_remove = (ExitBySignal == False) || ((ExitBySignal == True) && (ExitSignal != 11))
+queue 50
